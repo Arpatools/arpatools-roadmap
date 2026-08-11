@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobby: Fehlerbehandlung pro Action (Richtung n8n-artiges Workflow-Tool für JTL) – ArpaTools</title>
+<meta name="description" content="Produktvision Wir wollen Jobby längerfristig in Richtung eines n8n artigen Workflow Tools für JTL Wawi weiterentwickeln — also nicht nur eine starre Kette von Aktionen, sondern ein…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Jobby: Fehlerbehandlung pro Action (Richtung n8n-artiges Workflow-Tool für JTL)</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">Jobby</span>
+      <span class="badge">Ohne Version</span>
+      <span class="badge">#475</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 02. August 2026</p>
+    <div class="prose">
+      <h2>Produktvision</h2>
+<p>Wir wollen Jobby längerfristig in Richtung eines n8n-artigen Workflow-Tools für JTL Wawi weiterentwickeln — also nicht nur eine starre Kette von Aktionen, sondern ein Automatisierungswerkzeug, bei dem einzelne Schritte fehlschlagen können, ohne dass gleich der ganze Job stirbt.</p>
+<h2>Ist-Zustand (verifiziert im Code)</h2>
+<p>Jobby führt Aktionen aktuell strikt linear und ohne Schritt-Fehlerbehandlung aus:</p>
+<ul>
+<li><code>RunActions</code> (<code>ArpaTools/Modules/Jobby/Business/JobRunner.cs:170-182</code>) ist eine einfache <code>foreach</code>-Schleife über die Actions eines Jobs.</li>
+<li>Es gibt <strong>kein</strong> try/catch pro Action — nur einen einzigen try/catch um den <strong>gesamten Job</strong> (<code>RunJobInternal</code>, <code>JobRunner.cs:135-138</code>).</li>
+<li>Folge: Eine einzelne fehlschlagende Action reißt den kompletten Job ab. Kein Skip, kein Retry, kein Error-Branch (kein n8n-artiger "Error Output").</li>
+<li>Fehler-Sichtbarkeit ist grob: <code>WorkerService.cs:164-170</code> loggt nur "Job X fehlgeschlagen" auf Job-Ebene, nicht welche einzelne Action verantwortlich war.</li>
+<li>Das Ausführungsmodell ist strikt linear/sequentiell — keine bedingten Verzweigungen zwischen Actions.</li>
+</ul>
+<h2>Bekanntes Risiko bei der Umsetzung: Migrationen laufen nicht headless</h2>
+<p>Ein neues Feld wie z. B. eine pro-Action konfigurierbare <code>ErrorPolicy</code> (Stop/Continue/Retry) ließe sich per Migration mit Default = heutigem Verhalten ("Stop") rückwärtskompatibel einführen — bestehende Jobs würden sich nach dem Update unverändert verhalten.</p>
+<p>Der Haken: <code>MigrationService</code> läuft laut Architektur <strong>nur</strong> über <code>MainViewModel.Initialize()</code> im GUI-Pfad (nach erfolgreichem <code>TestConnection()</code>) — nicht im Batch-Modus, nicht beim reinen Prozessstart. Die geplanten Jobby-Jobs laufen aber überwiegend headless über den <code>ArpaToolsWorker</code>-Windows-Service. Wird nach einem Update auf einer reinen Server-Installation nie die GUI geöffnet, läuft die Migration nie — der Service startet dann Jobs gegen ein noch nicht migriertes Schema.</p>
+<p>Für "Update einspielen, alle Jobs laufen einfach weiter" muss das mitgelöst werden: entweder der Batch-/Worker-Pfad stößt selbst einen Migrationslauf an, oder <code>JobRunner</code> fällt bei fehlendem/altem Schema-Feld im Code sauber auf das heutige Verhalten zurück.</p>
+<h2>Offene Fragen (Product-Owner-Ebene, vor jeder Umsetzung zu klären)</h2>
+<ul>
+<li>Wie viel "n8n" wollen wir wirklich? Reicht ein einfaches Continue-on-Error pro Action, oder wollen wir echte Error-Branches (separater Folgeaktions-Pfad bei Fehler, wie n8ns Error-Output-Pin)?</li>
+<li>Retry-Policies pro Action (Anzahl Versuche, Backoff) — für welche Action-Typen sinnvoll (z. B. FTP/Web-Requests), für welche nicht (z. B. lokale Dateioperationen)?</li>
+<li>Wie granular soll Fehler-Sichtbarkeit werden — reicht Job-Ebene mit Action-Name im Log, oder braucht es eine strukturierte Historie pro Lauf (welche Action, welcher Input, welcher Fehler)?</li>
+<li>Benachrichtigung bei Fehlern (Mail/Webhook) pro Action oder nur pro Job?</li>
+<li>Migrations-/Deployment-Strategie für Server-only-Installationen (siehe oben) — eigenständiges Thema, das unabhängig vom Error-Handling-Feature gelöst werden muss.</li>
+</ul>
+<h2>Nicht-Ziel dieses Issues</h2>
+<p>Dies ist <strong>kein</strong> fertiger Implementierungsplan und <strong>keine</strong> Aufforderung, direkt loszulegen — das Issue dient dazu, die Produktentscheidung und Priorisierung sauber zu treffen, bevor an <code>JobRunner</code> gebaut wird (der von allen ~27 Action-Typen gemeinsam genutzt wird).</p>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

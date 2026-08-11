@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migrationen sind nach einem Teilfehlschlag nicht wiederholbar – ArpaTools</title>
+<meta name="description" content="Eine Migration, die mitten im Skript scheitert, lässt die Datenbank in einem Zustand zurück, aus dem sie sich nicht mehr befreien kann. Jeder weitere Versuch scheitert erneut, und…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Migrationen sind nach einem Teilfehlschlag nicht wiederholbar</h1>
+    <p class="badges">
+      <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">ArpaTools Kern</span>
+      <a class="badge badge-link" href="../changelog.html#v5.28.0">Version 5.28.0</a>
+      <span class="badge">#515</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 09. August 2026</p>
+    <div class="prose">
+      <p>Eine Migration, die mitten im Skript scheitert, lässt die Datenbank in einem Zustand zurück, aus
+dem sie sich nicht mehr befreien kann. Jeder weitere Versuch scheitert erneut, und zwar an einer
+anderen Stelle als beim ersten Mal.</p>
+<p><strong>Der Ablauf.</strong> <code>MigrationBase.RunMigration</code> teilt das Skript an <code>GO\r\n</code> und schickt die Batches
+nacheinander an <code>ExecuteNonQuery</code>. Diese Methode wirft eine Ausnahme weiter
+(<code>DbService.ExecuteNonQuery</code>, <code>catch (Exception) { throw; }</code>). Scheitert also der dritte Batch,
+sind die ersten beiden bereits angewandt, die Ausnahme verlässt <code>RunMigration</code>, und die
+Versionsnummer in <code>arpa.DbVersion</code> wird <strong>nicht</strong> hochgesetzt. Das ist an sich richtig.</p>
+<p>Beim nächsten Start liegt die Version weiterhin unter der Zielversion, die Migration läuft also
+erneut, diesmal aber gegen eine Datenbank, in der die ersten beiden Batches schon angewandt sind.
+Da die Skripte keine Existenzprüfungen enthalten, scheitert jetzt schon der <strong>erste</strong> Batch mit
+"There is already an object named ... in the database". Ab diesem Punkt kommt die Datenbank ohne
+Eingriff von Hand nicht mehr weiter, und die Ursache ist von der ursprünglichen Fehlerstelle
+verdeckt.</p>
+<p><strong>Beispiel.</strong> <code>MigrationNetstockV10</code> besteht aus drei Batches: <code>CREATE TABLE arpa.NetstockWarehouseSettings</code>, ein <code>INSERT</code> zum Befüllen aus <code>arpa.NetstockSettings.WarehouseIds</code>,
+und <code>ALTER TABLE arpa.NetstockSettings DROP COLUMN WarehouseIds</code>. Scheitert der dritte, etwa weil
+eine Vorgabe- oder Indexabhängigkeit an der Spalte hängt, bleibt die Tabelle bestehen und jeder
+weitere Lauf scheitert am <code>CREATE TABLE</code>.</p>
+<p><strong>Vorschlag.</strong> Zwei Möglichkeiten, die sich ergänzen:</p>
+<ol>
+<li>Die Skripte idempotent schreiben, also <code>IF OBJECT_ID(...) IS NULL</code> vor <code>CREATE TABLE</code>,
+<code>IF COL_LENGTH(...) IS NOT NULL</code> vor <code>DROP COLUMN</code> und Entsprechendes. Das macht jeden Lauf
+wiederholbar, unabhängig davon, wie weit der vorherige kam. Vorbild ist
+<code>MigrationSmartSupplyV9</code>, dessen Test ausdrücklich die Idempotenz beim zweiten Lauf prüft.</li>
+<li>Die Batches einer Migration in einer Transaktion ausführen, damit ein Fehlschlag alles
+zurücknimmt. Das ist die gründlichere Lösung, aber nicht jede DDL-Anweisung ist in SQL Server
+sinnvoll transaktional, und der Umbau berührt alle bestehenden Migrationen.</li>
+</ol>
+<p>Punkt 1 ist der kleinere Schritt und behebt den beschriebenen Fall vollständig.</p>
+<p><strong>Wie es aufgefallen ist.</strong> <code>MigrationNetstockV10Tests.Run_CreatesTableAndDropsWarehouseIds_AndIsIdempotentOnSecondRun</code>
+schlägt auf einer Entwicklungsmaschine fehl, an der Zusicherung, dass
+<code>arpa.NetstockSettings.WarehouseIds</code> nach der Migration verschwunden ist. Dort war die Migration
+einmal von Hand nachgeholt und die Version dabei auf 10 gesetzt worden, ohne die Spalte zu löschen.
+Die Versionsprüfung in <code>MigrationBase.Run</code> überspringt die Migration seitdem vollständig, das
+<code>DROP COLUMN</code> läuft nie, und der Test scheitert dauerhaft.</p>
+<p>Dieser konkrete Fall ist ein Maschinenthema und kein Produktfehler. Er zeigt aber genau die
+Eigenschaft, um die es hier geht: sobald Versionsstand und tatsächlicher Schemazustand
+auseinanderlaufen, holt der Mechanismus das nicht mehr ein. Idempotente Skripte würden auch das
+auffangen.</p>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

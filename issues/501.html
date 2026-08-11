@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows-Dienst für mehrere Profile (Multi-Mandant) – ArpaTools</title>
+<meta name="description" content="Folgt auf 57. Dort bleibt der Dienst unangetastet und bedient weiterhin nur , geplante Jobs laufen also nur im Hauptprofil. Dieses Issue macht ihn multiprofilfähig. Vollständig ana…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
+    <h1>Windows-Dienst für mehrere Profile (Multi-Mandant)</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
+      <span class="badge status-open">Offen</span>
+      <span class="badge">ArpaTools Kern</span>
+      <span class="badge">Ohne Version</span>
+      <span class="badge">#501</span>
+    </p>
+    <p class="issue-date">Erstellt am 07. August 2026</p>
+    <div class="prose">
+      <p>Folgt auf <a href="../issues/57.html">#57</a>. Dort bleibt der Dienst unangetastet und bedient weiterhin nur <code>Profile1</code>, geplante Jobs laufen also nur im Hauptprofil. Dieses Issue macht ihn multiprofilfähig.</p>
+<p>Vollständig analysierte Vorlage: Abschnitt "Verschoben in ein eigenes Issue: Multi-Profil-Dienst" in <code>docs/superpowers/specs/2026-08-07-profilverwaltung-multimandant-design.md</code>.</p>
+<h2>⚠️ Der Zustandsteil ist Pflicht, nicht Kür</h2>
+<p>Solange nur ein Profil bedient wird, wechselt <strong>kein</strong> Prozess das Profil im Betrieb: <code>ChangeActiveProfile</code> läuft genau einmal pro Prozess, und der Profilwechsel aus der Oberfläche ist ein Prozessneustart. Sobald der Dienst mehrere Profile in einem Prozess bedient, gilt das nicht mehr, und dann muss profilbezogener Zustand mit umgebaut werden.</p>
+<p><strong>Wer den Dienst umbaut und diesen Teil auslässt, baut einen Datenverwechslungsfehler ein: ein Mandant arbeitet still gegen die Datenbank und die Ordner eines anderen. Das findet niemand im Test.</strong></p>
+<h2>Die Profilschleife</h2>
+<p><code>ChangeActiveProfile</code> → <strong><code>IConfigurationService.Init()</code></strong> → Migration → Bindung verifizieren → Lizenzprüfung → fällige Jobs.</p>
+<p><code>Init()</code> ist nicht optional: es ist die einzige Stelle, die <code>Statics.ProfileFolder</code> setzt (<code>ConfigurationService.cs:31</code>) und <code>Data</code> samt <code>JtlConnectionString</code> neu lädt (<code>:41-68</code>). <code>ChangeActiveProfile</code> setzt nur <code>ActiveProfileId</code> (<code>ProfileService.cs:49-63</code>). Ohne erneutes <code>Init()</code> liefert <code>DbService.cs:206</code> weiter den Connection-String des ersten Profils.</p>
+<p><code>Init()</code> hat kein Erfolgssignal, es schluckt jede Exception (<code>ConfigurationService.cs:87-90</code>). Entweder Rückgabewert ergänzen oder direkt danach <code>Validate()</code> prüfen. Fehlschlag heißt: Dateilog, Profil überspringen, weitermachen.</p>
+<h2>Profilbezogener Zustand: Generationsmuster</h2>
+<p>Keine Liste von Diensten, die beim Wechsel zurückgesetzt werden. Solche Listen werden unvollständig, und eine übersehene Stelle bedeutet stille Datenverwechslung. Stattdessen führt <code>ProfileService</code> eine Zählnummer, die bei jedem <code>ChangeActiveProfile</code> hochzählt; jeder zustandsbehaftete Dienst verwirft seinen Zustand selbst, sobald die Nummer nicht mehr passt.</p>
+<p>Betroffen:</p>
+<ul>
+<li><strong>Lizenz-Cache.</strong> <code>LicenseService._responseData</code> (<code>:42</code>, <code>:118-121</code>) wird bewusst nur bei Erfolg überschrieben, also nie verworfen. <code>JobRunner.cs:77</code> gated über die gecachte Überladung. Folge: ein Mandant, dessen Lizenzprüfung scheitert, arbeitet mit den Berechtigungen des zuletzt erfolgreich geprüften. Zusätzlich <code>JobRunner</code> auf die parametrisierte Überladung umstellen, die <code>WorkerService.cs:84-88</code> schon benutzt.</li>
+<li><strong>Verbindungspool.</strong> <code>DatabaseBaseService._dbService</code> und <code>_dbServices</code> für den <code>doNotDispose</code>-Pfad. <code>EndBatch()</code> ohne Argument leert nur den Standardeintrag. Sieben Modul-Services erben von der Klasse plus die Basisinstanz, also acht Pool-Instanzen. Die Prüfung muss vor der Benutzung greifen.</li>
+<li><strong>Log-Warteschlange.</strong> <code>LogService._queuedLogs</code> (<code>:15</code>, gefüllt <code>:33-37</code>, abgearbeitet <code>:40-50</code>) wird auch absichtlich gefüllt, und zwar <strong>vor</strong> der Profilauswahl (<code>App.xaml.cs:126</code>, <code>:132</code> mit <code>addToQueue = true</code>). Pauschales Verwerfen löscht den Starteintrag. Regel: Einträge vor der ersten Profilbindung gehören der ersten Generation.</li>
+<li><strong>ReturnsPortal.</strong> <code>Modules/ReturnsPortal/Services/WorkerService.cs:35-38</code> friert die Pfade im Konstruktor ein, künftig bei Bedarf lesen.</li>
+</ul>
+<h2>Weitere Punkte</h2>
+<ul>
+<li><strong>Argumentauswertung</strong> in <code>ArpaToolsWorker/Program.cs</code>, die es heute nicht gibt. Ohne Argument alle Profile, mit Argument eines. Bei einer Installation mit einem Profil identisch mit heute. Der Windows-Dienstname entsteht in <code>sc.exe create</code>, nicht in <code>Program.cs</code>; nötig ist ein dokumentiertes <code>sc create</code>-Beispiel in <code>service_cmds.txt</code> mit korrekt quotiertem <code>binpath</code> samt Argument.</li>
+<li><strong>Sequenziell</strong>, nicht parallel: <code>Statics.ProfileFolder</code> und die Dienste sind global. Ein hängender Job in Mandant A verzögert Mandant B. Wer Isolation braucht, registriert pro Mandant einen Dienst.</li>
+<li><strong>Migration im Dienst</strong>, weil ein nur per Dienst bedienter Mandant sonst nach einem Update auf altem Stand bleibt. Fehlschlag darf nichts blockieren: loggen, Profil überspringen, weitermachen. <code>sp_getapplock</code> pro Mandant, damit Dienst und Oberfläche nicht gleichzeitig migrieren.</li>
+<li><strong>Fälligkeitsstempel pro Profil</strong> prozesslokal führen und in eine Datei unter <code>Statics.AppDataRoot</code> spiegeln, <strong>nicht</strong> in die Mandantendatenbank. Dort wäre er im wichtigsten Fehlerfall, nicht erreichbarer Datenbank, nicht schreibbar, und der Dienst würde den defekten Mandanten in jedem Takt erneut anlaufen. Auch bei Fehlschlag fortschreiben.</li>
+<li><strong>Erkennung doppelter Terminplanung.</strong> Die Spalte "zuletzt vom Dienst bedient am" in <code>arpa.ProfileBinding</code> wird von <a href="../issues/57.html">#57</a> mit angelegt, aber nur der Dienst kann sie füllen. Melden sich zwei Installationen mit frischen Zeitstempeln, laufen Jobby-Jobs doppelt. Hinweis, keine Sperre.</li>
+<li><strong>Dienstlogs pro Profil trennen.</strong> <code>ArpaToolsWorker/Worker.cs</code> schreibt heute alles ohne Profilbezug nach <code>%ProgramData%\arpaTools\ServiceLogs</code>.</li>
+</ul>
+<p>Siehe auch <a href="../issues/403.html">#403</a> zum Rundlauf des Dienstes.</p>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

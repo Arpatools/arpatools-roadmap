@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konfigurierbare Lagerbestand-Übermittlung in der Netstock-Anbindung – ArpaTools</title>
+<meta name="description" content="&lt;p ArpaTools soll beim Netstock Export eine konfigurierbare Option erhalten, mit der gesteuert wird, ob das Feld &lt;strong Stock On Hand&lt;/strong den gesamten Lagerbestand oder nur de…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Konfigurierbare Lagerbestand-Übermittlung in der Netstock-Anbindung</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">Netstock</span>
+      <a class="badge badge-link" href="../changelog.html#v5.24.0">Version 5.24.0</a>
+      <span class="badge">#452</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 06. Juli 2026</p>
+    <div class="prose">
+      <p>ArpaTools soll beim Netstock-Export eine konfigurierbare Option erhalten, mit der gesteuert wird, ob das Feld <strong>Stock On Hand</strong> den gesamten Lagerbestand oder nur den verfügbaren Bestand enthält.</p>
+<h2>Ausgangslage</h2>
+<p>Beim Netstock-Export über ArpaTools werden pro Lagerort u. a. folgende Felder der <code>stock.csv</code> befüllt:</p>
+
+<table>
+<thead>
+<tr>
+<th>Pos.</th>
+<th>Feld</th>
+<th>Typ</th>
+<th>Status</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>Stock On Hand</td>
+<td>Integer</td>
+<td>Benötigt</td>
+<td>Physischer Ist-Bestand, ausgedrückt in Netstock-Maßeinheit</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Allocated Stock</td>
+<td>Integer</td>
+<td>Erwünscht</td>
+<td>Reservierter Bestand, der nicht zum Verkauf zur Verfügung steht, ausgedrückt in Netstock-Maßeinheit</td>
+</tr>
+</tbody></table>
+<p><strong>Aktuelles Verhalten:</strong> In <em>Stock On Hand</em> wird der gesamte physische Lagerbestand übermittelt. Der reservierte Anteil wird optional zusätzlich in <em>Allocated Stock</em> geliefert. Netstock ermittelt den verfügbaren Bestand daraus selbst (<code>Stock On Hand − Allocated Stock</code>).</p>
+
+<h2>Problem</h2>
+<p>Ein Kunde möchte nicht den gesamten Lagerbestand in <em>Stock On Hand</em> übermitteln, sondern nur den <strong>verfügbaren Bestand</strong> (Ist-Bestand abzüglich Reservierungen). Dafür fehlt in ArpaTools eine Einstellmöglichkeit.</p>
+<h2>Gewünschte Lösung</h2>
+<p>Neue Konfigurationsoption, die die Befüllung von <em>Stock On Hand</em> für den Netstock-Export steuert. Zwei sich gegenseitig ausschließende Modi:</p>
+<h3>Modus A – „Gesamtbestand" (Default, bisheriges Verhalten)</h3>
+<ul>
+<li><code>Stock On Hand</code> = gesamter physischer Lagerbestand</li>
+<li><code>Allocated Stock</code> = reservierter Bestand (optional, wie bisher)</li>
+<li>Netstock berechnet den verfügbaren Bestand selbst.</li>
+</ul>
+<h3>Modus B – „Nur verfügbarer Bestand" (neu)</h3>
+<ul>
+<li><code>Stock On Hand</code> = verfügbarer Bestand = <strong>physischer Ist-Bestand − reservierter Bestand</strong></li>
+<li><code>Allocated Stock</code> wird <strong>nicht</strong> befüllt (leer).</li>
+<li><strong>Begründung:</strong> Würde <em>Allocated Stock</em> zusätzlich befüllt, zöge Netstock den reservierten Bestand erneut ab und würde den verfügbaren Bestand doppelt reduzieren.</li>
+</ul>
+<h2>Design-Entscheidungen</h2>
+<ul>
+<li><strong>Geltungsbereich:</strong> Die Option gilt immer <strong>global</strong>.</li>
+<li><strong>Negativer verfügbarer Bestand:</strong> Das Ergebnis wird auf <code>0</code> gekappt (<code>Stock On Hand ≥ 0</code>); es werden keine negativen Werte übermittelt.</li>
+</ul>
+<h2>Akzeptanzkriterien</h2>
+<ul>
+<li>[ ] In ArpaTools existiert eine <strong>globale</strong> Option (Umschalter/Dropdown) mit den Werten „Gesamtbestand" und „Nur verfügbarer Bestand".</li>
+<li>[ ] Default ist „Gesamtbestand" (kein Verhaltenswechsel für Bestandskunden).</li>
+<li>[ ] Bei „Nur verfügbarer Bestand" enthält Feld 7 (<code>Stock On Hand</code>) den Wert <code>Ist-Bestand − reservierter Bestand</code>.</li>
+<li>[ ] Bei „Nur verfügbarer Bestand" bleibt Feld 8 (<code>Allocated Stock</code>) leer.</li>
+<li>[ ] Ist der berechnete verfügbare Bestand negativ, wird <code>Stock On Hand = 0</code> übermittelt.</li>
+<li>[ ] Die Berechnung erfolgt in Netstock-Maßeinheit.</li>
+</ul>
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

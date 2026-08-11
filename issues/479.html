@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobby: Neue Aktion XML zu CSV mit auswählbaren Node-Pfaden – ArpaTools</title>
+<meta name="description" content="Ziel Immer mehr Händler liefern ihre Daten als XML statt als CSV. Alle nachgelagerten Jobby Aktionen, die Fremddaten verarbeiten ( , , , , ), erwarten CSV. Eine neue Aktion soll be…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Jobby: Neue Aktion XML zu CSV mit auswählbaren Node-Pfaden</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">Jobby</span>
+      <a class="badge badge-link" href="../changelog.html#v5.28.0">Version 5.28.0</a>
+      <span class="badge">#479</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 04. August 2026</p>
+    <div class="prose">
+      <h2>Ziel</h2>
+<p>Immer mehr Händler liefern ihre Daten als XML statt als CSV. Alle nachgelagerten
+Jobby-Aktionen, die Fremddaten verarbeiten (<code>JtlStockImport</code>, <code>WriteShoppingList</code>,
+<code>WriteSupplierOrder</code>, <code>JtlAmeiseImport</code>, <code>JtlShipmentDataImport</code>), erwarten CSV.
+Eine neue Aktion soll beliebiges XML in CSV wandeln, wobei der Nutzer selbst
+auswählt, welche Knoten zu Zeilen und welche zu Spalten werden. Verschachtelte
+Werte müssen funktionieren.</p>
+<p>Schwester-Issue für JSON: <a href="../issues/480.html">#480</a>. Der Kern wird geteilt (siehe unten).</p>
+<h2>Aktion</h2>
+<p><code>ActionType.XmlToCsv = 27</code>, Mapping als JSON in <code>ActionDbModel.Settings</code>
+(kein neuer Fremdschlüssel, keine Migration).</p>
+<h2>Mapping-Modell</h2>
+<p>Zwei Angaben genügen:</p>
+<ol>
+<li><strong>Zeilen-Pfad:</strong> welcher Knoten ist ein Datensatz, z.B. <code>/catalog/products/product</code></li>
+<li><strong>Spaltenliste:</strong> je Spalte ein Name, ein Pfad relativ zur Zeile und eine
+Obergrenze für Wiederholungen (1 bis 50)</li>
+</ol>
+<p>Beispiel:</p>
+<table>
+<thead>
+<tr>
+<th>Spaltenname</th>
+<th>Pfad (relativ zur Zeile)</th>
+<th>Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Artikelnummer</td>
+<td><code>@sku</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bestand</td>
+<td><code>stock/qty</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Lager</td>
+<td><code>stock/warehouse</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Preis EUR</td>
+<td><code>prices/price[@cur='EUR']</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Variante</td>
+<td><code>variants/variant/color</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>EAN</td>
+<td><code>variants/variant/ean</code></td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>Technische Basis ist XPath über <code>XDocument</code> / <code>XPathSelectElements</code>, also nichts
+selbst geparst.</p>
+<h2>Wiederholungen horizontal ausrollen</h2>
+<p>Liefert ein Pfad mehrere Treffer, entsteht <strong>pro Treffer eine eigene Spalte</strong>,
+keine Sammelzelle und keine zusätzliche Zeile:</p>
+<pre><code>Artikelnummer;Lager;Bestand;PreisEUR;Variante1;EAN1;Variante2;EAN2;Variante3;EAN3
+A-100;Z1;42;19,90;rot;400001;blau;400002;;
+A-200;Z1;7;9,90;schwarz;400010;;;;
+</code></pre>
+<ul>
+<li>Die Spaltenzahl ergibt sich aus der konfigurierten Obergrenze, nicht aus dem
+Dateiinhalt. Die Kopfzeile bleibt damit über alle Läufe stabil.</li>
+<li>Obergrenze wählbar von 1 bis 50, mehr nicht, sonst wird die CSV unbrauchbar breit.</li>
+<li>Mehr Treffer als erlaubt werden abgeschnitten und ins Log geschrieben, damit
+auffällt, wenn ein Händler plötzlich mehr liefert.</li>
+<li>Spalten aus derselben Wiederholung stehen gruppiert (<code>Variante1;EAN1;Variante2;EAN2</code>),
+damit bei Staffelpreisen Menge und Preis nebeneinander liegen.</li>
+</ul>
+<h2>Bedienung</h2>
+<p>Niemand soll XPath tippen. Im Aktions-Fenster wird eine Beispieldatei geladen,
+die Struktur erscheint als Baum (<code>SfTreeView</code> ist im Projekt vorhanden), der Nutzer
+klickt einen Knoten an und wählt "als Zeilen-Ebene" oder "als Spalte". Den Pfad
+erzeugt das Tool. Das Pfad-Feld bleibt editierbar, damit Fortgeschrittene Prädikate
+und Filter nachschärfen können.</p>
+<h2>Namespaces</h2>
+<p>Pflicht, nicht optional. Händlerformate wie BMEcat oder openTRANS liefern
+Namespaces, und ein XPath <code>/products/product</code> findet dann nichts, was für den
+Nutzer aussieht als sei das Tool defekt. Der Baum-Picker erzeugt deshalb
+standardmäßig namensraum-tolerante Pfade über <code>local-name()</code>. Ein Schalter
+erlaubt exakte Namespace-Bindung, falls zwei Namensräume dasselbe Element-Tag
+verwenden.</p>
+<h2>Lesen ohne Speicherproblem</h2>
+<p>Händler-Preislisten können mehrere hundert MB groß sein, ein vollständiges DOM
+ist dafür nicht tragbar. Der <code>XmlReader</code> läuft durch die Datei bis zur
+Elementkette des Zeilen-Pfads, lädt genau diesen Teilbaum per <code>XNode.ReadFrom</code>,
+wertet darauf alle Spaltenpfade aus, schreibt die Zeile und verwirft den Teilbaum.
+Prädikate im Zeilen-Pfad werden nach dem Laden des Teilbaums geprüft, dadurch
+bleibt es bei einem Codepfad.</p>
+<h2>Pipeline-Verhalten</h2>
+<ul>
+<li>Eingabe sind die Dateien des Vorgängers, gefiltert über <code>action.Filter</code> wie üblich.</li>
+<li>Pro Eingabedatei entsteht eine CSV im Job-Temp-Ordner.</li>
+<li>Rückgabe ist ein neues <code>TransferObject</code> mit den CSV-Pfaden, die Original-XML
+werden nicht weitergereicht.</li>
+</ul>
+<p>Damit sind Ketten wie diese möglich:</p>
+<pre><code>FtpServerDownload (*.xml)  -&gt;  XmlToCsv  -&gt;  JtlStockImport
+FtpServerDownload (*.xml)  -&gt;  XmlToCsv  -&gt;  WriteSupplierOrder
+LoadFromWeb (feed.xml)     -&gt;  XmlToCsv  -&gt;  SaveToFolder + FtpServerUpload
+</code></pre>
+<h2>Geteilter Kern</h2>
+<p>Mapping-Modelle, CSV-Writer und Ausroll-Logik werden mit der JSON-Variante
+geteilt, nur die Formatgrenze ist getrennt:</p>
+<pre><code>Modules/Jobby/Business/Converters/
+  IRowSource.cs      Rows() + Value(row, relPath)
+  XmlRowSource.cs    XmlReader-Streaming + XPath   (dieses Issue)
+  JsonRowSource.cs   JsonTextReader + JSONPath     (#480)
+  CsvRowWriter.cs    Kopfzeile, Wiederholungsspalten, Quoting, Encoding
+  RowMapping.cs      RowPath + List&lt;ColumnMapping&gt;
+  ColumnMapping.cs   Name, Path, MaxOccurrences (1-50)
+</code></pre>
+<p>Settings-Modell, Detail-Fenster und ViewModel bleiben je Aktion getrennt, weil
+Pfad-Syntax, Hilfetexte und Beispiele je Format unterschiedlich sind.</p>
+<h2>Nicht Teil dieses Issues</h2>
+<ul>
+<li>Keine Vorlagen-Tabelle und kein Verwaltungsfenster für Mappings. Das Mapping
+gehört zur Aktion. Import/Export als <code>.json</code> ist später billig nachrüstbar.</li>
+<li>Kein Schalter für die Spaltenfolge, gruppiert ist fest.</li>
+</ul>
+<h2>Noch zu klären (kommt in die Spec)</h2>
+<ul>
+<li>CSV-Ausgabeoptionen: Trennzeichen, Kopfzeile ja/nein, Encoding, Quoting.
+Vorhandene Muster aus <code>LoadFromSql</code> und <code>InventoryValuation</code> prüfen.</li>
+<li>Wertetransformation je Spalte, vor allem Dezimaltrennzeichen (<code>19.90</code> zu <code>19,90</code>)
+und Datumsformate.</li>
+<li>Verhalten bei fehlendem Knoten: leere Zelle oder Zeile verwerfen.</li>
+<li>Verhalten bei leerer Ergebnismenge: leere CSV mit Kopfzeile oder keine Datei.</li>
+</ul>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

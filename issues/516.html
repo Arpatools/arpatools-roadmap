@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MigrationBase: Leer-Batch-Prüfung greift ins Leere – ArpaTools</title>
+<meta name="description" content="In , Methode : Die Bedingung prüft , also das vollständige Skript, statt , den gerade abgespaltenen Batch. Da bei jeder Migration nicht leer ist, ist die Bedingung immer wahr und d…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>MigrationBase: Leer-Batch-Prüfung greift ins Leere</h1>
+    <p class="badges">
+      <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">ArpaTools Kern</span>
+      <a class="badge badge-link" href="../changelog.html#v5.28.0">Version 5.28.0</a>
+      <span class="badge">#516</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 08. August 2026</p>
+    <div class="prose">
+      <p>In <code>ArpaTools/Migrations/MigrationBase.cs</code>, Methode <code>RunMigration</code>:</p>
+<pre><code class="language-csharp">foreach (var sql in MigrationSql.Split("GO\r\n"))
+{
+    if (!string.IsNullOrWhiteSpace(MigrationSql))   // prüft das ganze Skript
+    {
+        databaseService.ExecuteNonQuery(sql, null, null, true);   // führt den einzelnen Batch aus
+    }
+}
+</code></pre>
+<p>Die Bedingung prüft <code>MigrationSql</code>, also das vollständige Skript, statt <code>sql</code>, den gerade
+abgespaltenen Batch. Da <code>MigrationSql</code> bei jeder Migration nicht leer ist, ist die Bedingung
+immer wahr und der Schutz gegen leere Batches greift nie.</p>
+<p><strong>Wirkung.</strong> Jedes Migrationsskript, das mit einer Leerzeile beginnt oder endet, oder das zwei
+<code>GO</code> hintereinander enthält, schickt einen leeren beziehungsweise reinen Kommentar-Batch an
+<code>ExecuteNonQuery</code>. Das ist heute folgenlos, weil SQL Server einen leeren Befehl toleriert, aber
+es ist erkennbar nicht die Absicht des Codes.</p>
+<p>Beispiel: <code>MigrationNetstockV10.MigrationSql</code> beginnt mit einer Leerzeile und endet nach dem
+letzten <code>GO</code> mit einer weiteren, erzeugt also zwei solcher Batches.</p>
+<p><strong>Vorschlag.</strong> <code>sql</code> statt <code>MigrationSql</code> prüfen. Eine Zeile.</p>
+<p><strong>Warum es trotzdem gemeldet wird.</strong> Der Schutz existiert offensichtlich mit Absicht, er ist nur
+wirkungslos. Wenn <code>ExecuteNonQuery</code> später einmal strenger wird oder eine andere Datenbank
+angebunden wird, fällt es zur Laufzeit auf und niemand vermutet die Ursache in einer
+Bedingung, die seit Jahren danebengreift.</p>
+<p>Gefunden beim Nachgehen eines fehlgeschlagenen Tests, siehe das verwandte Issue zur
+Wiederholbarkeit von Migrationen.</p>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

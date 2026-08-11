@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobby: Neue Aktion Excel zu CSV (.xlsx und .xls) mit Blatt- und Spaltenauswahl – ArpaTools</title>
+<meta name="description" content="Ziel ( 479) und ( 480) decken die strukturierten Fremdformate ab. Der häufigste Fall in der Praxis fehlt noch: Lieferanten schicken Preislisten, Bestandsdateien und Retourenlisten…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Jobby: Neue Aktion Excel zu CSV (.xlsx und .xls) mit Blatt- und Spaltenauswahl</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">Jobby</span>
+      <a class="badge badge-link" href="../changelog.html#v5.28.0">Version 5.28.0</a>
+      <span class="badge">#483</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 06. August 2026</p>
+    <div class="prose">
+      <h2>Ziel</h2>
+<p><code>XmlToCsv</code> (<a href="../issues/479.html">#479</a>) und <code>JsonToCsv</code> (<a href="../issues/480.html">#480</a>) decken die strukturierten Fremdformate ab. Der
+häufigste Fall in der Praxis fehlt noch: Lieferanten schicken Preislisten,
+Bestandsdateien und Retourenlisten als Excel-Mappe. Heute endet die Kette beim
+Download, und der Kunde speichert die Datei von Hand als CSV.</p>
+<p>Eine neue Aktion wandelt <code>.xlsx</code> und <code>.xls</code> in CSV. Der Nutzer wählt das Blatt, die
+Kopfzeile und die Spalten. Alles hinter der CSV-Ausgabe bleibt unverändert, weil die
+bestehenden CSV-Verbraucher weiterarbeiten wie bisher.</p>
+<p>Der Reader ist die dritte Umsetzung hinter derselben Grenze, die für XML und JSON
+gebaut wurde: Mapping-Oberfläche, Spaltenformate, CSV-Ausgabeoptionen und Vorschau
+werden mitbenutzt, nicht nachgebaut.</p>
+<p><strong>Design abgestimmt</strong> und im Repo unter <code>docs/superpowers/specs/2026-08-04-excel-zu-csv-design.md</code>,
+entstanden nach einer Red-Team-Prüfung des ersten Entwurfs. Die Spec liegt bis zum Merge
+auf dem Branch <code>worktree-xml-json-to-csv</code>.</p>
+<h2>Aktion</h2>
+<p><code>ActionType.ExcelToCsv = 29</code>, Mapping als JSON in <code>ActionDbModel.Settings</code>, keine
+Migration. Eine Aktion für beide Formate, nicht zwei: <code>ExcelReaderFactory.CreateReader</code>
+prüft die ersten acht Bytes und wählt selbst, der Nutzer muss das Format nicht kennen.
+Dateifilter <code>*.xlsx;*.xls</code>.</p>
+<p>Bibliothek: <code>ExcelDataReader</code> 3.9.0 (MIT) plus <code>System.Text.Encoding.CodePages</code> (für
+<code>.xls</code> zwingend, sonst wirft Codepage 1252).</p>
+<h2>Mapping-Modell</h2>
+<p>Das Blatt ist die Zeilenebene, jede Datenzeile ein Datensatz.</p>
+<pre><code>Zeilenpfad:        Tabelle1        (oder #1 für "erstes Blatt")
+Spalte:            Tabelle1!Artikelnummer
+Spalte ohne Titel: Tabelle1!#H
+Kopfzelle:         Tabelle1!B2     (Dokumentpfad)
+</code></pre>
+<p>Spalten werden <strong>über ihre Überschrift</strong> adressiert, nicht über die Position. Sortiert
+der Lieferant Spalten um, läuft das Mapping weiter.</p>
+<p><code>HeaderRow</code> ist einstellbar, Standard 1. <code>HeaderRow = 0</code> heißt <strong>keine Kopfzeile</strong>:
+Daten ab Zeile 1, Spalten über den Buchstaben (<code>#A</code>, <code>#B</code>, ...). Zellen oberhalb der
+Kopfzeile werden als Kopfdaten angeboten, damit "gültig ab" oder "Lieferantennummer"
+aus dem Blattkopf in jede Zeile kann.</p>
+<p>Die Positionsform <code>#1</code> gibt es, weil Blätter wie "Preisliste Feb 2026" monatlich
+umbenannt werden und den Job sonst jeden Monat brechen würden.</p>
+<h2>Werte</h2>
+<p>Rohwert, kulturneutral: Zahl <code>19.9</code>, Datum ISO, Wahrheitswert <code>1</code>/<code>0</code>. Danach greifen
+die bestehenden Spaltenoptionen für Zahl- und Datumsformat.</p>
+<p>Drei Fälle brauchen ausdrücklich Sonderbehandlung, sonst gibt es stillen Datenverlust:</p>
+<ul>
+<li><strong>Prozentzellen.</strong> Excel speichert 19 % als <code>0.19</code>. Ohne Auswertung des Zahlenformats
+ist eine MwSt- oder Rabattspalte um Faktor 100 falsch, und beide Werte sehen
+plausibel aus.</li>
+<li><strong>Fehlerzellen.</strong> <code>#N/A</code> kommt als leer an. Eine Zeile aus lauter <code>#VLOOKUP</code>-Fehlern
+würde damit als Leerzeile verworfen, und aus 1000 Artikeln würden 940 ohne Spur im
+Log. Leerheit muss <code>GetCellError</code> einbeziehen.</li>
+<li><strong>Ganzzahlen ohne Exponent.</strong> Ab 18 Stellen liefert <code>double.ToString</code> wissenschaftliche
+Notation. Ganzzahlen bis 2^53 werden exakt als <code>long</code> geschrieben, darüber ohne
+Exponent plus Warnung.</li>
+</ul>
+<p>Dokumentierte Grenzen: Formeln liefern den gespeicherten Wert, verbundene Zellen haben
+ihren Wert nur oben links, ein Datum kommt nur als Datum durch, wenn die Zelle ein
+Datumsformat trägt, und eine per Zellformat <code>000</code> als <code>007</code> angezeigte Artikelnummer
+verliert die Führungsnullen.</p>
+<h2>Speicher</h2>
+<p>Die Datenzeilen werden gestreamt, die Shared Strings nicht: beide Workbook-Implementierungen
+halten die vollständige Shared-String-Tabelle im Speicher. Es wird deshalb <strong>keine</strong>
+Dateigrößengrenze versprochen, sondern an einer echten Kundendatei gemessen und das
+Ergebnis dokumentiert.</p>
+<h2>Eingriffe in geteilten Code</h2>
+<p>Die Formatgrenze allein reicht nicht, drei kleine Eingriffe sind nötig und danach für
+alle drei Formate korrekt:</p>
+<ol>
+<li><strong>Kopfzellen-Kennzeichen</strong> an <code>DocumentNodeModel</code>. Bei Excel ist der Blattknoten
+gleichzeitig der Zeilenknoten, Kopfzellen hängen also darunter, und <code>IsInsideRow</code>
+hält sie deshalb für zeilenrelativ. Ein Pfad, der gleichzeitig mit <code>Tabelle1!</code>
+beginnt und nicht damit beginnt, existiert nicht.</li>
+<li><strong><code>CanBeRequired</code></strong> prüft hart auf <code>.</code>, <code>/</code> und <code>[*]</code>. Eine Überschrift <code>Art.Nr.</code>
+verliert damit still ihren Pflichtfeldschutz. Prüfung auf den <code>PathSeparator</code>
+umstellen.</li>
+<li><strong>Präfixerkennung für Textvorlagen</strong>: <code>{Tabelle1!B2}</code> gilt heute nicht als
+Dokumentpfad und bliebe leer.</li>
+</ol>
+<h2>Bestandsreparaturen in diesem Zug</h2>
+<p>Drei Befunde treffen XML und JSON heute genauso, werden bei Excel aber deutlich
+wahrscheinlicher schmerzhaft. Sie werden mitrepariert:</p>
+<ul>
+<li><strong>Vorschau begrenzen.</strong> <code>Convert</code> läuft ohne Zeilengrenze über die ganze Datei,
+gelesen werden 21 Zeilen, und jeder gesetzte Haken löst das erneut aus. Bei 30
+Spalten sind das 31 Volldurchläufe. Bei einer 300.000-Zeilen-Tabelle ist das Fenster
+unbenutzbar.</li>
+<li><strong><code>try/catch</code> je Datei in <code>RunToCsv</code>.</strong> Heute reißt eine kaputte Datei den ganzen Job
+ab, und der Temp-Ordner wird im <code>finally</code> gelöscht. Eine passwortgeschützte Mappe
+unter 20 Lieferantendateien führt damit zu null CSV statt 19.</li>
+<li><strong><code>FileShare.ReadWrite</code>.</strong> Im Modul gibt es heute kein einziges <code>FileShare</code>, eine in
+Excel offene Quelldatei wirft <code>IOException</code>.</li>
+</ul>
+<p>Dazu Excel-spezifisch: der Endungsfilter in <code>RunToCsv</code> wird eine Liste, und die
+Zielnamenskollision <code>preise.xls</code> gegen <code>preise.xlsx</code> (beide schreiben <code>preise.csv</code>)
+wird erkannt und gewarnt.</p>
+<h2>Nicht Teil dieses Issues</h2>
+<ul>
+<li>Excel schreiben, <code>.xlsb</code>, mehrere Blätter in einem Lauf.</li>
+<li>Formeln neu berechnen, verbundene Zellen auflösen, passwortgeschützte Mappen
+entschlüsseln.</li>
+<li>Zellformate auswerten außer dem Prozentfall.</li>
+</ul>
+<h2>Versionshinweis</h2>
+<p>Ein älterer Client stürzt beim Öffnen eines Jobs mit Typ 29 (<code>ArgumentOutOfRangeException</code>
+im <code>AsDisplayString</code>-Switch), ein älterer Worker überspringt die Aktion still. Gleiches
+Muster wie bei <code>XmlToCsv = 27</code>, gehört aber in die Kundendoku.</p>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

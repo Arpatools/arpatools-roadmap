@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Einstellen wie lange abgerechnete Aufträge in Auftragslisten sichtbar bleiben – ArpaTools</title>
+<meta name="description" content="Beschreibung: Aufträge in der Auftragslisten Detailansicht ( , rechtes Panel, Grid) sammeln sich über die Zeit an — auch bereits vollständig abgerechnete. Das verlangsamt das Laden…">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="issue-detail rise">
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Einstellen wie lange abgerechnete Aufträge in Auftragslisten sichtbar bleiben</h1>
+    <p class="badges">
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
+      <span class="badge">ProviMate</span>
+      <a class="badge badge-link" href="../changelog.html#v5.27.0">Version 5.27.0</a>
+      <span class="badge">#38</span>
+    </p>
+    <p class="issue-date">Abgeschlossen am 02. August 2026</p>
+    <div class="prose">
+      <p><strong>Beschreibung:</strong>
+Aufträge in der Auftragslisten-Detailansicht (<code>SalesOrderListsView</code>, rechtes Panel, <code>SalesOrders</code>-Grid) sammeln sich über die Zeit an — auch bereits vollständig abgerechnete. Das verlangsamt das Laden/Filtern der Liste unnötig. Es soll in den globalen ProviMate-Einstellungen konfigurierbar sein, nach wie vielen Tagen ein bereits abgerechneter Auftrag standardmäßig aus der Liste ausgeblendet wird. Ausgeblendete Aufträge sollen bei Bedarf über eine Checkbox wieder eingeblendet werden können.</p>
+<p><strong>Akzeptanzkriterien:</strong></p>
+<ul>
+<li>Neue Einstellung in den ProviMate-Einstellungen (<code>ProviMateSettingsWindow</code>): Anzahl Tage, nach denen ein abgerechneter Auftrag ausgeblendet wird. Default <code>0</code> = Funktion deaktiviert (kein Auftrag wird ausgeblendet) — bestehende Installationen sehen nach dem Update keine Veränderung, bis der Wert bewusst gesetzt wird.</li>
+<li>Ein Auftrag gilt als "abgerechnet seit X Tagen", wenn <strong>alle</strong> verknüpften Journale (<code>JournalIdentifier</code>) abgerechnet sind (<code>AccountedAt</code> gesetzt) und das <strong>späteste</strong> <code>AccountedAt</code> unter den verknüpften Journalen mehr als X Tage in der Vergangenheit liegt. Ein Auftrag mit mindestens einem noch nicht abgerechneten Journal, oder ganz ohne Journal, bleibt immer sichtbar, unabhängig vom Einstellungswert.</li>
+<li>In <code>SalesOrderListsView</code> (rechtes Panel) gibt es eine Checkbox ("Abgerechnete Aufträge einblenden" o.ä.), die die Alters-Filterung für die aktuelle Ansicht übersteuert und alle Aufträge wieder anzeigt.</li>
+<li>Die Alters-Filterung kombiniert sich mit dem bestehenden <code>OrderDataFilter</code>-Suchfeld (UND-Verknüpfung) statt es zu ersetzen.</li>
+</ul>
+<p><strong>Technisch:</strong></p>
+<ul>
+<li><code>ProviMateSettingsDbModel</code> + <code>ProviMateSettingsWindow</code>/<code>ProviMateSettingsViewModel</code>: neues Feld (Arbeitstitel <code>HideAccountedSalesOrdersAfterDays</code>, <code>int</code>, Default <code>0</code>), inkl. Migration <code>MigrationProviMateV48</code> (nächste freie Nummer nach <code>V47</code>) für die neue Spalte auf <code>arpa.ProviMateSettings</code>.</li>
+<li><code>SalesOrderListSalesOrderDbModel.GetAllSql()</code> (<code>Modules/ProviMate/Models/SalesOrderListSalesOrderDbModel.cs:46-69</code>): die <code>Journals</code>-Subquery selektiert aktuell nur <code>JournalId</code>, nicht <code>AccountedAt</code> — muss erweitert werden, um das späteste <code>AccountedAt</code> je Auftrag mitzuliefern (z.B. <code>MAX(ProviMateJournals.AccountedAt)</code>), plus ein Flag/Wert, ob alle verknüpften Journale abgerechnet sind.</li>
+<li><code>SalesOrderListsViewModel</code>: neue <code>ShowAccountedSalesOrders</code>-Property (Checkbox-Binding) und Filterlogik, die zusätzlich zum bestehenden <code>OrderDataFilter</code>-Textfilter greift.</li>
+</ul>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 11. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>
