@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XML zu CSV: geschriebene CSV kommt nicht im Zielverzeichnis an, nur die Zusammenfassung – ArpaTools</title>
-<meta name="description" content="Bei einer Kette aus → → kommt im Zielverzeichnis nur die Zusammenfassung ( ) an, nicht die geschriebene CSV. Ursache schreibt zwei Dateien in den Temp Ordner und gibt beide in die…">
+<title>Die umgewandelte CSV landet nun auch mit Zusammenfassung im Zielverzeichnis – ArpaTools</title>
+<meta name="description" content="Wer beim Umwandeln nach CSV die Zusammenfassung mitschreiben ließ und die folgende Aktion auf &quot;Nur die neuste Datei verarbeiten&quot; stehen hatte, fand am Ziel nur die Zusammenfassung.…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>XML zu CSV: geschriebene CSV kommt nicht im Zielverzeichnis an, nur die Zusammenfassung</h1>
+    <h1>Die umgewandelte CSV landet nun auch mit Zusammenfassung im Zielverzeichnis</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,27 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 06. August 2026</p>
     <div class="prose">
-      <p>Bei einer Kette aus <code>Daten aus Verzeichnis laden</code> → <code>XML zu CSV</code> → <code>Daten in Verzeichnis speichern</code> kommt im Zielverzeichnis nur die Zusammenfassung (<code>*.log.txt</code>) an, nicht die geschriebene CSV.</p>
-<h2>Ursache</h2>
-<p><code>XML zu CSV</code> schreibt zwei Dateien in den Temp-Ordner und gibt beide in die Kette weiter:</p>
-<ol>
-<li>die CSV</li>
-<li>die Zusammenfassung <code>&lt;name&gt;.csv.log.txt</code>, wenn <strong>Zusammenfassung schreiben</strong> aktiv ist</li>
-</ol>
-<p>Die empfangende Aktion filtert über <code>JobRunner.BuildListByAllFilesOption</code>. Steht sie auf <strong>Nur die neuste Datei verarbeiten</strong> (das ist der Standardwert, <code>AllFilesOption.OnlyNewest = 0</code>), wird genau eine Datei übernommen: die mit der jüngsten Erstellungszeit. Die Zusammenfassung wird immer <strong>nach</strong> der CSV geschrieben und ist damit immer die jüngere. Sie gewinnt, die CSV bleibt im Temp-Ordner liegen und wird beim Jobende mit dem Ordner gelöscht.</p>
-<h2>Erwartet</h2>
-<p>Zusammenfassung <strong>und</strong> geschriebene Datei landen im Zielverzeichnis.</p>
-<h2>Status</h2>
-<p>Behoben zusammen mit <a href="../issues/483.html">#483</a> (PR <span class="ref-muted">#484</span>): Die Auswahl der neuesten Datei überspringt Zusammenfassungen und hängt die zur gewählten Datei gehörende Zusammenfassung anschließend an. Da <code>BuildListByAllFilesOption</code> von allen drei Konvertern geteilt wird, wirkt die Korrektur für XML mit.</p>
-<p>Dieses Issue dient der <strong>getrennten Nachprüfung für XML</strong>, weil der Fehler dort genauso auftrat und der Fix nicht im XML-Kontext getestet wurde.</p>
-<h2>Prüfschritte</h2>
-<ol>
-<li>Job anlegen: <code>Daten aus Verzeichnis laden</code> → <code>XML zu CSV</code> → <code>Daten in Verzeichnis speichern</code></li>
-<li>In der Konverter-Aktion <strong>Zusammenfassung schreiben</strong> aktivieren</li>
-<li>In der Speichern-Aktion <strong>Nur die neuste Datei verarbeiten</strong> stehen lassen</li>
-<li>Job ausführen</li>
-</ol>
-<p>Erwartung: im Zielverzeichnis liegen die CSV und die <code>.log.txt</code>.</p>
+      <p>Wer beim Umwandeln nach CSV die Zusammenfassung mitschreiben ließ und die folgende Aktion auf "Nur die neuste Datei verarbeiten" stehen hatte, fand am Ziel nur die Zusammenfassung. Die CSV selbst blieb liegen und wurde am Jobende gelöscht.</p>
 
     </div>
   </article>

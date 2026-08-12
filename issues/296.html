@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aktion für &quot;erfolgreich&quot; und für &quot;fehlerhaft&quot; - Ergebnis eines Jobs – ArpaTools</title>
-<meta name="description" content="Kontext Baut auf 295 auf: Sobald jeder Job Durchlauf einen Status ( / ) und weiß, bei welcher Action er ggf. abgebrochen ist, fehlt noch die Möglichkeit, darauf innerhalb der Aktio…">
+<title>Ein Job reagiert nun getrennt auf Erfolg und auf Fehler – ArpaTools</title>
+<meta name="description" content="Brach eine Aktion ab, endete der Job schlicht; wer davon erfahren wollte, sah im Protokoll nach. Für beide Ausgänge hängt man nun eine eigene Folge von Aktionen an, etwa eine Benac…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Aktion für &quot;erfolgreich&quot; und für &quot;fehlerhaft&quot; - Ergebnis eines Jobs</h1>
+    <h1>Ein Job reagiert nun getrennt auf Erfolg und auf Fehler</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
       <span class="badge status-open">Offen</span>
@@ -47,19 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 17. April 2026</p>
     <div class="prose">
-      <h2>Kontext</h2>
-<p>Baut auf <span class="ref-muted">#295</span> auf: Sobald jeder Job-Durchlauf einen Status (<code>success</code>/<code>error</code>) und weiß, bei welcher Action er ggf. abgebrochen ist, fehlt noch die Möglichkeit, darauf innerhalb der Aktionskette zu reagieren — also eine Action, die abhängig vom Ergebnis des Jobs (oder eines vorherigen Abschnitts) unterschiedlich weiterläuft.</p>
-<h2>Wunsch</h2>
-<p>Eine Jobby-Aktion (bzw. zwei Anschlusspunkte an eine bestehende Action/den Job), die getrennt konfigurierbar ist für:</p>
-<ul>
-<li><strong>"erfolgreich"</strong>: wird nur ausgeführt, wenn der vorherige Abschnitt/Job ohne Fehler durchgelaufen ist</li>
-<li><strong>"fehlerhaft"</strong>: wird nur ausgeführt, wenn der vorherige Abschnitt/Job mit Fehler abgebrochen ist (z. B. um eine Benachrichtigung zu verschicken, aufzuräumen, oder gezielt einen Reparatur-Pfad anzustoßen)</li>
-</ul>
-<p>Damit bliebe die Ausführung weiterhin strikt sequenziell (kein Parallel-Branching) — es wird lediglich anhand des Status aus <span class="ref-muted">#295</span> entschieden, welcher <em>eine</em> nächste Pfad angehängt/übersprungen wird.</p>
-<h2>Abhängigkeit</h2>
-<p>Setzt den Status-/Log-Mechanismus aus <span class="ref-muted">#295</span> voraus (pending/processing/success/error je Durchlauf, inkl. Angabe der fehlgeschlagenen Action). Ohne <span class="ref-muted">#295</span> gibt es kein maschinenlesbares Ergebnis, an dem diese Aktion sich orientieren könnte.</p>
-<h2>Nicht-Ziel</h2>
-<p>Keine parallele Ausführung mehrerer Zweige — Jobby verarbeitet Aktionen bewusst als sequenzielle Kette, bei der jede Action von den Ergebnissen der vorherigen abhängt. Diese Aktion wählt nur, welcher einzelne Folgepfad je nach Ergebnis eingeschlagen wird.</p>
+      <p>Brach eine Aktion ab, endete der Job schlicht; wer davon erfahren wollte, sah im Protokoll nach. Für beide Ausgänge hängt man nun eine eigene Folge von Aktionen an, etwa eine Benachrichtigung im Fehlerfall oder das Aufräumen nach einem sauberen Lauf.</p>
 
     </div>
   </article>

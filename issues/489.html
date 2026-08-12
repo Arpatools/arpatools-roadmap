@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartSupply: Timeout beim Berechnen, Verkaufsmengen-Aggregation läuft über den gesamten Artikelstamm – ArpaTools</title>
-<meta name="description" content="Symptom Bei einem Kunden bricht SmartSupply beim Klick auf &quot;Berechnen&quot; mit einer SQL Timeout Meldung (&quot;Timeout expired. The timeout period elapsed prior to completion of the operat…">
+<title>Die Berechnung läuft nun auch bei langer Bestellhistorie durch – ArpaTools</title>
+<meta name="description" content="Bei gewachsener Bestellhistorie endete &quot;Berechnen&quot; nach einer Weile mit einer englischen Zeitüberschreitungsmeldung und ohne Daten. Grund war, dass die Verkaufsmengen über den gesa…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>SmartSupply: Timeout beim Berechnen, Verkaufsmengen-Aggregation läuft über den gesamten Artikelstamm</h1>
+    <h1>Die Berechnung läuft nun auch bei langer Bestellhistorie durch</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,83 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 06. August 2026</p>
     <div class="prose">
-      <h2>Symptom</h2>
-<p>Bei einem Kunden bricht SmartSupply beim Klick auf "Berechnen" mit einer SQL-Timeout-Meldung
-("Timeout expired. The timeout period elapsed prior to completion of the operation or the
-server is not responding.") ab. Die Bestelldaten werden nicht geladen.</p>
-<h2>Betroffene Stelle</h2>
-<ul>
-<li><code>ArpaTools/Modules/SmartSupply/Services/DatabaseService.cs:34</code> — <code>GetAllSmartSupplyData()</code> mit fest verdrahtetem <code>commandTimeout: 60</code></li>
-<li><code>ArpaTools/Modules/SmartSupply/Models/SmartSupplyDataDbModel.cs:58-144</code> — die beiden Query-Varianten (<code>_getSql</code> und <code>_getSqlWithWarehouseFilter</code>)</li>
-<li><code>ArpaTools/Modules/SmartSupply/ViewModels/SmartSupplyViewModel.cs:398-408</code> — Aufruf über <code>Calculate()</code>, ohne Fehlerbehandlung</li>
-</ul>
-<h2>Warum <a href="../issues/423.html">#423</a> nicht gereicht hat</h2>
-<p>Issue <a href="../issues/423.html">#423</a> hat den Timeout von 30 auf 60 Sekunden erhöht (Commit <code>f70adee</code>). Das war eine
-Anhebung der Grenze, keine Behebung der Ursache: Die Laufzeit der Query wächst mit der
-Bestellhistorie des Kunden, deshalb läuft dieselbe Grenze bei größeren Datenbeständen
-erneut ab. Ein weiteres Hochsetzen des Werts würde das Problem nur verschieben.</p>
-<h2>Vermutete Ursache (zu verifizieren, siehe Diagnose)</h2>
-<p>Die Verkaufsmengen-Aggregation ist nicht auf den ausgewählten Lieferanten eingeschränkt:</p>
-<pre><code class="language-sql">LEFT JOIN (
-    SELECT tBestellpos.tArtikel_kArtikel AS kArtikel
-        , SUM(tbestellpos.nAnzahl) AS fAnzahl
-    FROM dbo.tBestellpos
-    JOIN dbo.tBestellung ON ... AND tBestellung.dErstellt &gt;= @SalesAmountDateFilter ...
-    GROUP BY tBestellpos.tArtikel_kArtikel
-) AS SalesAmount ON SalesAmount.kArtikel = tArtikel.kArtikel
-</code></pre>
-<p>Das ist eine nicht korrelierte abgeleitete Tabelle mit <code>GROUP BY</code>. Der Lieferantenfilter
-(<code>WHERE tliefartikel.tLieferant_kLieferant = @SupplierId</code>) steht außerhalb und kann nicht in
-die Gruppierung hineingezogen werden. SQL Server aggregiert daher alle Bestellpositionen des
-gewählten Zeitraums über den gesamten Artikelstamm, obwohl anschließend nur die Artikel eines
-einzelnen Lieferanten benötigt werden. Bei der Warehouse-Variante kommen zusätzlich
-<code>tLieferscheinpos</code>, <code>tWarenlagerausgang</code> und <code>tWarenLagerPlatz</code> in dieselbe Aggregation, was
-die Datenmenge weiter erhöht.</p>
-<p>Zwei weitere Verdachtspunkte in derselben Query:</p>
-<ol>
-<li><code>JOIN dbo.vLagerbestandEx</code> liefert nur die Spalte <code>fZulauf</code>, wird aber als INNER JOIN über
-den kompletten Artikelstamm eingebunden. Die JTL-Bestandsviews sind mehrfach verschachtelt
-und teuer. Gleiches gilt für <code>vLagerbestandProLager</code>.</li>
-<li>Die Lagerliste wird per String-Ersetzung eingesetzt
-(<code>_getSqlWithWarehouseFilter.Replace("##WAREHOUSES##", ...)</code>, <code>SmartSupplyDataDbModel.cs:150</code>).
-Jede Lagerkombination erzeugt damit einen eigenen Ad-hoc-Plan, statt einen Plan
-wiederzuverwenden.</li>
-</ol>
-<h2>Zweiter Defekt: keine Fehlerbehandlung</h2>
-<p><code>Calculate()</code> (<code>SmartSupplyViewModel.cs:398</code>) kapselt den Datenbankzugriff in <code>Task.Run</code>, ohne
-<code>try</code>/<code>catch</code>. Eine <code>SqlException</code> aus dem Timeout wird deshalb nicht abgefangen:</p>
-<ul>
-<li><code>IsBusy</code> wird nie auf <code>false</code> zurückgesetzt (<code>SmartSupplyViewModel.cs:443</code> wird nicht erreicht), die Ansicht bleibt im Ladezustand</li>
-<li>der Fehler landet nicht im Log (<code>LogService</code> wird an dieser Stelle nicht aufgerufen)</li>
-<li>der Anwender sieht die rohe englische SQL-Server-Meldung statt eines verständlichen Hinweises</li>
-<li>ein globaler Handler fehlt, der Block in <code>App.xaml.cs:565</code> ist auskommentiert</li>
-</ul>
-<h2>Diagnose beim Kunden (vor der Umsetzung)</h2>
-<ol>
-<li>Query aus <code>SmartSupplyDataDbModel</code> mit den echten Parameterwerten (Lieferant, Zeitraum,
-Lager) direkt im SSMS ausführen, mit <code>SET STATISTICS IO, TIME ON</code> und tatsächlichem
-Ausführungsplan.</li>
-<li>Reine Laufzeit ohne die <code>SalesAmount</code>-Subquery messen, um deren Anteil zu belegen.</li>
-<li>Größen erfassen: Anzahl Zeilen in <code>tBestellpos</code> und <code>tBestellung</code> im gewählten Zeitraum,
-Anzahl Artikel des Lieferanten, eingestellter Wert "Verkäufe der letzten X Tage".</li>
-</ol>
-<h2>Lösungsansatz</h2>
-<ol>
-<li>Aggregation auf die Artikel des Lieferanten einschränken, entweder per <code>OUTER APPLY</code> mit
-Korrelation auf <code>tArtikel.kArtikel</code> oder indem die Lieferantenartikel zuerst in eine
-temporäre Tabelle geschrieben und in die Subquery eingejoint werden.</li>
-<li>Prüfen, ob <code>vLagerbestandEx</code> und <code>vLagerbestandProLager</code> durch gezielte Zugriffe ersetzbar
-sind. Achtung: Der INNER JOIN auf <code>vLagerbestandEx</code> filtert derzeit Artikel heraus, die
-dort nicht enthalten sind. Eine Umstellung auf <code>LEFT JOIN</code>/<code>OUTER APPLY</code> ändert das
-Ergebnis und muss bewusst entschieden werden.</li>
-<li>Lagerliste als parametrisierte Liste übergeben (<code>STRING_SPLIT</code> oder Table-Valued Parameter)
-statt per String-Ersetzung.</li>
-<li><code>commandTimeout</code> konfigurierbar machen statt fest 60, analog zu Netstock
-(<code>Modules/Netstock/Business/Uploader.cs:79</code>) und SellerLogic (300 Sekunden). Der Wert bleibt
-die Notbremse, nicht die Lösung.</li>
-<li><code>Calculate()</code> mit <code>try</code>/<code>catch</code>/<code>finally</code> versehen: Fehler protokollieren, verständliche
-Meldung anzeigen, <code>IsBusy</code> in <code>finally</code> zurücksetzen.</li>
-</ol>
+      <p>Bei gewachsener Bestellhistorie endete "Berechnen" nach einer Weile mit einer englischen Zeitüberschreitungsmeldung und ohne Daten. Grund war, dass die Verkaufsmengen über den gesamten Artikelstamm zusammengerechnet wurden, obwohl nur die Artikel des gewählten Lieferanten gebraucht werden.</p>
 
     </div>
   </article>

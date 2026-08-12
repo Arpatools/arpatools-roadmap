@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartSupply: Einkaufslisten-Import erzeugt bei EK ab 1000 ungültiges SQL – ArpaTools</title>
-<meta name="description" content="Der Import auf die Einkaufsliste schreibt Zahlen kulturabhängig ins SQL ( , Zweig ): Die Anwendung läuft auf . Für 1,23 ergibt das &quot;1.23&quot; und funktioniert. Für einen Netto EK von 1…">
+<title>Die Einkaufsliste nimmt nun auch Preise ab 1.000 Euro an – ArpaTools</title>
+<meta name="description" content="Stand in einer Position ein Einkaufspreis oder eine Menge ab 1.000, brach die Übernahme in die Einkaufsliste ab, und zwar für alle Positionen, nicht nur für die betroffene.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>SmartSupply: Einkaufslisten-Import erzeugt bei EK ab 1000 ungültiges SQL</h1>
+    <h1>Die Einkaufsliste nimmt nun auch Preise ab 1.000 Euro an</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,15 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 06. August 2026</p>
     <div class="prose">
-      <p>Der Import auf die Einkaufsliste schreibt Zahlen kulturabhängig ins SQL (<code>Modules/SmartSupply/ViewModels/SmartSupplyViewModel.cs</code>, Zweig <code>config.ImportType != 0</code>):</p>
-<pre><code class="language-csharp">{line.OrderQuantity.ToString().Replace(",", ".")}
-{line.PurchasePrice.ToString().Replace(",", ".")}
-</code></pre>
-<p>Die Anwendung läuft auf <code>de-DE</code>. Für 1,23 ergibt das "1.23" und funktioniert. Für einen Netto-EK von 1234,56 liefert <code>ToString()</code> aber "1.234,56", und das Replace macht daraus "1.234.56". Das ist kein Rundungsfehler, sondern ein SQL-Syntaxfehler, der den gesamten Import abbricht. Dasselbe gilt für Bestellmengen ab 1000.</p>
-<p>Betroffen sind damit alle Positionen mit einem EK ab 1000 Euro, was bei Investitionsgütern und Sammelverpackungen nicht exotisch ist.</p>
-<h2>Erwartetes Verhalten</h2>
-<p>Zahlen werden nicht als Text ins SQL gesetzt, sondern als Parameter übergeben. Wo Formatierung nötig bleibt, mit <code>CultureInfo.InvariantCulture</code> statt <code>Replace</code>.</p>
-<p>Wird zusammen mit dem Blockweise-Einfügen umgesetzt, weil es dieselbe Stelle betrifft.</p>
+      <p>Stand in einer Position ein Einkaufspreis oder eine Menge ab 1.000, brach die Übernahme in die Einkaufsliste ab, und zwar für alle Positionen, nicht nur für die betroffene.</p>
 
     </div>
   </article>

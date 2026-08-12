@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartSupply: Listenfilter findet keine Artikelnummern – ArpaTools</title>
-<meta name="description" content="Das Suchfeld über der Vorschlagsliste filtert ausschließlich den Artikelnamen ( , ). Wer eine Artikelnummer oder eine Lieferantenartikelnummer eintippt, bekommt eine leere Liste, o…">
+<title>Die Suche in der Vorschlagsliste findet nun auch Artikelnummern – ArpaTools</title>
+<meta name="description" content="Wer eine Artikelnummer oder eine Lieferantenartikelnummer eintippte, bekam eine leere Liste, obwohl beide Spalten in der Ansicht stehen: durchsucht wurde nur der Artikelname.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>SmartSupply: Listenfilter findet keine Artikelnummern</h1>
+    <h1>Die Suche in der Vorschlagsliste findet nun auch Artikelnummern</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,11 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 06. August 2026</p>
     <div class="prose">
-      <p>Das Suchfeld über der Vorschlagsliste filtert ausschließlich den Artikelnamen (<code>Modules/SmartSupply/ViewModels/SmartSupplyViewModel.cs</code>, <code>FillList</code>). Wer eine Artikelnummer oder eine Lieferantenartikelnummer eintippt, bekommt eine leere Liste, obwohl beide Spalten im Grid stehen.</p>
-<h2>Erwartetes Verhalten</h2>
-<p>Der Filter greift auf Artikelnummer, Artikelname und Lieferantenartikelnummer, ohne Beachtung der Groß- und Kleinschreibung. Ein Treffer in einer der drei Spalten genügt.</p>
-<h2>Umsetzung</h2>
-<p>Die Filterbedingung wandert aus <code>FillList</code> in eine eigene, testbare Funktion, damit das Verhalten nicht wieder in der UI-Logik verschwindet. Der bestehende Schalter "Inaktive Artikel ausblenden" bleibt unverändert damit kombinierbar.</p>
+      <p>Wer eine Artikelnummer oder eine Lieferantenartikelnummer eintippte, bekam eine leere Liste, obwohl beide Spalten in der Ansicht stehen: durchsucht wurde nur der Artikelname.</p>
 
     </div>
   </article>

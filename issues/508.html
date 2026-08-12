@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Verbindungspool wird beim Mandantenwechsel nicht freigegeben, Schreibzugriffe gehen an die alte Datenbank – ArpaTools</title>
-<meta name="description" content="Gefunden beim Entwurf der Profilverwaltung ( 57), betrifft aber jeden Kunden heute , auch mit einem einzigen Profil. Problem Wird im laufenden Betrieb der Mandant gewechselt, also…">
+<title>Mandantenwechsel schreibt nun in den gewählten Mandanten – ArpaTools</title>
+<meta name="description" content="Wechselte man während der Arbeit den Mandanten, landeten Änderungen mitunter im vorher geöffneten Mandanten.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Verbindungspool wird beim Mandantenwechsel nicht freigegeben, Schreibzugriffe gehen an die alte Datenbank</h1>
+    <h1>Mandantenwechsel schreibt nun in den gewählten Mandanten</h1>
     <p class="badges">
       <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
       <span class="badge status-open">Offen</span>
@@ -47,28 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 07. August 2026</p>
     <div class="prose">
-      <p>Gefunden beim Entwurf der Profilverwaltung (<a href="../issues/57.html">#57</a>), betrifft aber <strong>jeden Kunden heute</strong>, auch mit einem einzigen Profil.</p>
-<h2>Problem</h2>
-<p>Wird im laufenden Betrieb der Mandant gewechselt, also in den Datenbankeinstellungen eine andere Mandantendatenbank gewählt, behält der Verbindungspool die alte Verbindung. Weiterarbeiten schreibt dann still in die <strong>alte</strong> Datenbank.</p>
-<h2>Ablauf</h2>
-<ol>
-<li><code>DatabaseSettingsViewModel.cs:233-234</code> setzt <code>Data.JtlConnectionString</code> neu und speichert.</li>
-<li><code>MainViewModel.cs:383-393</code> (<code>ShowDatabaseSettings</code>) ruft danach nur <code>Initialize()</code>, keinen Neustart.</li>
-<li><code>DatabaseBaseService._dbService</code> (<code>:16-17</code>) hält aber weiter eine offene Verbindung. <code>DbService.CreateConnection</code> liest <code>Data.JtlConnectionString</code> nur beim ersten Öffnen (<code>:203-206</code>), <code>HandleConnection</code> öffnet ausschließlich bei <code>_connection == null</code> (<code>:222-227</code>). Freigegeben wird der Eintrag nur durch <code>EndBatch()</code>.</li>
-</ol>
-<h2>Konkreter Auslöser ohne jede Exception</h2>
-<p><code>Modules/ProviMate/ViewModels/JournalViewModel.cs:399, 419, 440, 461</code> benutzt viermal <code>doNotDispose: true</code> mit <code>null</code> als Connection-String und ruft <strong>nie</strong> <code>EndBatch</code>. In der gesamten Codebasis gibt es nur zehn <code>EndBatch</code>-Aufrufe, <code>JournalViewModel</code> ist keiner davon.</p>
-<p>Wer in ProviMate ein Journal ein- oder ausschließt, hinterlässt damit eine dauerhaft offene Verbindung auf die damals aktive Datenbank im ProviMate-<code>DatabaseService</code>-Singleton. Wechselt der Nutzer danach den Mandanten und arbeitet in ProviMate weiter, gehen die Schreibzugriffe an die alte Datenbank.</p>
-<p>Zweiter Pfad: <code>MigrationService.cs:32</code> ruft <code>EndBatch()</code> nicht in <code>finally</code>, und <code>MainViewModel.cs:262-271</code> fängt die Migrationsexception ab. Nach einem Fehler in der Migration und einem anschließenden Datenbankwechsel läuft die Migration gegen die alte Datenbank.</p>
-<h2>Zu tun</h2>
-<ol>
-<li><strong>Jede Änderung von <code>Data.JtlConnectionString</code> löst eine Poolfreigabe aus</strong>, für den Standardeintrag und jeden Schlüsseleintrag. Entweder als Hook auf <code>IConfigurationService</code> oder unmittelbar in <code>DatabaseSettingsViewModel.Save()</code>.</li>
-<li><strong>Alle vorhandenen <code>EndBatch()</code>-Aufrufe in <code>finally</code> verschieben.</strong> Heute überlebt der Pool jeden Fehlerfall.</li>
-<li><strong>Die fehlenden <code>EndBatch</code>-Aufrufe in <code>JournalViewModel</code> ergänzen.</strong></li>
-</ol>
-<p>Es gibt acht Pool-Instanzen: sieben Modul-Services erben von <code>DatabaseBaseService</code> plus die separat registrierte Basisinstanz, alle als Singletons registriert (<code>App.xaml.cs:359, 386, 396, 443, 451, 459, 483, 493</code>). Eine Freigabe muss alle treffen.</p>
-<h2>Zusammenhang</h2>
-<p>Wird im Rahmen von <a href="../issues/57.html">#57</a> Plan 1 mit erledigt, weil die Spec den Mandantenwechsel eines laufenden Profils zum ausdrücklich unterstützten Ablauf macht. Als eigenes Issue geführt, weil der Defekt unabhängig von Profilen besteht und für sich behoben werden kann.</p>
+      <p>Wechselte man während der Arbeit den Mandanten, landeten Änderungen mitunter im vorher geöffneten Mandanten.</p>
 
     </div>
   </article>

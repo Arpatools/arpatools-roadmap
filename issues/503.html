@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Retourenportal: Logpfad bleibt im Dienst- und Batchbetrieb leer, Log landet im Arbeitsverzeichnis – ArpaTools</title>
-<meta name="description" content="Gefunden beim Entwurf der Profilverwaltung ( 57), dort ausdrücklich als eigene Aufgabe herausgenommen. Problem setzt den Logpfad aus , aber nicht im Konstruktor, sondern in . Und w…">
+<title>Automatische Retourenläufe legen ihr Protokoll nun beim Profil ab – ArpaTools</title>
+<meta name="description" content="Startete das Retourenportal über eine geplante Aufgabe oder den Windows Dienst, landete das Protokoll im Arbeitsverzeichnis des Prozesses statt beim Profil. Im Supportfall fehlte d…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Retourenportal: Logpfad bleibt im Dienst- und Batchbetrieb leer, Log landet im Arbeitsverzeichnis</h1>
+    <h1>Automatische Retourenläufe legen ihr Protokoll nun beim Profil ab</h1>
     <p class="badges">
       <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
       <span class="badge status-open">Offen</span>
@@ -47,16 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 07. August 2026</p>
     <div class="prose">
-      <p>Gefunden beim Entwurf der Profilverwaltung (<a href="../issues/57.html">#57</a>), dort ausdrücklich als eigene Aufgabe herausgenommen.</p>
-<h2>Problem</h2>
-<p><code>Modules/ReturnsPortal/Services/LogService.cs:30</code> setzt den Logpfad aus <code>IProfileService.ProfileDataFolder</code>, aber nicht im Konstruktor, sondern in <code>Init(...)</code>. Und <code>Init</code> wird ausschließlich aus dem ViewModel aufgerufen, also <strong>nur im Oberflächenbetrieb</strong>.</p>
-<p>Im Batch- und im Dienstbetrieb läuft <code>Init</code> nie. Der Pfad bleibt leer, und die Logdatei landet als relativer Pfad im <strong>Arbeitsverzeichnis des Prozesses</strong>. Bei einem Windows-Dienst ist das üblicherweise <code>C:\Windows\System32</code> oder das Installationsverzeichnis, je nach Aufruf.</p>
-<h2>Folge</h2>
-<p>Retourenportal-Läufe, die über Jobby oder einen Batchaufruf angestoßen werden, schreiben ihr Log an einen Ort, an dem niemand danach sucht, oder scheitern am Schreibversuch. Im Supportfall fehlt genau das Log, das den Lauf erklären würde.</p>
-<h2>Erwartetes Verhalten</h2>
-<p>Der Logpfad ist auch ohne den <code>Init</code>-Aufruf aus der Oberfläche gesetzt, also bei Bedarf aus <code>IProfileService.ProfileDataFolder</code> gelesen statt einmalig zugewiesen.</p>
-<h2>Hinweis zur Abgrenzung</h2>
-<p>Im selben Modul gibt es einen zweiten, davon unabhängigen Punkt: <code>Modules/ReturnsPortal/Services/WorkerService.cs:35-38</code> friert die Pfade im Konstruktor ein. Das ist erst relevant, wenn ein Prozess das Profil wechselt, und gehört deshalb zu <a href="../issues/501.html">#501</a>, nicht hierher.</p>
+      <p>Startete das Retourenportal über eine geplante Aufgabe oder den Windows-Dienst, landete das Protokoll im Arbeitsverzeichnis des Prozesses statt beim Profil. Im Supportfall fehlte damit genau die Datei, die den Lauf erklärt.</p>
 
     </div>
   </article>

@@ -44,13 +44,12 @@
     <div class="filter-row">
       <button type="button" class="chip is-active" data-filter-module="*">Alle Module</button>
       <button type="button" class="chip" data-filter-module="Arpatools">ArpaTools Kern<span class="chip-count">4</span></button>
-      <button type="button" class="chip" data-filter-module="Jobby">Jobby<span class="chip-count">9</span></button>
+      <button type="button" class="chip" data-filter-module="Jobby">Jobby<span class="chip-count">10</span></button>
       <button type="button" class="chip" data-filter-module="Netstock">Netstock<span class="chip-count">1</span></button>
-      <button type="button" class="chip" data-filter-module="ProviMate">ProviMate<span class="chip-count">6</span></button>
-      <button type="button" class="chip" data-filter-module="Retourenportal">Retourenportal<span class="chip-count">2</span></button>
-      <button type="button" class="chip" data-filter-module="Sammelrechnung">Sammelrechnung<span class="chip-count">5</span></button>
+      <button type="button" class="chip" data-filter-module="ProviMate">ProviMate<span class="chip-count">1</span></button>
+      <button type="button" class="chip" data-filter-module="Retourenportal">Retourenportal<span class="chip-count">1</span></button>
+      <button type="button" class="chip" data-filter-module="Sammelrechnung">Sammelrechnung<span class="chip-count">3</span></button>
       <button type="button" class="chip" data-filter-module="SmartSupply">SmartSupply<span class="chip-count">1</span></button>
-      <button type="button" class="chip" data-filter-module="_other">Allgemein<span class="chip-count">1</span></button>
     </div>
     
     <div class="filter-row">
@@ -68,17 +67,17 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Arpatools" data-title="windows-dienst für mehrere profile (multi-mandant)">
+        <li class="issue" data-module="Arpatools" data-title="der hintergrunddienst bedient nun alle profile">
       <a class="issue-link" href="issues/501.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Windows-Dienst für mehrere Profile (Multi-Mandant)</span>
+        <span class="issue-title">Der Hintergrunddienst bedient nun alle Profile</span>
         <span class="issue-meta">ArpaTools Kern · #501</span>
       </a>
     </li>
-        <li class="issue" data-module="Arpatools" data-title="profilverwaltung teil 2: bindung eines profils an genau eine mandantendatenbank">
+        <li class="issue" data-module="Arpatools" data-title="ein profil gehört nun fest zu einem mandanten">
       <a class="issue-link" href="issues/509.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Profilverwaltung Teil 2: Bindung eines Profils an genau eine Mandantendatenbank</span>
+        <span class="issue-title">Ein Profil gehört nun fest zu einem Mandanten</span>
         <span class="issue-meta">ArpaTools Kern · #509</span>
       </a>
     </li>
@@ -87,17 +86,17 @@
     <div class="type-group">
       <h4 class="type-heading">Behoben</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Arpatools" data-title="die externdll von jtl-wawi funktioniert ab  version 2.0 nicht">
+        <li class="issue" data-module="Arpatools" data-title="arpatools kommt nun auch mit jtl-wawi 2.0 zurecht">
       <a class="issue-link" href="issues/439.html">
         <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
-        <span class="issue-title">Die ExternDll von JTL-Wawi funktioniert ab  Version 2.0 nicht</span>
+        <span class="issue-title">arpaTools kommt nun auch mit JTL-Wawi 2.0 zurecht</span>
         <span class="issue-meta">ArpaTools Kern · #439</span>
       </a>
     </li>
-        <li class="issue" data-module="Arpatools" data-title="verbindungspool wird beim mandantenwechsel nicht freigegeben, schreibzugriffe gehen an die alte datenbank">
+        <li class="issue" data-module="Arpatools" data-title="mandantenwechsel schreibt nun in den gewählten mandanten">
       <a class="issue-link" href="issues/508.html">
         <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
-        <span class="issue-title">Verbindungspool wird beim Mandantenwechsel nicht freigegeben, Schreibzugriffe gehen an die alte Datenbank</span>
+        <span class="issue-title">Mandantenwechsel schreibt nun in den gewählten Mandanten</span>
         <span class="issue-meta">ArpaTools Kern · #508</span>
       </a>
     </li>
@@ -109,67 +108,74 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Jobby" data-title="bestandsdatenimport um werte-mappingregeln erweitern">
+        <li class="issue" data-module="Jobby" data-title="der bestandsimport rechnet mengen nun nach eigenen regeln um">
       <a class="issue-link" href="issues/286.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Bestandsdatenimport um Werte-Mappingregeln erweitern</span>
+        <span class="issue-title">Der Bestandsimport rechnet Mengen nun nach eigenen Regeln um</span>
         <span class="issue-meta">Jobby · #286</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="aktion für &quot;erfolgreich&quot; und für &quot;fehlerhaft&quot; - ergebnis eines jobs">
+        <li class="issue" data-module="Jobby" data-title="ein job reagiert nun getrennt auf erfolg und auf fehler">
       <a class="issue-link" href="issues/296.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Aktion für &quot;erfolgreich&quot; und für &quot;fehlerhaft&quot; - Ergebnis eines Jobs</span>
+        <span class="issue-title">Ein Job reagiert nun getrennt auf Erfolg und auf Fehler</span>
         <span class="issue-meta">Jobby · #296</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="jobby kann nun auch jtl-abos automatisiert erstellen">
-      <a class="issue-link" href="issues/343.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Jobby kann nun auch JTL-Abos automatisiert erstellen</span>
-        <span class="issue-meta">Jobby · #343</span>
-      </a>
-    </li>
-        <li class="issue" data-module="Jobby" data-title="einführung von filter-logik zwischen aktionen in jobby">
+        <li class="issue" data-module="Jobby" data-title="eine aktion läuft nun nur noch, wenn die bedingung davor zutrifft">
       <a class="issue-link" href="issues/360.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Einführung von Filter-Logik zwischen Aktionen in Jobby</span>
+        <span class="issue-title">Eine Aktion läuft nun nur noch, wenn die Bedingung davor zutrifft</span>
         <span class="issue-meta">Jobby · #360</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="neue jobby aktion zur pdf-kompression und -optimierung implementieren">
+        <li class="issue" data-module="Jobby" data-title="jobby verkleinert nun pdf-dateien">
       <a class="issue-link" href="issues/378.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Neue Jobby Aktion zur PDF-Kompression und -Optimierung implementieren</span>
+        <span class="issue-title">Jobby verkleinert nun PDF-Dateien</span>
         <span class="issue-meta">Jobby · #378</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="jobby ftp verbindungen können nun auch explizites tls/ssl">
-      <a class="issue-link" href="issues/397.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Jobby FTP Verbindungen können nun auch explizites TLS/SSL</span>
-        <span class="issue-meta">Jobby · #397</span>
-      </a>
-    </li>
-        <li class="issue" data-module="Jobby" data-title="scheduling überarbeiten: startzeit und wiederholungsintervall zu einem einheitlichen, vorhersagbaren planungsmodell zusammenführen">
+        <li class="issue" data-module="Jobby" data-title="der zeitplan eines jobs hält nun seine uhrzeit">
       <a class="issue-link" href="issues/403.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Scheduling überarbeiten: Startzeit und Wiederholungsintervall zu einem einheitlichen, vorhersagbaren Planungsmodell zusammenführen</span>
+        <span class="issue-title">Der Zeitplan eines Jobs hält nun seine Uhrzeit</span>
         <span class="issue-meta">Jobby · #403</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="jobby job per rechtklick duplizieren und öffnen">
+        <li class="issue" data-module="Jobby" data-title="ein zweiter, fast gleicher job entsteht nun per rechtsklick">
       <a class="issue-link" href="issues/410.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Jobby Job Per Rechtklick duplizieren und öffnen</span>
+        <span class="issue-title">Ein zweiter, fast gleicher Job entsteht nun per Rechtsklick</span>
         <span class="issue-meta">Jobby · #410</span>
       </a>
     </li>
-        <li class="issue" data-module="Jobby" data-title="lagerbestand auswertung &quot;multimandanten&quot; prüfen">
+        <li class="issue" data-module="Jobby" data-title="die lagerbestandsauswertung liefert nun auch in weiteren mandanten zahlen">
       <a class="issue-link" href="issues/411.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Lagerbestand Auswertung &quot;Multimandanten&quot; prüfen</span>
+        <span class="issue-title">Die Lagerbestandsauswertung liefert nun auch in weiteren Mandanten Zahlen</span>
         <span class="issue-meta">Jobby · #411</span>
+      </a>
+    </li>
+        <li class="issue" data-module="Jobby" data-title="jobby verschickt mails nun auch über postfächer ohne anmeldung">
+      <a class="issue-link" href="issues/601.html">
+        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
+        <span class="issue-title">Jobby verschickt Mails nun auch über Postfächer ohne Anmeldung</span>
+        <span class="issue-meta">Jobby · #601</span>
+      </a>
+    </li>
+        <li class="issue" data-module="Jobby" data-title="der mailversand richtet sich nun nach der verschlüsselung des postfachs">
+      <a class="issue-link" href="issues/602.html">
+        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
+        <span class="issue-title">Der Mailversand richtet sich nun nach der Verschlüsselung des Postfachs</span>
+        <span class="issue-meta">Jobby · #602</span>
+      </a>
+    </li>
+        <li class="issue" data-module="Jobby" data-title="ein job führt nun eigene programme und skripte aus">
+      <a class="issue-link" href="issues/652.html">
+        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
+        <span class="issue-title">Ein Job führt nun eigene Programme und Skripte aus</span>
+        <span class="issue-meta">Jobby · #652</span>
       </a>
     </li>
       </ul>
@@ -180,10 +186,10 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Netstock" data-title="auftragsspezifische stücklisten separat verarbeiten">
+        <li class="issue" data-module="Netstock" data-title="auftragsstücklisten gehen nun mit ihren komponenten an netstock">
       <a class="issue-link" href="issues/438.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Auftragsspezifische Stücklisten separat verarbeiten</span>
+        <span class="issue-title">Auftragsstücklisten gehen nun mit ihren Komponenten an Netstock</span>
         <span class="issue-meta">Netstock · #438</span>
       </a>
     </li>
@@ -195,46 +201,11 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="ProviMate" data-title="provisionsberechtigte können nun auf die jtl-wawi firma eingeschränkt werden">
-      <a class="issue-link" href="issues/39.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Provisionsberechtigte können nun auf die JTL-Wawi Firma eingeschränkt werden</span>
-        <span class="issue-meta">ProviMate · #39</span>
-      </a>
-    </li>
-        <li class="issue" data-module="ProviMate" data-title="provisionsregeln können mit artikeln aus jtl-wawi verknüpft werden">
+        <li class="issue" data-module="ProviMate" data-title="provisionsgutschriften weisen nun einen hinterlegten artikel aus">
       <a class="issue-link" href="issues/44.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Provisionsregeln können mit Artikeln aus JTL-Wawi verknüpft werden</span>
+        <span class="issue-title">Provisionsgutschriften weisen nun einen hinterlegten Artikel aus</span>
         <span class="issue-meta">ProviMate · #44</span>
-      </a>
-    </li>
-        <li class="issue" data-module="ProviMate" data-title="für einen provisionberechtigten können nun mehrere zeiträume konfiguriert werden">
-      <a class="issue-link" href="issues/55.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Für einen Provisionberechtigten können nun mehrere Zeiträume konfiguriert werden</span>
-        <span class="issue-meta">ProviMate · #55</span>
-      </a>
-    </li>
-        <li class="issue" data-module="ProviMate" data-title="provisionen auf basis von gewinn ermitteln können">
-      <a class="issue-link" href="issues/64.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Provisionen auf Basis von Gewinn ermitteln können</span>
-        <span class="issue-meta">ProviMate · #64</span>
-      </a>
-    </li>
-        <li class="issue" data-module="ProviMate" data-title="regeln von einem auf andere provisionsberechtigte kopieren">
-      <a class="issue-link" href="issues/69.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Regeln von einem auf andere Provisionsberechtigte kopieren</span>
-        <span class="issue-meta">ProviMate · #69</span>
-      </a>
-    </li>
-        <li class="issue" data-module="ProviMate" data-title="provimate: rechnungskorrekturen sollen die provision anteilig kürzen">
-      <a class="issue-link" href="issues/565.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">ProviMate: Rechnungskorrekturen sollen die Provision anteilig kürzen</span>
-        <span class="issue-meta">ProviMate · #565</span>
       </a>
     </li>
       </ul>
@@ -243,24 +214,12 @@
 <section class="module-group" data-module-group="Retourenportal">
     <h3 class="module-heading">Retourenportal</h3>
     <div class="type-group">
-      <h4 class="type-heading">Neu</h4>
-      <ul class="issue-list">
-        <li class="issue" data-module="Retourenportal" data-title="arpatools retourenportal hat nun einen portierungsservice">
-      <a class="issue-link" href="issues/372.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Arpatools Retourenportal hat nun einen Portierungsservice</span>
-        <span class="issue-meta">Retourenportal · #372</span>
-      </a>
-    </li>
-      </ul>
-    </div>
-    <div class="type-group">
       <h4 class="type-heading">Behoben</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Retourenportal" data-title="retourenportal: logpfad bleibt im dienst- und batchbetrieb leer, log landet im arbeitsverzeichnis">
+        <li class="issue" data-module="Retourenportal" data-title="automatische retourenläufe legen ihr protokoll nun beim profil ab">
       <a class="issue-link" href="issues/503.html">
         <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
-        <span class="issue-title">Retourenportal: Logpfad bleibt im Dienst- und Batchbetrieb leer, Log landet im Arbeitsverzeichnis</span>
+        <span class="issue-title">Automatische Retourenläufe legen ihr Protokoll nun beim Profil ab</span>
         <span class="issue-meta">Retourenportal · #503</span>
       </a>
     </li>
@@ -272,25 +231,18 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Sammelrechnung" data-title="teillieferungen sollen optional auch abgerechnet werden können">
+        <li class="issue" data-module="Sammelrechnung" data-title="auch lieferscheine kommen nun in die sammelrechnung">
       <a class="issue-link" href="issues/310.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Teillieferungen sollen optional auch abgerechnet werden können</span>
+        <span class="issue-title">Auch Lieferscheine kommen nun in die Sammelrechnung</span>
         <span class="issue-meta">Sammelrechnung · #310</span>
       </a>
     </li>
-        <li class="issue" data-module="Sammelrechnung" data-title="als nutzer möchte ich die möglichkeit haben, mehrere kunden auszuwählen, damit ich die aufträge von diesen kunden laden und in sammelrechnungen pro kunde zusammenfassen kann">
+        <li class="issue" data-module="Sammelrechnung" data-title="die kundenauswahl nimmt nun mehrere kunden auf einmal">
       <a class="issue-link" href="issues/311.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Als Nutzer möchte ich die Möglichkeit haben, mehrere Kunden auszuwählen, damit ich die Aufträge von diesen Kunden laden und in Sammelrechnungen pro Kunde zusammenfassen kann</span>
+        <span class="issue-title">Die Kundenauswahl nimmt nun mehrere Kunden auf einmal</span>
         <span class="issue-meta">Sammelrechnung · #311</span>
-      </a>
-    </li>
-        <li class="issue" data-module="Sammelrechnung" data-title="arpatools sammelrechnung weist den gewinn von aufträgen nun korrekt aus">
-      <a class="issue-link" href="issues/327.html">
-        <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Arpatools Sammelrechnung weist den Gewinn von Aufträgen nun korrekt aus</span>
-        <span class="issue-meta">Sammelrechnung · #327</span>
       </a>
     </li>
       </ul>
@@ -298,23 +250,11 @@
     <div class="type-group">
       <h4 class="type-heading">Behoben</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="Sammelrechnung" data-title="wenn für mehrere kunden eine sammelrechnung erstellt wird und das tagesgeschäft beim händler läuft, gibt es probleme mit dem zugriff auf die tabelle tlaufendenummern">
+        <li class="issue" data-module="Sammelrechnung" data-title="sammelrechnungen laufen nun auch durch, während im haus weitergearbeitet wird">
       <a class="issue-link" href="issues/312.html">
         <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
-        <span class="issue-title">Wenn für mehrere Kunden eine Sammelrechnung erstellt wird und das Tagesgeschäft beim Händler läuft, gibt es Probleme mit dem Zugriff auf die Tabelle tlaufendenummern</span>
+        <span class="issue-title">Sammelrechnungen laufen nun auch durch, während im Haus weitergearbeitet wird</span>
         <span class="issue-meta">Sammelrechnung · #312</span>
-      </a>
-    </li>
-      </ul>
-    </div>
-    <div class="type-group">
-      <h4 class="type-heading">Sonstiges</h4>
-      <ul class="issue-list">
-        <li class="issue" data-module="Sammelrechnung" data-title="sammelrechnung: runtime error 216 bei kunde">
-      <a class="issue-link" href="issues/476.html">
-        <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/></svg>Sonstiges</span>
-        <span class="issue-title">Sammelrechnung: Runtime error 216 bei Kunde</span>
-        <span class="issue-meta">Sammelrechnung · #476</span>
       </a>
     </li>
       </ul>
@@ -325,26 +265,11 @@
     <div class="type-group">
       <h4 class="type-heading">Neu</h4>
       <ul class="issue-list">
-        <li class="issue" data-module="SmartSupply" data-title="neue einstellung: warenlagerfilter für bestandsberechnung">
+        <li class="issue" data-module="SmartSupply" data-title="der bestand rechnet nun nur über die gewählten lager">
       <a class="issue-link" href="issues/217.html">
         <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-        <span class="issue-title">Neue Einstellung: Warenlagerfilter für Bestandsberechnung</span>
+        <span class="issue-title">Der Bestand rechnet nun nur über die gewählten Lager</span>
         <span class="issue-meta">SmartSupply · #217</span>
-      </a>
-    </li>
-      </ul>
-    </div>
-  </section>
-<section class="module-group" data-module-group="_other">
-    <h3 class="module-heading">Allgemein</h3>
-    <div class="type-group">
-      <h4 class="type-heading">Sonstiges</h4>
-      <ul class="issue-list">
-        <li class="issue" data-module="_other" data-title="prüfung: anbindung an minderest.com prüfen">
-      <a class="issue-link" href="issues/518.html">
-        <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/></svg>Sonstiges</span>
-        <span class="issue-title">Prüfung: Anbindung an minderest.com prüfen</span>
-        <span class="issue-meta">Allgemein · #518</span>
       </a>
     </li>
       </ul>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ProviMate: Rechnungskorrekturen sollen die Provision anteilig kürzen – ArpaTools</title>
-<meta name="description" content="ProviMate rechnet die Provision heute immer auf den vollen Rechnungsbetrag. Wird einem Kunden nachträglich ein Teil erstattet, zum Beispiel weil er eine von drei Positionen zurücks…">
+<title>Rechnungskorrekturen kürzen die Provision nun anteilig – ArpaTools</title>
+<meta name="description" content="Erstattete ein Kunde nur einen Teil einer Rechnung, blieb die Provision auf dem vollen Betrag stehen; erkannt wurde bisher nur der komplette Storno. Der Abzug erscheint als eigene…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -36,42 +36,18 @@
 <main class="wrap">
 
   <article class="issue-detail rise">
-    <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>ProviMate: Rechnungskorrekturen sollen die Provision anteilig kürzen</h1>
+    <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
+    <h1>Rechnungskorrekturen kürzen die Provision nun anteilig</h1>
     <p class="badges">
-      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
-      <span class="badge status-open">Offen</span>
+      <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
+      <span class="badge status-closed">Erledigt</span>
       <span class="badge">ProviMate</span>
       <a class="badge badge-link" href="../changelog.html#vnext">Version Next</a>
       <span class="badge">#565</span>
     </p>
-    <p class="issue-date">Erstellt am 11. August 2026</p>
+    <p class="issue-date">Abgeschlossen am 12. August 2026</p>
     <div class="prose">
-      <p>ProviMate rechnet die Provision heute immer auf den vollen Rechnungsbetrag. Wird einem Kunden nachträglich ein Teil erstattet, zum Beispiel weil er eine von drei Positionen zurückschickt, bleibt die Provision trotzdem auf dem ursprünglichen Betrag stehen. Der Provisionsberechtigte bekommt also weiterhin Provision auf Ware, die zurückgegangen ist.</p>
-<p>Erkannt wird heute nur der komplette Storno einer Rechnung. Wer eine Teilerstattung berücksichtigen will, muss die betroffene Position im Journal von Hand ausschließen.</p>
-<h2>Was sich ändern soll</h2>
-<p>Legt man in JTL-Wawi eine Rechnungskorrektur an, soll ProviMate die zugehörige Provision anteilig kürzen. Werden von vier Stück zwei erstattet, sinkt die Provision für diese Position um die Hälfte.</p>
-<p>Im Journal entsteht dafür eine eigene, negative Zeile mit dem Hinweis „Rechnungskorrektur". Der ursprüngliche Eintrag bleibt unverändert stehen, damit in der Abrechnung nachvollziehbar bleibt, wie der Betrag zustande kommt.</p>
-<p>Liegt das ursprüngliche Journal noch offen, wird der Abzug dort verbucht. Ist es bereits abgerechnet, landet er im laufenden Journal, genau wie es bei einem Storno heute schon der Fall ist.</p>
-<h2>Neue Einstellung</h2>
-<p>In den ProviMate-Einstellungen kommen zwei Felder dazu:</p>
-<ul>
-<li><strong>Provision durch Rechnungskorrekturen kürzen</strong> — ein Schalter, standardmäßig aus. Nach einem Update rechnet ProviMate also unverändert weiter, bis die Funktion bewusst eingeschaltet wird.</li>
-<li><strong>Rechnungskorrekturen berücksichtigen ab</strong> — ein Datum. Berücksichtigt werden nur Korrekturen ab diesem Tag. Beim Einschalten wird automatisch das aktuelle Datum vorgeschlagen, damit nicht rückwirkend die gesamte Historie neu aufgerollt wird.</li>
-</ul>
-<h2>Was zu beachten ist</h2>
-<p>Ein paar Punkte, die man bei der Einführung kennen sollte:</p>
-<ul>
-<li><strong>Mindest- und Höchstauszahlung haben Vorrang.</strong> Ist bei einem Provisionsberechtigten ein garantierter Mindestbetrag hinterlegt, füllt ProviMate das Journal wie bisher wieder auf diesen Betrag auf. Die Kürzung bleibt dann ohne Wirkung.</li>
-<li><strong>Feste Beträge pro Auftrag werden nicht gekürzt.</strong> Provisionsregeln, die einen Pauschalbetrag je Auftrag zahlen, hängen nicht an einer einzelnen Rechnungsposition und lassen sich deshalb nicht anteilig kürzen. Prozentuale Provisionen und feste Beträge je Stück dagegen schon.</li>
-<li><strong>Die Provisionsstaffel ändert sich nicht.</strong> Eine Korrektur senkt den Provisionsbetrag, sie stuft den Provisionssatz aber nicht zurück. Wer durch den ursprünglichen Umsatz eine höhere Staffelstufe erreicht hat, behält sie.</li>
-<li><strong>Das Ausschalten wirkt nicht rückwirkend.</strong> Bereits gebuchte Abzüge bleiben stehen.</li>
-<li><strong>Die Testberechnung zeigt weiterhin den ungekürzten Wert.</strong> Sie rechnet direkt auf den Rechnungsdaten und kennt die Korrekturen nicht.</li>
-</ul>
-<h2>Hintergrund</h2>
-<p>Ein Rechnungsstorno erzeugt in JTL-Wawi im Hintergrund selbst eine Gutschrift. Damit ein Storno nicht doppelt abgezogen wird, bleiben diese Storno-Gutschriften außen vor; für stornierte Rechnungen greift weiterhin die vorhandene Logik.</p>
-<p>Ebenfalls unberührt bleiben die von ProviMate selbst erzeugten Provisionsgutschriften.</p>
-<p>Das Verhalten von JTL-Wawi wurde an einer Testinstanz überprüft: Rechnungskorrekturen tragen durchgängig einen Bezug zur ursprünglichen Rechnungsposition, und Teilerstattungen werden über die Menge abgebildet.</p>
+      <p>Erstattete ein Kunde nur einen Teil einer Rechnung, blieb die Provision auf dem vollen Betrag stehen; erkannt wurde bisher nur der komplette Storno. Der Abzug erscheint als eigene negative Zeile im Journal, der ursprüngliche Eintrag bleibt daneben stehen. Eingeschaltet wird die Kürzung in den ProviMate-Einstellungen, zusammen mit dem Datum, ab dem Korrekturen zählen.</p>
 
     </div>
   </article>

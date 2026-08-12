@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Profilverwaltung Teil 2: Bindung eines Profils an genau eine Mandantendatenbank – ArpaTools</title>
-<meta name="description" content="Teil 2 der Profilverwaltung, folgt auf 57. Eigenes Issue, damit 57 mit dem ersten Schritt geschlossen und dem Changelog zugeordnet werden kann. Design: Abschnitt 1 in . Regel Eine…">
+<title>Ein Profil gehört nun fest zu einem Mandanten – ArpaTools</title>
+<meta name="description" content="Legte man auf demselben Rechner ein zweites Profil auf denselben Mandanten, fiel das niemandem auf: Geplante Aufgaben liefen doppelt, und Einstellungen überschrieben sich gegenseit…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Profilverwaltung Teil 2: Bindung eines Profils an genau eine Mandantendatenbank</h1>
+    <h1>Ein Profil gehört nun fest zu einem Mandanten</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
       <span class="badge status-open">Offen</span>
@@ -47,25 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 07. August 2026</p>
     <div class="prose">
-      <p>Teil 2 der Profilverwaltung, folgt auf <a href="../issues/57.html">#57</a>. Eigenes Issue, damit <a href="../issues/57.html">#57</a> mit dem ersten Schritt geschlossen und dem Changelog zugeordnet werden kann.</p>
-<p>Design: Abschnitt 1 in <code>docs/superpowers/specs/2026-08-07-profilverwaltung-multimandant-design.md</code>.</p>
-<h2>Regel</h2>
-<p>Eine Mandantendatenbank gehört genau einem Profil <strong>pro Installation</strong>, und ein Profil genau einer Mandantendatenbank. Die Einschränkung „pro Installation" ist wesentlich: Mehrplatzbetrieb gegen denselben Mandanten ist der Normalfall, nicht ein Konflikt.</p>
-<p>Nicht betroffen sind die Zusatzverbindungen aus <code>arpa.JobbyDatabaseConnections</code>. Das sind Verbindungen für einzelne Aktionen, nicht die Basisdatenbank eines Profils.</p>
-<h2>Umfang</h2>
-<ul>
-<li>Tabelle <code>arpa.ProfileBinding</code> <strong>in der Mandantendatenbank</strong>, angelegt von <code>MigrationInit</code> und zusätzlich vom <code>ProfileBindingService</code> selbst. Die Selbstanlage ist nicht optional: beim Einrichten eines neuen Mandanten läuft <code>MigrationService</code> erst <strong>nach</strong> dem Datenbankdialog (<code>MainViewModel.cs:265</code> in <code>Initialize()</code>), die Tabelle existiert im Moment des Speicherns also noch nicht.</li>
-<li>Nicht zentral in <code>eazybusiness</code>, weil Backup und Restore getrennt laufen: nach dem Zurücksichern eines Mandanten würde eine zentrale Bindung auf einen Stand zeigen, den es nicht mehr gibt. In der Mandantendatenbank wandert sie mit.</li>
-<li>Primärschlüssel ist die <strong>Installations-ID allein</strong>. Ein zusammengesetzter Schlüssel mit der Profil-GUID würde genau den Zustand erlauben, den die Regel verbietet.</li>
-<li>Schlüssel für Server und Datenbank kommt aus <code>SELECT @@SERVERNAME, DB_NAME()</code> über die konfigurierte Verbindung, damit <code>localhost</code>, <code>.\JTLWAWI</code> und die IP derselbe Schlüssel sind und kein fremdes Kennwort nötig ist.</li>
-<li>Entscheidungstabelle mit fünf Fällen, Reihenfolge beim Speichern, atomares <code>MERGE … WITH (HOLDLOCK)</code>, Nachtragspfad beim Start, Verfallsregel für verwaiste Zeilen, Freigabe beim Löschen ausschließlich der eigenen Zeile.</li>
-<li>Die Heartbeat-Spalte wird <strong>angelegt, aber nicht ausgewertet</strong>. Nur der Dienst kann sie füllen, die Erkennung doppelter Terminplanung liegt daher in <a href="../issues/501.html">#501</a>.</li>
-<li>Alle Zeitstempel in UTC.</li>
-</ul>
-<h2>Fehlerverhalten</h2>
-<p>Verweigert wird ausschließlich bei einer gefundenen fremden Bindung derselben Installation. Ein Schreibfehler der Bindung darf das Speichern der Datenbankeinstellungen <strong>nie</strong> verhindern, sonst kommt ein Kunde nach einem Kennwortwechsel nicht mehr an seine Einstellungen.</p>
-<h2>Abhängigkeit</h2>
-<p>Setzt <span class="ref-muted">#504</span> voraus, weil <code>MigrationInit</code> erweitert wird und dessen <code>GO</code>-Trenner und Leerprüfung defekt sind.</p>
+      <p>Legte man auf demselben Rechner ein zweites Profil auf denselben Mandanten, fiel das niemandem auf: Geplante Aufgaben liefen doppelt, und Einstellungen überschrieben sich gegenseitig. Beim Speichern der Datenbankeinstellungen wird der Versuch nun abgewiesen, mit Angabe des Profils, das den Mandanten schon belegt. Mehrere Arbeitsplätze am selben Mandanten bleiben davon unberührt, das ist der Normalfall und kein Konflikt.</p>
 
     </div>
   </article>

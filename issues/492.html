@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SmartSupply: Abfragevariante für JTL-Wawi 1.11+ (Verkauf-Schema) einführen und wählbar machen – ArpaTools</title>
-<meta name="description" content="Die SmartSupply Berechnung fragt ausschließlich das alte JTL Schema ab ( , , ). Ab JTL Wawi 1.11 gibt es dafür das Schema ( , ) und . Die alte Abfrage darf nur noch für Datenbanken…">
+<title>Die Bedarfsrechnung nutzt nun die Daten von JTL-Wawi 1.11 und neuer – ArpaTools</title>
+<meta name="description" content="Ab Wawi 1.11 stellt sich die Berechnung nach der Aktualisierung selbst auf die neue Variante um, die Aufträge und Bestände direkt liest statt über die Kompatibilitätsansichten der…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>SmartSupply: Abfragevariante für JTL-Wawi 1.11+ (Verkauf-Schema) einführen und wählbar machen</h1>
+    <h1>Die Bedarfsrechnung nutzt nun die Daten von JTL-Wawi 1.11 und neuer</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,100 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 06. August 2026</p>
     <div class="prose">
-      <p>Die SmartSupply-Berechnung fragt ausschließlich das alte JTL-Schema ab (<code>dbo.tBestellpos</code>, <code>dbo.tBestellung</code>, <code>dbo.vLagerbestandEx</code>). Ab JTL-Wawi 1.11 gibt es dafür das <code>Verkauf</code>-Schema (<code>Verkauf.tAuftrag</code>, <code>Verkauf.tAuftragPosition</code>) und <code>dbo.tlagerbestand</code>. Die alte Abfrage darf nur noch für Datenbanken vor 1.11 verwendet werden.</p>
-<p>Auf einer Wawi-2.0-Datenbank geprüft: <code>dbo.tBestellpos</code> und <code>dbo.vLagerbestandEx</code> sind dort <strong>Views</strong>, <code>Verkauf.tAuftragPosition</code> und <code>dbo.tlagerbestand</code> echte Tabellen. Die alte Abfrage läuft also über Kompatibilitätsschichten, was zusätzlich Laufzeit kostet.</p>
-<h2>Umfang</h2>
-<p><strong>1. Zwei Abfragevarianten, in den Einstellungen wählbar</strong></p>
-<ul>
-<li>v1 (Legacy, für Datenbanken vor 1.11): heutige Abfrage.</li>
-<li>v2 (ab 1.11): <code>Verkauf.tAuftrag</code>/<code>Verkauf.tAuftragPosition</code> mit <code>nType = 1</code>, Zulauf aus <code>dbo.tlagerbestand.fZulauf</code> statt <code>dbo.vLagerbestandEx</code>, zusätzlich <code>tArtikelBeschreibung.kShop = 0</code>.</li>
-<li>Neue Spalte <code>QueryVersion INT NOT NULL</code> in <code>arpa.SmartSupplySettings</code> (<code>MigrationSmartSupplyV9</code>). Die Migration belegt v2 vor, wenn die Datenbank 1.11 oder neuer ist, sonst v1.</li>
-<li>ComboBox im Einstellungsfenster. Der v2-Eintrag ist deaktiviert, wenn die JTL-Wawi-Version kleiner als 1.11 ist.</li>
-<li>Sicherheitsnetz: Steht v2 in der Datenbank, ist die Wawi aber älter, läuft v1 mit einem Log-Eintrag statt eines SQL-Fehlers.</li>
-</ul>
-<p><strong>2. Versionsweiche</strong></p>
-<p>Es gibt bereits <code>IDatabaseBaseService.GetVersion()</code> (liest <code>dbo.tversion.cVersion</code>) und eine ad-hoc-Prüfung auf 1.11.7 in <code>Modules/ProviMate/Business/CreditCreator.cs:28</code>, dazu <code>is20 = GetVersion().Major &gt;= 2</code> an drei Stellen. Neu ist ein gemeinsamer Helper mit <code>Major &gt; 1 || (Major == 1 &amp;&amp; Minor &gt;= 11)</code>.</p>
-<p>Wichtig: Nicht gegen <code>new Version(1,11,0,0)</code> vergleichen. <code>new Version("1.11")</code> hat Build und Revision <code>-1</code> und wäre damit kleiner als <code>1.11.0.0</code>, die Prüfung würde bei zweistelligem <code>cVersion</code> fälschlich fehlschlagen.</p>
-<p><strong>3. Verkaufsmenge nur aus ausgewählten Lagern, v2-Fassung</strong></p>
-<p>Die v1-Variante geht über <code>tLieferscheinpos</code> → <code>tWarenlagerausgang</code> → <code>tWarenLagerPlatz</code>. Auf der 2.0-Datenbank trifft <code>tLieferscheinpos.kBestellPos = tAuftragPosition.kAuftragPosition</code> alle 42 von 42 Zeilen, <code>Verkauf.tLieferschein</code> und <code>Verkauf.tLieferscheinPosition</code> existieren dort nicht. Vorschlag deshalb strukturgleich zu v1, nur mit Auftrag statt Bestellung:</p>
-<pre><code class="language-sql">OUTER APPLY (
-    SELECT SUM(wla.fAnzahl) AS fAnzahl
-    FROM Verkauf.tAuftragPosition ap
-    JOIN Verkauf.tAuftrag a ON a.kAuftrag = ap.kAuftrag
-        AND a.dErstellt &gt;= @SalesAmountDateFilter
-        AND a.nStorno = 0
-        AND a.nKomplettAusgeliefert &lt;&gt; 0
-        AND a.nType = 1
-    JOIN dbo.tLieferscheinpos lsp ON lsp.kBestellPos = ap.kAuftragPosition
-    JOIN dbo.tWarenlagerausgang wla ON wla.kLieferscheinPos = lsp.kLieferscheinPos
-    JOIN dbo.tWarenLagerPlatz wlp ON wlp.kWarenLagerPlatz = wla.kWarenLagerPlatz
-        AND wlp.kWarenlager IN (##WAREHOUSES##)
-    WHERE ap.kArtikel = tArtikel.kArtikel
-) AS SalesAmount
-</code></pre>
-<p>Noch offen: fachliche Bestätigung für echte 1.11-Datenbanken. Geprüft wurde auf 2.0.3.</p>
-<p><strong>4. Korrelierte Aggregation in allen Varianten (<a href="../issues/489.html">#489</a>)</strong></p>
-<p>Alle vier Kombinationen aus v1/v2 und mit/ohne Lagerfilter bekommen die Verkaufsmengen als korreliertes <code>OUTER APPLY</code> statt als nicht korrelierte abgeleitete Tabelle mit <code>GROUP BY</code>. Damit wird <a href="../issues/489.html">#489</a> in beiden Varianten behoben. Ergebnisgleichheit der Umformulierung ist auf der Testdatenbank belegt.</p>
-<p><strong>5. Aufbau der SQL-Texte</strong></p>
-<p>Heute stehen zwei zu über 80 Prozent identische Textblöcke in <code>SmartSupplyDataDbModel</code>. Mit vier Kombinationen wird das unhaltbar. Die Abfrage wird aus Bausteinen zusammengesetzt: gemeinsame Select-Liste und Joins, variabler Zulauf-Join, variabler Aggregationsblock, gemeinsamer Abschluss.</p>
-<h2>Bestehende Optionen müssen alle erhalten bleiben</h2>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Umgesetzt in</th>
-<th>Von der Umstellung berührt</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Nur unterschrittener Mindestbestand</td>
-<td>SQL <code>@LessThanMinimumStock</code></td>
-<td>identisch in beiden Varianten</td>
-</tr>
-<tr>
-<td>Maximalbestand nicht erreicht</td>
-<td>SQL <code>@LessThanMaximumStock</code></td>
-<td>identisch in beiden Varianten</td>
-</tr>
-<tr>
-<td>Verkäufe der letzten X Tage</td>
-<td>SQL <code>@SalesAmountDateFilter</code></td>
-<td>identisch in beiden Varianten</td>
-</tr>
-<tr>
-<td>Lager für Bestand, Min, Max</td>
-<td>SQL <code>@WarehouseId</code></td>
-<td>identisch in beiden Varianten</td>
-</tr>
-<tr>
-<td>Verkäufe auf Warenlager beschränken</td>
-<td>SQL <code>##WAREHOUSES##</code></td>
-<td>neue v2-Fassung, siehe Punkt 3</td>
-</tr>
-<tr>
-<td>Nur wenn Standardlieferant</td>
-<td>ViewModel-Filter, Spalte <code>SupplierIsDefault</code></td>
-<td>nur die Spalte, v2 liefert sie ebenso</td>
-</tr>
-<tr>
-<td>Globalen Zulauf einrechnen</td>
-<td>ViewModel (<code>SmartSupplyOrderDataViewModel.cs:40-42</code>), Spalte <code>GlobalIntake</code></td>
-<td>Quelle wechselt auf <code>tlagerbestand.fZulauf</code></td>
-</tr>
-<tr>
-<td>Bedarf für die nächsten X Tage</td>
-<td>ViewModel (<code>SmartSupplyOrderDataViewModel.cs:35</code>)</td>
-<td>kein SQL, unberührt</td>
-</tr>
-</tbody></table>
-<h2>Tests</h2>
-<ul>
-<li>Ergebnisgleichheit alte gegen neue Formulierung je Variante, über mehrere Optionskombinationen (Mindestbestand, Maximalbestand, Lagerfilter an und aus).</li>
-<li>v2 liefert dieselben zwölf Spalten wie v1, damit die ViewModel-Optionen weiter funktionieren.</li>
-<li>Versionsweiche gegen 1.10.x, 1.11, 1.11.7, 2.0.3 und den Zweisteller "1.11".</li>
-<li><code>MigrationSmartSupplyV9</code>: Spalte vorhanden, Vorbelegung passend zur Datenbankversion, zweiter Lauf ist ein No-op.</li>
-<li>Fallback: Einstellung v2 bei zu alter Wawi führt zur v1-Abfrage.</li>
-</ul>
+      <p>Ab Wawi 1.11 stellt sich die Berechnung nach der Aktualisierung selbst auf die neue Variante um, die Aufträge und Bestände direkt liest statt über die Kompatibilitätsansichten der Wawi. Das verkürzt die Laufzeit. In den Einstellungen lässt sich zwischen beiden Varianten wechseln; bei älteren Wawi-Ständen bleibt die bisherige aktiv.</p>
 
     </div>
   </article>

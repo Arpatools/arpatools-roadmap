@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wenn für mehrere Kunden eine Sammelrechnung erstellt wird und das Tagesgeschäft beim Händler läuft, gibt es Probleme mit dem Zugriff auf die Tabelle tlaufendenummern – ArpaTools</title>
-<meta name="description" content="Sammelrechnung für Sammelrechnung erzeugen funktioniert tadellos 20.11.2023 10:05 Interner Fehler Ein Aufrufziel hat einen Ausnahmefehler verursacht. Die Anwendungssperre kann nich…">
+<title>Sammelrechnungen laufen nun auch durch, während im Haus weitergearbeitet wird – ArpaTools</title>
+<meta name="description" content="Vergab JTL Wawi im selben Moment eine Belegnummer, brach der Lauf mit einer Meldung über eine nicht aufgehobene Sperre ab. Die Nummer wird nun mehrfach angefordert, bevor abgebroch…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Wenn für mehrere Kunden eine Sammelrechnung erstellt wird und das Tagesgeschäft beim Händler läuft, gibt es Probleme mit dem Zugriff auf die Tabelle tlaufendenummern</h1>
+    <h1>Sammelrechnungen laufen nun auch durch, während im Haus weitergearbeitet wird</h1>
     <p class="badges">
       <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
       <span class="badge status-open">Offen</span>
@@ -47,17 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 17. April 2026</p>
     <div class="prose">
-      <p>Sammelrechnung für Sammelrechnung erzeugen funktioniert tadellos</p>
-<p>20.11.2023 10:05 - Interner Fehler</p>
-<p>Ein Aufrufziel hat einen Ausnahmefehler verursacht.</p>
-<p>Die Anwendungssperre kann nicht aufgehoben werden (Datenbankprinzipal: "public", Ressource: "tLaufendeNummern"), da sie im Moment nicht aufrechterhalten wird.</p>
-<p>Frage: Wie werden die freien nummern derzeit in Arpatools Sammelrechnung ermittelt?
-Für alle direkt oder nach und nach?</p>
-<p>Verbesserungsvorschlag:</p>
-<ul>
-<li>3 versuche unternehmen, um die nächste freie Nummer abzurufen, bevor es zum Fehler kommt. </li>
-<li>ggf. die Fehlermeldung anpassen: "Der JTL-Prozess der Nummernermittlung ist gerade ausgelastet. Bitte versuchen Sie es zu einem späteren Zeitpunkt nocheinmal"</li>
-</ul>
+      <p>Vergab JTL-Wawi im selben Moment eine Belegnummer, brach der Lauf mit einer Meldung über eine nicht aufgehobene Sperre ab. Die Nummer wird nun mehrfach angefordert, bevor abgebrochen wird, und die Meldung sagt, dass die Nummernvergabe der Wawi gerade belegt ist.</p>
 
     </div>
   </article>

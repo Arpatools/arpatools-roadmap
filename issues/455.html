@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>stock.csv: AllocatedStock berücksichtigt keine offenen Aufträge (fInAuftraegen nur pro Artikel, nicht pro Lager verfügbar) – ArpaTools</title>
-<meta name="description" content="Problem Sobald ein Kunde mehr als ein aktives Lager für NetStock nutzt, können wir den bereits durch offene Aufträge gebundenen Bestand (&quot;Allocated Stock&quot;) nicht sauber einem einze…">
+<title>Der reservierte Bestand bleibt nun leer, wenn er keinem Lager eindeutig zuzuordnen ist – ArpaTools</title>
+<meta name="description" content="Gemeldet wurde eine von Hand gesetzte Bestandssperre statt der durch offene Aufträge gebundenen Menge. Führte ein Artikel in mehreren Lagern Bestand, ließ sich die gebundene Menge…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>stock.csv: AllocatedStock berücksichtigt keine offenen Aufträge (fInAuftraegen nur pro Artikel, nicht pro Lager verfügbar)</h1>
+    <h1>Der reservierte Bestand bleibt nun leer, wenn er keinem Lager eindeutig zuzuordnen ist</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,99 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 11. Juli 2026</p>
     <div class="prose">
-      <h2>Problem</h2>
-<p>Sobald ein Kunde mehr als ein aktives Lager für NetStock nutzt, können wir den bereits durch
-offene Aufträge gebundenen Bestand ("Allocated Stock") nicht sauber einem einzelnen Lager
-zuordnen — JTL-Wawi speichert diese Menge nur zusammengefasst über alle Lager, nicht pro Lager
-einzeln.</p>
-<p>Aktuell senden wir stattdessen an dieser Stelle einen Wert, der eigentlich etwas ganz anderes
-ist (eine manuelle Bestandssperre, kein durch Aufträge gebundener Bestand) — das ist irreführend
-für NetStock.</p>
-<h2>Lösung</h2>
-<ul>
-<li><strong>Mehr als ein aktives Lager:</strong> Allocated Stock gar nicht befüllen. Kein Informationsverlust —
-wir übermitteln die offenen Aufträge sowieso schon separat (<code>co.csv</code>), NetStock kann sich
-daraus selbst ausrechnen, was gebunden ist.</li>
-<li><strong>Nur ein aktives Lager:</strong> Hier ist die Zuordnung eindeutig, Allocated Stock kann korrekt
-befüllt werden.</li>
-</ul>
-<p>Die aktuelle Berechnung wird damit für Mehrlager-Kunden hinfällig und sollte sich automatisch
-danach richten, ob der Kunde ein oder mehrere Lager aktiv hat.</p>
-<h2>Technischer Hintergrund &amp; validierter Lösungsvorschlag</h2>
-<details>
-<summary>Details für die Umsetzung (Query, Root Cause, Testfälle)</summary>
-
-<p><code>AllocatedStock</code> in <code>StockQuery</code> (<code>Uploader.cs</code>) wird aktuell aus <code>fVerfuegbarGesperrt</code>
-berechnet (einem manuellen Sperrfeld), nicht aus offenen Aufträgen. Die tatsächlich durch
-Aufträge gebundene Menge steckt im Feld <code>fInAuftraegen</code> in <code>dbo.tlagerbestand</code> — aber nur
-aggregiert pro Artikel, nicht pro Lager. Bei einem Artikel mit Bestand in mehreren Lagern lässt
-sich diese Menge nicht verlustfrei auf einzelne Lager herunterbrechen (getestet: proportionale
-Verteilung nach Bestandsanteil führt durch Rundung zu falschen Summen).</p>
-<p>Validierter Fallback: <code>AllocatedStock</code> nur befüllen, wenn der Artikel systemweit in genau einem
-Lager Bestand führt, sonst <code>0</code>:</p>
-<pre><code class="language-sql">WITH LagerMitBestandProArtikel AS (
-    SELECT kArtikel, COUNT(*) AS AnzahlLagerMitBestand
-    FROM dbo.tlagerbestandProLagerLagerartikel
-    WHERE fBestand &gt; 0
-    GROUP BY kArtikel
-)
-SELECT
-    a.cArtNr AS ItemCode,
-    CONCAT('Location_', lb.kWarenlager) AS Location,
-    CAST(lb.fBestand AS INT) AS StockOnHand,
-    CASE
-        WHEN ISNULL(lmb.AnzahlLagerMitBestand, 0) &lt;= 1 AND lb.fBestand &gt; 0
-            THEN CAST(tl.fLagerbestand - tl.fVerfuegbar AS INT)
-        ELSE 0
-    END AS AllocatedStock
-FROM dbo.tlagerbestandProLagerLagerartikel lb
-JOIN dbo.tArtikel a ON a.kArtikel = lb.kArtikel
-JOIN dbo.tlagerbestand tl ON tl.kArtikel = lb.kArtikel
-LEFT JOIN LagerMitBestandProArtikel lmb ON lmb.kArtikel = lb.kArtikel
-</code></pre>
-<p>Getestet gegen die JTL-Wawi-Test-DB (2026-07-08):</p>
-<table>
-<thead>
-<tr>
-<th>Artikel</th>
-<th>Lager mit Bestand</th>
-<th>Reserviert</th>
-<th>Ergebnis</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>17</td>
-<td>2</td>
-<td>2</td>
-<td><code>0</code> / <code>0</code> — korrekt, da mehrdeutig</td>
-</tr>
-<tr>
-<td>20</td>
-<td>1</td>
-<td>0</td>
-<td><code>0</code> — korrekt, wirklich nichts reserviert</td>
-</tr>
-<tr>
-<td>4</td>
-<td>1</td>
-<td>8</td>
-<td><code>8</code> am richtigen Lager, <code>0</code> sonst</td>
-</tr>
-<tr>
-<td>6</td>
-<td>1</td>
-<td>3</td>
-<td><code>3</code> am richtigen Lager, <code>0</code> sonst</td>
-</tr>
-</tbody></table>
-</details>
-
-<h2>Nächste Schritte</h2>
-<ul>
-<li><input disabled type="checkbox" /> Fallback-Logik in <code>StockQuery</code> einbauen (<code>stockSetting</code>-unabhängig)</li>
-<li><input disabled type="checkbox" /> Default-Einstellung für Mehrlager-Kunden neu bewerten</li>
-</ul>
-<p>Gefunden im Rahmen der manuellen NetStock-Upload-Validierungs-Checkliste (Checklistenpunkte 15/16).</p>
+      <p>Gemeldet wurde eine von Hand gesetzte Bestandssperre statt der durch offene Aufträge gebundenen Menge. Führte ein Artikel in mehreren Lagern Bestand, ließ sich die gebundene Menge ohnehin keinem einzelnen Lager zuordnen.</p>
 
     </div>
   </article>

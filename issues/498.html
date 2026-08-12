@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ProviMate: Testberechnung für Provisionsberechtigte (Test Commissioning) – ArpaTools</title>
-<meta name="description" content="Beschreibung Im ProviMate Modul soll im Hauptfenster eines Provisionsberechtigten (&quot;CommissionerSettingsWindow&quot;) ein Button &quot;Testberechnung&quot; ergänzt werden. Damit kann eine Rechnun…">
+<title>Provisionen lassen sich nun vorab prüfen – ArpaTools</title>
+<meta name="description" content="Für eine Rechnung oder einen Auftrag lässt sich die Provision zur Probe berechnen, ohne sie zu speichern. Auch noch nicht gespeicherte Änderungen an den Einstellungen fließen ein,…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>ProviMate: Testberechnung für Provisionsberechtigte (Test Commissioning)</h1>
+    <h1>Provisionen lassen sich nun vorab prüfen</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,18 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 07. August 2026</p>
     <div class="prose">
-      <h2>Beschreibung</h2>
-<p>Im ProviMate-Modul soll im Hauptfenster eines Provisionsberechtigten ("CommissionerSettingsWindow") ein Button "Testberechnung" ergänzt werden. Damit kann eine Rechnung oder ein Auftrag ausgewählt und die resultierende Provision simuliert werden (Dry-Run, keine Datenbankschreibvorgänge), basierend auf den aktuell im Fenster angezeigten Provisionseinstellungen (inkl. noch nicht gespeicherter Änderungen).</p>
-<p>Im Zuge dessen wird ein bestehender Fehler behoben: <code>JournalCreator.Run</code> hat die Einstellung <code>ReferenceDateOption</code> (Rechnung-Bezahldatum vs. Auftrag-Versanddatum) bislang ignoriert. Die Auflösung dieser Einstellung wird in einen gemeinsamen Helper (<code>BillingInformationOptions</code>) extrahiert, den sowohl der Produktivlauf als auch die neue Testberechnung verwenden — keine doppelte/duplizierte Logik.</p>
-<h2>Akzeptanzkriterien</h2>
-<ul>
-<li>Neuer Button "Testberechnung" im linken Footer von <code>CommissionerSettingsWindow</code>.</li>
-<li>Auswahl einer Rechnungs-/Auftragsnummer (Freitext + Suche über bestehendes <code>SearchSalesOrderWindow</code>).</li>
-<li>Berechnung erfolgt als reiner Dry-Run: keine Schreibvorgänge, keine Persistierung.</li>
-<li>Ergebnis zeigt Provisionsaufschlüsselung je Position sowie Summe.</li>
-<li>Warnhinweis, wenn das Bezugsdatum außerhalb des Gültigkeitszeitraums des Provisionsberechtigten liegt.</li>
-<li><code>ReferenceDateOption</code> wird korrekt sowohl im Produktivlauf als auch in der Testberechnung angewendet (Bugfix).</li>
-</ul>
+      <p>Für eine Rechnung oder einen Auftrag lässt sich die Provision zur Probe berechnen, ohne sie zu speichern. Auch noch nicht gespeicherte Änderungen an den Einstellungen fließen ein, sodass sich eine geänderte Regel testen lässt, bevor sie gilt.</p>
 
     </div>
   </article>

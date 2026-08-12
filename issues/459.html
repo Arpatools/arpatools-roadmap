@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>transfer.csv: 'Quantity to Ship' ist fest auf 0 verdrahtet statt berechnet – ArpaTools</title>
-<meta name="description" content="Problem meldet für jede Umlagerung als &quot;Quantity to Ship&quot; immer den festen Wert — unabhängig davon, wie viel tatsächlich schon auf den Weg zum Ziellager gebracht wurde. Lösung &quot;Qua…">
+<title>Umlagerungen melden nun die tatsächlich noch zu versendende Menge – ArpaTools</title>
+<meta name="description" content="In der Übertragung an Netstock stand für jede Umlagerung die noch zu versendende Menge fest auf 0, unabhängig davon, was am Quelllager wirklich noch offen war.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>transfer.csv: 'Quantity to Ship' ist fest auf 0 verdrahtet statt berechnet</h1>
+    <h1>Umlagerungen melden nun die tatsächlich noch zu versendende Menge</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,34 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 11. Juli 2026</p>
     <div class="prose">
-      <h2>Problem</h2>
-<p><code>transfer.csv</code> meldet für <strong>jede</strong> Umlagerung als "Quantity to Ship" immer den festen Wert <code>0</code>
-— unabhängig davon, wie viel tatsächlich schon auf den Weg zum Ziellager gebracht wurde.</p>
-<h2>Lösung</h2>
-<p>"Quantity to Ship" soll die tatsächlich noch zu versendende Menge widerspiegeln, nicht immer
-<code>0</code>.</p>
-<h2>Technischer Hintergrund</h2>
-<details>
-<summary>Details für die Umsetzung</summary>
-
-<p><code>TransferQuery</code> (<code>Uploader.cs</code>, Zeile 887):</p>
-<pre><code class="language-sql">, '0' AS [Quantity to Ship]
-</code></pre>
-<p>Das ist ein literaler SQL-String, kein aus Daten berechneter Wert. Zum Vergleich: die direkt
-danach stehende Spalte <code>[Quantity to Receive]</code> wird korrekt aus <code>fMenge - fMengeGeliefert</code>
-berechnet — für "Quantity to Ship" fehlt eine entsprechende Berechnung komplett.</p>
-<p>Testbeleg (2026-07-09, Umlagerung U-1/U-2): beide zeigen <code>Quantity to Ship = "0"</code>, obwohl bei
-U-1 noch 3 bzw. 1 Einheiten offen sind (<code>fMengeGeliefert = 0</code>).</p>
-</details>
-
-<h2>Nächste Schritte</h2>
-<ul>
-<li><input disabled type="checkbox" /> Klären, welche JTL-Wawi-Größe "Quantity to Ship" tatsächlich abbilden soll (vermutlich:
-am Quelllager bereits kommissionierte/versandbereite, aber noch nicht am Ziellager
-eingegangene Menge)</li>
-<li><input disabled type="checkbox" /> <code>'0'</code> durch eine echte Berechnung ersetzen</li>
-</ul>
-<p>Gefunden im Rahmen der manuellen NetStock-Upload-Validierungs-Checkliste (Checklistenpunkt 36).</p>
+      <p>In der Übertragung an Netstock stand für jede Umlagerung die noch zu versendende Menge fest auf 0, unabhängig davon, was am Quelllager wirklich noch offen war.</p>
 
     </div>
   </article>

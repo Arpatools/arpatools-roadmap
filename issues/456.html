@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sales.csv: 'Alle Aufträge' und 'Bezahlte Aufträge' dürfen keinen Lieferschein/Warenausgang voraussetzen – ArpaTools</title>
-<meta name="description" content="Problem Alle drei &quot;Verkaufsermittlung&quot; Optionen in den NetStock Einstellungen (&quot;Alle Aufträge&quot;, &quot;Bezahlte Aufträge&quot;, &quot;Gelieferte Aufträge&quot;) liefern aktuell nur Aufträge, für die be…">
+<title>Auch Aufträge ohne Warenausgang zählen nun als Verkauf – ArpaTools</title>
+<meta name="description" content="Bei den Auswahlen &quot;Alle Aufträge&quot; und &quot;Bezahlte Aufträge&quot; gingen nur Aufträge an Netstock, für die schon ein Lieferschein gebucht war. Zwingend ist der Warenausgang nun allein bei…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>sales.csv: 'Alle Aufträge' und 'Bezahlte Aufträge' dürfen keinen Lieferschein/Warenausgang voraussetzen</h1>
+    <h1>Auch Aufträge ohne Warenausgang zählen nun als Verkauf</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,58 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 11. Juli 2026</p>
     <div class="prose">
-      <h2>Problem</h2>
-<p>Alle drei "Verkaufsermittlung"-Optionen in den NetStock-Einstellungen ("Alle Aufträge",
-"Bezahlte Aufträge", "Gelieferte Aufträge") liefern aktuell <strong>nur</strong> Aufträge, für die bereits
-ein Lieferschein/Warenausgang gebucht wurde. Das liegt daran, dass die <code>SalesQuery</code> einen
-Warenausgang strukturell voraussetzt (über eine Kette von INNER JOINs), bevor sie überhaupt
-auf die gewählte Option schaut.</p>
-<p>Für "Alle Aufträge" und "Bezahlte Aufträge" ist das nicht richtig — nur "Gelieferte Aufträge"
-soll zwingend einen Lieferschein/Warenausgang voraussetzen.</p>
-<h2>Lösung</h2>
-<ul>
-<li><strong>Alle Aufträge:</strong> auch Aufträge ohne Lieferschein/Warenausgang zeigen.</li>
-<li><strong>Bezahlte Aufträge:</strong> ebenfalls unabhängig davon, ob schon ausgeliefert wurde — nur der
-Zahlungsstatus zählt.</li>
-<li><strong>Gelieferte Aufträge:</strong> bleibt wie bisher zwingend an einen tatsächlichen Warenausgang
-gebunden.</li>
-</ul>
-<h2>Technischer Hintergrund</h2>
-<details>
-<summary>Details für die Umsetzung</summary>
-
-<p><code>SalesQuery</code> (<code>Uploader.cs</code>) joint aktuell so:
-<code>Verkauf.tAuftragPosition → Verkauf.tAuftrag → Verkauf.tAuftragEckdaten → dbo.tLieferscheinPos → dbo.tWarenlagerausgang → dbo.tWarenLagerPlatz</code></p>
-<p>Alles davon sind <code>INNER JOIN</code>s — fehlt ein Lieferschein/Warenausgang, fällt die komplette Zeile
-raus, unabhängig vom <code>@WhenSendSales</code>-Parameter. Der eigentliche Options-Filter
-(<code>@WhenSendSales = 0/1/2 ...</code>) kommt in der <code>WHERE</code>-Klausel erst danach und kann diese
-strukturelle Einschränkung nicht mehr aufheben.</p>
-<p>Für "Alle Aufträge" und "Bezahlte Aufträge" müssten <code>tLieferscheinPos</code>/<code>tWarenlagerausgang</code>/
-<code>tWarenLagerPlatz</code> zu <code>LEFT JOIN</code>s werden (nur für "Gelieferte Aufträge" weiterhin zwingend).
-Das wirft zwei Folgefragen auf, die bei der Umsetzung mitentschieden werden müssen:</p>
-<ol>
-<li><strong>Location:</strong> kommt aktuell aus <code>tWarenLagerPlatz.kWarenLager</code> (dem tatsächlichen
-Warenausgang-Lager). Ohne Warenausgang braucht es eine andere Quelle — z. B. ein
-Fallback-Lager wie in <code>PoQuery</code>/<code>CoQuery</code> (<code>ISNULL(kLager,0) = 0 THEN &lt;Default&gt; ELSE kLager</code>).</li>
-<li><strong>Sales Quantity:</strong> kommt aktuell aus <code>tWarenlagerausgang.fAnzahl</code> (versandte Menge). Ohne
-Warenausgang müsste stattdessen <code>tAuftragPosition.fAnzahl</code> (bestellte Menge) verwendet
-werden.</li>
-</ol>
-<p>Zu bedenken: Das überschneidet sich inhaltlich mit <code>co.csv</code> (dort werden bereits offene
-Kundenaufträge separat gemeldet). Sollte beim Umsetzen mitgedacht werden, ändert aber nichts an
-der oben beschriebenen Erwartung an die drei Optionen selbst.</p>
-</details>
-
-<h2>Nächste Schritte</h2>
-<ul>
-<li><input disabled type="checkbox" /> Lieferschein-/Warenausgang-Joins nur noch für "Gelieferte Aufträge" erzwingen (<code>LEFT JOIN</code>
-für die anderen beiden Optionen)</li>
-<li><input disabled type="checkbox" /> Alternative Quelle für Location und Sales Quantity festlegen, wenn kein Warenausgang
-vorhanden ist</li>
-<li><input disabled type="checkbox" /> Überschneidung mit <code>co.csv</code> (offene Aufträge) bei der Umsetzung berücksichtigen</li>
-</ul>
-<p>Gefunden im Rahmen der manuellen NetStock-Upload-Validierungs-Checkliste (Checklistenpunkte
-25/26).</p>
+      <p>Bei den Auswahlen "Alle Aufträge" und "Bezahlte Aufträge" gingen nur Aufträge an Netstock, für die schon ein Lieferschein gebucht war. Zwingend ist der Warenausgang nun allein bei "Gelieferte Aufträge".</p>
 
     </div>
   </article>

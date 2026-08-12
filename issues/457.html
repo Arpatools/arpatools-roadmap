@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sales.csv: 'Gelieferte Aufträge' verlässt sich auf nKomplettAusgeliefert=2, das mengenmäßig vollständig gelieferte Aufträge nicht korrekt erkennt – ArpaTools</title>
-<meta name="description" content="Problem Die Option &quot;Gelieferte Aufträge&quot; in prüft . Das scheint aber nicht zuverlässig &quot;wirklich vollständig ausgeliefert&quot; zu bedeuten — wir haben Aufträge gefunden, die mengenmäßi…">
+<title>Die Verkaufszahlen enthalten nun alle ausgelieferten Aufträge – ArpaTools</title>
+<meta name="description" content="Mit der Auswahl &quot;Gelieferte Aufträge&quot; fehlten Aufträge, deren Ware längst vollständig versandt war, weil JTL Wawi sie erst nach einem weiteren Arbeitsschritt als komplett ausgelief…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>sales.csv: 'Gelieferte Aufträge' verlässt sich auf nKomplettAusgeliefert=2, das mengenmäßig vollständig gelieferte Aufträge nicht korrekt erkennt</h1>
+    <h1>Die Verkaufszahlen enthalten nun alle ausgelieferten Aufträge</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,65 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 11. Juli 2026</p>
     <div class="prose">
-      <h2>Problem</h2>
-<p>Die Option "Gelieferte Aufträge" in <code>sales.csv</code> prüft <code>tAuftrag.nKomplettAusgeliefert = 2</code>.
-Das scheint aber nicht zuverlässig "wirklich vollständig ausgeliefert" zu bedeuten — wir haben
-Aufträge gefunden, die mengenmäßig zu 100 % versandt sind, bei denen das Feld trotzdem nur <code>1</code>
-zeigt, nicht <code>2</code>.</p>
-<h2>Befund (aus der manuellen Test-DB, 2026-07-08)</h2>
-<table>
-<thead>
-<tr>
-<th>Auftrag</th>
-<th><code>nKomplettAusgeliefert</code></th>
-<th>Position</th>
-<th>Bestellt</th>
-<th>Versandt</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>AU-202607-10022</td>
-<td>1</td>
-<td>Artikel 17</td>
-<td>1</td>
-<td><strong>1 (100 %)</strong></td>
-</tr>
-<tr>
-<td>AU-202607-10024</td>
-<td>1</td>
-<td>Artikel 14</td>
-<td>9</td>
-<td><strong>9 (100 %)</strong></td>
-</tr>
-<tr>
-<td>AU-202607-10024</td>
-<td>1</td>
-<td>Artikel 15</td>
-<td>3</td>
-<td>0</td>
-</tr>
-</tbody></table>
-<p>Bei AU-202607-10022 ist die einzige Position komplett versandt — trotzdem steht <code>1</code>, nicht <code>2</code>.
-Bei AU-202607-10024 ist die Artikel-14-Position komplett versandt, während die Artikel-15-
-Position noch gar nicht versandt ist — auch hier <code>1</code>. Beide Fälle zeigen denselben Wert,
-obwohl der Liefergrad offensichtlich unterschiedlich ist (eine Position komplett, eine Position
-gemischt).</p>
-<h2>Offene Frage</h2>
-<p>Wonach richtet sich <code>nKomplettAusgeliefert</code> tatsächlich? Vermutung: Das Feld wird nicht direkt
-aus dem Mengenabgleich (versandt vs. bestellt) berechnet, sondern hängt an einem separaten
-Prozessschritt (z. B. Rechnungsstellung oder ein explizites "Auftrag abschließen"), der
-unabhängig davon ist, ob die Ware körperlich rausgegangen ist. Wenn das zutrifft, würde die
-Option "Gelieferte Aufträge" in der Praxis systematisch zu wenig melden — Aufträge könnten
-lange (oder dauerhaft) bei <code>1</code> hängen bleiben, obwohl körperlich längst alles raus ist.</p>
-<h2>Empfehlung zur Prüfung</h2>
-<ul>
-<li>Klären, was genau den Übergang <code>0 → 1 → 2</code> bei <code>nKomplettAusgeliefert</code> auslöst.</li>
-<li>Falls das Feld nicht verlässlich den tatsächlichen Mengenabgleich abbildet: für "Gelieferte
-Aufträge" stattdessen direkt Menge bestellt vs. Menge versandt vergleichen (ähnliches Muster
-wie die "Outstanding Quantity"-Berechnung, die bei <code>PoQuery</code>/<code>CoQuery</code> bereits verwendet wird),
-statt sich auf <code>nKomplettAusgeliefert</code> zu verlassen.</li>
-</ul>
-<p>Gefunden im Rahmen der manuellen NetStock-Upload-Validierungs-Checkliste (Checklistenpunkt 27).</p>
+      <p>Mit der Auswahl "Gelieferte Aufträge" fehlten Aufträge, deren Ware längst vollständig versandt war, weil JTL-Wawi sie erst nach einem weiteren Arbeitsschritt als komplett ausgeliefert kennzeichnete.</p>
 
     </div>
   </article>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arpatools kann nun mit unterschiedlichen Profilen umgehen – ArpaTools</title>
-<meta name="description" content="Design liegt vor: (Branch ). Worum es geht Kunden mit mehreren JTL Mandanten wollen arpaTools pro Mandant getrennt nutzen. Die Datenhaltung gibt das schon her: ein Profil ist ein O…">
+<title>Mehrere JTL-Mandanten lassen sich nun getrennt nutzen – ArpaTools</title>
+<meta name="description" content="Je Mandant wird ein Profil mit eigener Datenbankverbindung, eigenen Einstellungen und eigener Lizenz geführt. Gibt es mehr als eines, wird beim Start gefragt, mit welchem gearbeite…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>Arpatools kann nun mit unterschiedlichen Profilen umgehen</h1>
+    <h1>Mehrere JTL-Mandanten lassen sich nun getrennt nutzen</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Neu</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,20 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 07. August 2026</p>
     <div class="prose">
-      <p>Design liegt vor: <code>docs/superpowers/specs/2026-08-07-profilverwaltung-multimandant-design.md</code> (Branch <code>worktree-profilverwaltung-multimandant</code>).</p>
-<h2>Worum es geht</h2>
-<p>Kunden mit mehreren JTL-Mandanten wollen arpaTools pro Mandant getrennt nutzen. Die Datenhaltung gibt das schon her: ein Profil ist ein Ordner mit eigener <code>arpaTools.cfg</code>, darin genau ein <code>JtlConnectionString</code> auf eine Mandantendatenbank, und alle arpa-Tabellen samt Migrationsstand liegen pro Datenbank. <strong>Ein Profil ist im Kern ein Zeiger auf eine Datenbank plus eine Lizenz.</strong></p>
-<h2>Warum es heute nicht geht</h2>
-<p>Die Profilverwaltung ist vollständig implementiert, aber in der Oberfläche abgeschaltet: <code>MainViewModel.cs:166-169</code> baut den Menüpunkt und hängt ihn nie in die Footer-Navigation ein (Kommentar <code>// remove</code>). <code>ProfileSettingsWindow</code> ist damit unerreichbar.</p>
-<p>Wer von Hand einen Ordner anlegt, kommt trotzdem nicht weit: die Profilauswahl erscheint, zeigt aber <strong>kein einziges Profil</strong>. Ursache ist <code>ProfileSelectionViewModel.cs:75</code>, eine gewöhnliche Property ohne Änderungsbenachrichtigung, gesetzt erst nach einem <code>await</code>, sodass die ComboBox nie von der gefüllten Liste erfährt. Nach Abbrechen läuft die Anwendung mit <code>Profile1</code> weiter (<code>App.xaml.cs:289-296</code>), also im Produktivmandanten.</p>
-<h2>Umsetzung in drei Plänen</h2>
-<p><strong>Plan 1, Profilverwaltung nutzbar machen.</strong> Binding-Fehler in der Auswahl (zuerst, ohne ihn ist nichts prüfbar), Menüpunkt freischalten, Dev-Flag merken, Auswahl immer bei mehr als einem Profil, Profil-GUID und Installations-ID in eigenen Dateien, Profilwechsel per Prozessneustart, Aufräumarbeiten (Löschen ohne Rückfrage, <code>int.Parse</code> auf Ordnernamen, leerer Profilwert, Vorbelegung), sichere <code>Save()</code>-Schreibweise. Danach sind zwei Mandanten in der Oberfläche getrennt nutzbar.</p>
-<p><strong>Plan 2, Bindung.</strong> <code>arpa.ProfileBinding</code> in der Mandantendatenbank, damit eine Datenbank pro Installation nur einem Profil gehört.</p>
-<p><strong>Plan 3, Lizenz und Doku.</strong></p>
-<h2>Nicht Teil dieses Issues</h2>
-<p>Der Windows-Dienst bleibt unangetastet und bedient weiterhin nur <code>Profile1</code>. Geplante Jobs laufen also nur im Hauptprofil. Dafür gibt es ein eigenes Issue.</p>
-<h2>Validierung</h2>
-<p>Drei Prüfrunden mit adversarischer Gegenprüfung je Fund. Zwei Kernentscheidungen wurden dabei gekippt: die Bindung liegt in der Mandantendatenbank statt zentral in <code>eazybusiness</code> (Backup und Restore laufen getrennt), und Mehrplatzbetrieb gegen einen Mandanten ist der Normalfall statt ein Konflikt.</p>
+      <p>Je Mandant wird ein Profil mit eigener Datenbankverbindung, eigenen Einstellungen und eigener Lizenz geführt. Gibt es mehr als eines, wird beim Start gefragt, mit welchem gearbeitet werden soll. Geplante Jobs des Dienstes laufen weiterhin nur im ersten Profil.</p>
 
     </div>
   </article>

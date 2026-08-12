@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Worker-Dienst arbeitet nach einem Server-Neustart nie wieder, meldet sich aber als laufend – ArpaTools</title>
-<meta name="description" content="Gefunden beim Entwurf der Profilverwaltung ( 57), nicht dort behoben. Problem baut den im Konstruktor und fängt die Exception nur weg: Schlägt die Initialisierung fehl, ist null un…">
+<title>Geplante Aufgaben laufen nun auch nach einem Server-Neustart weiter – ArpaTools</title>
+<meta name="description" content="Startete der Server neu, war der Dienst oft vor der Datenbank bereit und gab dann endgültig auf: keine Sammelrechnungen, kein Bestandsabgleich, kein Retourenimport, bis ihn jemand…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../changelog.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Änderungsverlauf</a>
-    <h1>Worker-Dienst arbeitet nach einem Server-Neustart nie wieder, meldet sich aber als laufend</h1>
+    <h1>Geplante Aufgaben laufen nun auch nach einem Server-Neustart weiter</h1>
     <p class="badges">
       <span class="badge type-fixed"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>Behoben</span>
       <span class="badge status-closed">Erledigt</span>
@@ -47,31 +47,7 @@
     </p>
     <p class="issue-date">Abgeschlossen am 07. August 2026</p>
     <div class="prose">
-      <p>Gefunden beim Entwurf der Profilverwaltung (<a href="../issues/57.html">#57</a>), nicht dort behoben.</p>
-<h2>Problem</h2>
-<p><code>ArpaToolsWorker/Worker.cs</code> baut den <code>WorkerService</code> im <strong>Konstruktor</strong> und fängt die Exception nur weg:</p>
-<pre><code class="language-csharp">public Worker()
-{
-    try { _workerService = new WorkerService(); ... }
-    catch (Exception ex) { Log(ex); }
-}
-
-protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-{
-    if (_workerService == null) { Log("Worker Not Initialized"); return; }
-</code></pre>
-<p>Schlägt die Initialisierung fehl, ist <code>_workerService</code> null und <code>ExecuteAsync</code> steigt sofort aus. <strong>Danach tut der Dienst nie wieder etwas, meldet sich gegenüber Windows aber weiter als laufend.</strong> Es gibt keinen Retry.</p>
-<h2>Auslöser im Alltag</h2>
-<p>Der Konstruktor stellt über <code>_configurationService.Init()</code> (<code>Services/WorkerService.cs:31</code>) und die Lizenzprüfung schon eine Datenbankverbindung her. Nach einem Server-Neustart ist der Dienst mit <code>start=auto</code> oft früher bereit als SQL Server. Dann greift genau dieser Pfad.</p>
-<p>Folge: keine Sammelrechnungen, keine Bestandssynchronisation, kein Retourenimport, bis jemand den Dienst von Hand neu startet. Auffällig wird das erst über fehlende Belege, weil die einzige Spur eine Zeile in <code>%ProgramData%\arpaTools\ServiceLogs</code> ist, die niemand proaktiv liest.</p>
-<h2>Erwartetes Verhalten</h2>
-<ul>
-<li>Die Initialisierung gehört nicht in den Konstruktor, sondern in <code>ExecuteAsync</code>, mit Wiederholung.</li>
-<li>Scheitert sie, wird nach einem Backoff erneut versucht, statt endgültig aufzugeben.</li>
-<li>Der Dienst darf sich nicht als betriebsbereit ausgeben, wenn er nichts tut.</li>
-</ul>
-<h2>Zusammenhang</h2>
-<p>Erklärt einen Teil des in <a href="../issues/403.html">#403</a> beschriebenen unzuverlässigen Verhaltens. Fällt strukturell weg, falls der Dienst im Rahmen des Multi-Profil-Umbaus die Arbeit an Kindprozesse abgibt, was dort aber ausdrücklich <strong>nicht</strong> vorgesehen ist.</p>
+      <p>Startete der Server neu, war der Dienst oft vor der Datenbank bereit und gab dann endgültig auf: keine Sammelrechnungen, kein Bestandsabgleich, kein Retourenimport, bis ihn jemand von Hand neu startete. In Windows meldete er sich die ganze Zeit als laufend, sodass es erst über fehlende Belege auffiel.</p>
 
     </div>
   </article>

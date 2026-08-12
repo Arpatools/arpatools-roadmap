@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Einführung von Filter-Logik zwischen Aktionen in Jobby – ArpaTools</title>
-<meta name="description" content="Als technischer Nutzer möchte ich Filter zwischen Aktionen in einem Job definieren können damit ich die Ausführung nachfolgender Aktionen gezielt steuern kann – basierend auf Inhal…">
+<title>Eine Aktion läuft nun nur noch, wenn die Bedingung davor zutrifft – ArpaTools</title>
+<meta name="description" content="Eine Aktionskette lief stur von oben nach unten: Wer nur bei einem bestimmten Ergebnis weitermachen wollte, brauchte dafür getrennte Jobs — oder die Mail ging auch dann raus, wenn…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Einführung von Filter-Logik zwischen Aktionen in Jobby</h1>
+    <h1>Eine Aktion läuft nun nur noch, wenn die Bedingung davor zutrifft</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
       <span class="badge status-open">Offen</span>
@@ -47,24 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 17. April 2026</p>
     <div class="prose">
-      <p>Als technischer Nutzer<br />möchte ich Filter zwischen Aktionen in einem Job definieren können<br />damit ich die Ausführung nachfolgender Aktionen gezielt steuern kann – basierend auf Inhalten wie MSSQL-Ergebnissen oder Dateieigenschaften.</p>
-<h3>Akzeptanzkriterien</h3>
-<ul>
-<li><input disabled type="checkbox" /> Filter können zwischen zwei Aktionen eingefügt werden</li>
-<li><input disabled type="checkbox" /> Filter prüfen die Ausgabe der vorherigen Aktion (z. B. MSSQL-Resultat, Dateiexistenz)</li>
-<li><input disabled type="checkbox" /> Bedingung: Nur wenn Resultat vorhanden ist, wird Folgeaktion (z. B. Mailversand) ausgeführt</li>
-<li><input disabled type="checkbox" /> Filter können einfache Bedingungen prüfen (z. B. Anzahl Datensätze, Feldwert, Dateiinhalt)</li>
-<li><input disabled type="checkbox" /> Beispiel: Ein Job prüft alle 6 Stunden per MSSQL, ob ein Kunde neue Aufträge hat. Nur wenn COUNT = 0, wird eine E-Mail gesendet. Diese Bedingung soll direkt im Filter konfigurierbar sein.</li>
-</ul>
-<h3>Technische Hinweise</h3>
-<ul>
-<li>MSSQL-Ergebnisstruktur muss vorhersehbar und zugänglich sein</li>
-<li>Filterlogik sollte per UI konfigurierbar sein (z. B. Regeln wie <code>results.length &gt; 0</code> oder <code>results[0].count = 0</code></li>
-<li>Filter später eventuell erweiterbar mit UND/ODER-Verknüpfungen</li>
-<li>Vergleichsoperatoren wie =, &lt;, &gt;, != sollten unterstützt werden</li>
-</ul>
-<h3>Reproduktionsschritte</h3>
-<p>Nicht zutreffend – neues Feature</p>
+      <p>Eine Aktionskette lief stur von oben nach unten: Wer nur bei einem bestimmten Ergebnis weitermachen wollte, brauchte dafür getrennte Jobs — oder die Mail ging auch dann raus, wenn es nichts zu melden gab. Zwischen zwei Aktionen steht nun eine Prüfung auf das, was die vorherige geliefert hat: die Anzahl gefundener Datensätze etwa, oder ob eine Datei vorliegt.</p>
 
     </div>
   </article>

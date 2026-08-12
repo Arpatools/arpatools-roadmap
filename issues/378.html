@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Neue Jobby Aktion zur PDF-Kompression und -Optimierung implementieren – ArpaTools</title>
-<meta name="description" content="Unsere Anwendung soll eine Jobby Aktion bereitstellen, die bestehende PDF Dateien in optimierter Form abspeichert. Ziel ist es, die Dateigröße zu reduzieren, ohne zwingend Inhalte…">
+<title>Jobby verkleinert nun PDF-Dateien – ArpaTools</title>
+<meta name="description" content="Bisher gab Jobby PDF Dateien in der Größe weiter, in der sie ankamen. Das Format bleibt erhalten; ob Bilder verkleinert, Schriften ersetzt oder Metadaten und Anhänge entfernt werde…">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
 <link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +37,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Neue Jobby Aktion zur PDF-Kompression und -Optimierung implementieren</h1>
+    <h1>Jobby verkleinert nun PDF-Dateien</h1>
     <p class="badges">
       <span class="badge type-feature"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6L4.5 10.5l5.6-1.9z"/></svg>Geplant</span>
       <span class="badge status-open">Offen</span>
@@ -47,42 +47,7 @@
     </p>
     <p class="issue-date">Erstellt am 17. April 2026</p>
     <div class="prose">
-      <p>Unsere Anwendung soll eine <strong>Jobby-Aktion</strong> bereitstellen, die bestehende PDF-Dateien in optimierter Form abspeichert. Ziel ist es, die Dateigröße zu reduzieren, ohne zwingend Inhalte zu verlieren.<br />Die Aktion soll konfigurierbar sein und verschiedene Optimierungen unterstützen.</p>
-<h2>Anforderungen / Funktionsumfang</h2>
-<ul>
-<li><strong>PDF-Format muss erhalten bleiben</strong> (keine Konvertierung in andere Formate).  </li>
-<li>Optionen, die einzeln aktiviert/deaktiviert werden können:<ul>
-<li><strong>Bilder</strong>: verkleinern (Downsampling, JPEG-Qualität anpassen) oder komplett entfernen.  </li>
-<li><strong>Schriften</strong>: entfernen bzw. durch Standardschriften ersetzen (wenn möglich).  </li>
-<li><strong>Metadaten &amp; Anhänge</strong>: optional entfernen.  </li>
-<li><strong>Struktur-Kompression</strong>: Objekt- und Stream-Kompression anwenden.</li>
-</ul>
-</li>
-</ul>
-<h2>Technische Hinweise</h2>
-<ul>
-<li>Umsetzung in <strong>C#</strong>.  </li>
-<li>Mögliche Libraries:<ul>
-<li>iText 7 (AGPL / kommerzielle Lizenz für Optimizer-Add-on).  </li>
-<li>Alternativen: Aspose.PDF, Syncfusion PDF (kommerziell), PDFsharp (OSS, eingeschränkt).</li>
-</ul>
-</li>
-<li>Optional: Integration externer Tools wie Ghostscript, falls vertretbar.  </li>
-<li>Architektur: so gestalten, dass einzelne Optimierungen frei kombinierbar sind.</li>
-</ul>
-<h2>Akzeptanzkriterien</h2>
-<ul>
-<li>Eingabe: beliebiges PDF.  </li>
-<li>Ausgabe: PDF im gleichen Format.  </li>
-<li>Bei aktivierter Bildkompression ist die Dateigröße messbar kleiner.  </li>
-<li>Deaktivierte Optionen haben keinen Einfluss auf das Dokument.  </li>
-<li>Dokumente bleiben im Viewer fehlerfrei darstellbar.</li>
-</ul>
-<h2>Deliverable</h2>
-<ul>
-<li>Neue <strong>Jobby-Aktion</strong> <code>"PDF Dokument verkleinern"</code> mit den oben genannten Optionen.  </li>
-<li>Unit-Tests für unterschiedliche PDF-Beispiele (mit Bildern, Schriften, Metadaten).</li>
-</ul>
+      <p>Bisher gab Jobby PDF-Dateien in der Größe weiter, in der sie ankamen. Das Format bleibt erhalten; ob Bilder verkleinert, Schriften ersetzt oder Metadaten und Anhänge entfernt werden, wählt man einzeln aus.</p>
 
     </div>
   </article>
