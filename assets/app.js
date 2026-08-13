@@ -22,6 +22,85 @@
   });
 })();
 
+/* Inhaltsverzeichnis einer Doku-Seite.
+   Zweierlei: auf schmalen Geräten zugeklappt starten — ausgeliefert wird es
+   offen, damit ohne JavaScript nichts fehlt, hier wird nur zugeklappt, was
+   sonst drei Bildschirme füllt, bevor der Text beginnt. Und: der Abschnitt,
+   in dem man gerade liest, ist hervorgehoben, beim Scrollen wie beim Klicken. */
+(function () {
+  const toc = document.querySelector('[data-doc-toc]');
+  if (!toc) return;
+
+  if (window.matchMedia('(max-width: 768px)').matches) toc.open = false;
+
+  const liste = toc.querySelector('ul');
+  const marken = [...toc.querySelectorAll('a[href^="#"]')]
+    .map((link) => ({ link, ziel: document.getElementById(decodeURIComponent(link.hash.slice(1))) }))
+    .filter((marke) => marke.ziel);
+
+  if (!marken.length) return;
+
+  let aktuell = null;
+
+  /** Den hervorgehobenen Eintrag im mitlaufenden Verzeichnis sichtbar halten. */
+  function inSicht(link) {
+    if (!liste || liste.scrollHeight <= liste.clientHeight) return;
+
+    const eintrag = link.getBoundingClientRect();
+    const kasten = liste.getBoundingClientRect();
+
+    if (eintrag.top < kasten.top) liste.scrollTop -= kasten.top - eintrag.top + 8;
+    else if (eintrag.bottom > kasten.bottom) liste.scrollTop += eintrag.bottom - kasten.bottom + 8;
+  }
+
+  function hervorheben(marke) {
+    if (!marke || marke === aktuell) return;
+
+    aktuell?.link.classList.remove('is-active');
+    marke.link.classList.add('is-active');
+    aktuell = marke;
+    inSicht(marke.link);
+  }
+
+  function pruefen() {
+    // Unterhalb der klebenden Kopfzeile: was darüber steht, ist gelesen.
+    const grenze = 120;
+    let treffer = marken[0];
+
+    for (const marke of marken) {
+      if (marke.ziel.getBoundingClientRect().top > grenze) break;
+      treffer = marke;
+    }
+
+    // Am Seitenende bleibt sonst der vorletzte Abschnitt hängen, weil der letzte
+    // nie mehr bis unter die Kopfzeile wandert.
+    const amEnde = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+
+    hervorheben(amEnde ? marken[marken.length - 1] : treffer);
+  }
+
+  let angefordert = false;
+  document.addEventListener(
+    'scroll',
+    () => {
+      if (angefordert) return;
+      angefordert = true;
+      requestAnimationFrame(() => {
+        angefordert = false;
+        pruefen();
+      });
+    },
+    { passive: true },
+  );
+
+  // Beim Klick sofort, statt erst wenn das weiche Scrollen angekommen ist.
+  for (const marke of marken) {
+    marke.link.addEventListener('click', () => hervorheben(marke));
+  }
+
+  pruefen();
+})();
+
 /* Client-side filtering: module, title search, version range and the version-free view. */
 (function () {
   const filters = document.querySelector('[data-filters]');

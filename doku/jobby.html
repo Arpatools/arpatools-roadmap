@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jobby – Dokumentation – ArpaTools</title>
+<meta name="description" content="Willkommen bei Jobby, dem Automatisierungstool für Ihre JTL-Wawi. Jobby ist eine App im arpaTools Client und bündelt wiederkehrende Aktionen in Jobs, die automatisiert oder auf Knopfdruck laufen.">
+<link rel="canonical" href="https://arpatools.github.io/arpatools-roadmap/doku/jobby.html">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link is-active" href="../doku/index.html">Dokumentation</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="doc-page rise">
+    <a class="breadcrumb" href="../doku/index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Dokumentation</a>
+    <h1>Jobby</h1>
+    <p class="badges"><span class="badge">Jobby</span></p>
+    <div class="doc-body">
+    <details class="doc-toc" data-doc-toc open>
+      <summary class="doc-toc-title">Auf dieser Seite<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>
+      <ul>
+        <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
+        <li class="doc-toc-level-2"><a href="#beispiele-für-den-einsatz">Beispiele für den Einsatz</a></li>
+        <li class="doc-toc-level-3"><a href="#beispiel-automatischer-import-der-bestände-eines-dropshipping-lieferanten">Beispiel: Automatischer Import der Bestände eines Dropshipping-Lieferanten</a></li>
+        <li class="doc-toc-level-3"><a href="#beispiel-übergabe-einer-dropshipping-bestellung-an-den-lieferanten">Beispiel: Übergabe einer Dropshipping-Bestellung an den Lieferanten</a></li>
+        <li class="doc-toc-level-3"><a href="#beispiel-import-von-tracking-informationen-vom-dropshipper">Beispiel: Import von Tracking-Informationen vom Dropshipper</a></li>
+        <li class="doc-toc-level-2"><a href="#jobby-übersicht">Jobby-Übersicht</a></li>
+        <li class="doc-toc-level-3"><a href="#jobs">Jobs</a></li>
+        <li class="doc-toc-level-3"><a href="#e-mail-konten">E-Mail-Konten</a></li>
+        <li class="doc-toc-level-3"><a href="#drittanbieter-konten">Drittanbieter-Konten</a></li>
+        <li class="doc-toc-level-3"><a href="#vault">Vault</a></li>
+        <li class="doc-toc-level-3"><a href="#ftp-server">FTP-Server</a></li>
+        <li class="doc-toc-level-3"><a href="#datenbanken">Datenbanken</a></li>
+        <li class="doc-toc-level-3"><a href="#einstellungen">Einstellungen</a></li>
+        <li class="doc-toc-level-2"><a href="#einfachen-job-erstellen">Einfachen Job erstellen</a></li>
+        <li class="doc-toc-level-2"><a href="#jobby-aktionen">Jobby-Aktionen</a></li>
+        <li class="doc-toc-level-3"><a href="#import-jtl-ameise-import">Import: JTL-Ameise Import</a></li>
+        <li class="doc-toc-level-3"><a href="#import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</a></li>
+        <li class="doc-toc-level-3"><a href="#import-sendungsdaten-importieren-jtlwawiexterndll">Import: Sendungsdaten importieren (JTLWawiExtern.DLL)</a></li>
+        <li class="doc-toc-level-3"><a href="#import-xml-auftragsimport-jtlwawiexterndll">Import: XML-Auftragsimport (JTLWawiExtern.DLL)</a></li>
+        <li class="doc-toc-level-3"><a href="#export-jtl-ameise-export">Export: JTL-Ameise Export</a></li>
+        <li class="doc-toc-level-3"><a href="#export-lagerbewertung">Export: Lagerbewertung</a></li>
+        <li class="doc-toc-level-3"><a href="#aufträge-lieferantenbestellung-bestätigen">Aufträge: Lieferantenbestellung bestätigen</a></li>
+        <li class="doc-toc-level-3"><a href="#aufträge-lieferantenbestellung-erstellen">Aufträge: Lieferantenbestellung erstellen</a></li>
+        <li class="doc-toc-level-3"><a href="#aufträge-ohne-versand-abschließen">Aufträge: Ohne Versand abschließen</a></li>
+        <li class="doc-toc-level-3"><a href="#einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</a></li>
+        <li class="doc-toc-level-3"><a href="#dateitransfer-download-vom-ftp-server">Dateitransfer: Download vom FTP-Server</a></li>
+        <li class="doc-toc-level-3"><a href="#dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-datei-aus-web-laden">Sonstiges: Datei aus Web laden</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-daten-aus-verzeichnis-laden">Sonstiges: Daten aus Verzeichnis laden</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-daten-in-verzeichnis-speichern">Sonstiges: Daten in Verzeichnis speichern</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-e-mail-senden">Sonstiges: E-Mail senden</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-e-mail-via-brevo-senden">Sonstiges: E-Mail via Brevo senden</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-prozess-starten">Sonstiges: Prozess starten</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-benutzerdefinierte-aktion">Sonstiges: Benutzerdefinierte Aktion</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-manuellen-jtl-wawi-workflow-ausführen">Sonstiges: Manuellen JTL-Wawi Workflow ausführen</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-daten-von-ms-sql-server-laden">Sonstiges: Daten von MS-SQL Server laden</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-daten-per-sql-einfügenändern">Sonstiges: Daten per SQL einfügen/ändern</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-job-ausführen">Sonstiges: Job ausführen</a></li>
+        <li class="doc-toc-level-3"><a href="#xml-zu-csv-json-zu-csv-und-excel-zu-csv">XML zu CSV, JSON zu CSV und Excel zu CSV</a></li>
+        <li class="doc-toc-level-2"><a href="#jobby-interne-arpatools-jobs">Jobby-Interne arpaTools Jobs</a></li>
+        <li class="doc-toc-level-3"><a href="#provimate-abrechnung">ProviMate-Abrechnung</a></li>
+        <li class="doc-toc-level-3"><a href="#querify">Querify</a></li>
+        <li class="doc-toc-level-3"><a href="#retourenportal">Retourenportal</a></li>
+        <li class="doc-toc-level-3"><a href="#sammelrechnung">Sammelrechnung</a></li>
+        <li class="doc-toc-level-3"><a href="#netstock">Netstock</a></li>
+        <li class="doc-toc-level-2"><a href="#arpatools-worker-installieren">arpaTools Worker installieren</a></li>
+      </ul>
+    </details>
+    <div class="prose">
+      <h2 id="einleitung">Einleitung</h2>
+<p>Willkommen bei Jobby, dem Automatisierungstool für Ihre JTL-Wawi. Jobby ist eine App im arpaTools
+Client und bündelt wiederkehrende Aktionen in Jobs, die automatisiert oder auf Knopfdruck laufen. Das
+spart Zeit und reduziert Fehlerquellen in den täglichen Prozessen.</p>
+<p><img src="../docs/bilder/jobby-uebersicht.png" alt="Die Jobs-Übersicht in Jobby: alle angelegten Jobs mit Zeitplan und letztem Lauf" /></p>
+<p>Jobby ergänzt die anderen arpaTools-Produkte wie Sammelrechnung, Retourenportal und ProviMate. Ein
+Job besteht aus einer Reihe von Aktionen, die in beliebiger Reihenfolge konfiguriert werden, zum
+Beispiel Importe, Exporte, Dateiübertragungen oder das Versenden von E-Mails. Jeder Job kann
+zeitgesteuert oder manuell gestartet werden.</p>
+<p>Diese Aufgaben decken typische Prozesse rund um Import, Export, Dateitransfer und Systemintegration ab.</p>
+<p><strong>Import</strong></p>
+<ul>
+<li><strong>JTL-Ameise Import:</strong> führt definierte Importvorlagen der JTL-Ameise aus. Ideal für Artikeldaten, Bestände, Preise.</li>
+<li><strong>Lieferantenbestand importieren:</strong> importiert eine CSV-Datei mit Bestandsinformationen eines Lieferanten in die JTL-Wawi.</li>
+<li><strong>XML zu CSV / JSON zu CSV / Excel zu CSV:</strong> wandelt Lieferantendateien in eine CSV, die die übrigen Importaktionen lesen können.</li>
+<li><strong>Sendungsdatenimport:</strong> verarbeitet Trackinginformationen aus einer CSV-Datei und trägt sie in JTL-Wawi ein, sodass Sendungen als „versendet" markiert werden.</li>
+</ul>
+<p><strong>Export</strong></p>
+<ul>
+<li><strong>JTL-Ameise Export:</strong> steuert Exportvorlagen der JTL-Ameise an, z. B. für Artikel-, Auftrags- oder Kundendaten.</li>
+<li><strong>Lagerbewertung:</strong> erzeugt eine Datei mit Bestand und Bestandswert je Artikel, aufgeschlüsselt nach Lager.</li>
+</ul>
+<p><strong>Aufträge</strong></p>
+<ul>
+<li><strong>Lieferantenbestellung bestätigen:</strong> verarbeitet und bestätigt Lieferantenbestellungen.</li>
+<li><strong>Lieferantenbestellung erstellen:</strong> legt aus einer Datei neue Lieferantenbestellungen in JTL-Wawi an.</li>
+<li><strong>XML-Auftragsimport:</strong> importiert Auftragsdaten im JTL-XML-Format in die JTL-Wawi.</li>
+<li><strong>Ohne Versand abschließen:</strong> markiert Aufträge als komplett ausgeliefert, ohne einen Versand auszulösen.</li>
+</ul>
+<p><strong>Einkauf</strong></p>
+<ul>
+<li><strong>Einkaufsliste schreiben:</strong> trägt Artikel mit Menge aus einer Datei in die JTL-Einkaufsliste eines Benutzers ein.</li>
+</ul>
+<p><strong>Dateitransfer</strong></p>
+<ul>
+<li><strong>Download vom FTP-Server:</strong> lädt Dateien von einem FTP-Server in den internen Jobspeicher.</li>
+<li><strong>Upload zum FTP-Server:</strong> überträgt Dateien aus dem Jobspeicher auf einen externen FTP-Server.</li>
+</ul>
+<p><strong>Sonstiges</strong></p>
+<ul>
+<li><strong>Daten aus dem Web laden:</strong> ruft eine Datei von einer URL ab und legt sie im Jobspeicher ab.</li>
+<li><strong>Daten aus Verzeichnis laden:</strong> liest Dateien aus einem lokalen Verzeichnis ein, optional mit Löschen nach dem Laden.</li>
+<li><strong>Daten in Verzeichnis speichern:</strong> speichert verarbeitete Dateien in einem Verzeichnis, optional mit automatischem Löschen nach X Tagen.</li>
+<li><strong>E-Mail senden:</strong> versendet Benachrichtigungen oder Berichte, optional mit Anhang.</li>
+<li><strong>E-Mail via Brevo senden:</strong> versendet transaktionale E-Mails über Brevo.</li>
+<li><strong>Prozess starten:</strong> startet externe Programme oder Skripte mit Parametern.</li>
+<li><strong>Benutzerdefinierte Aktion:</strong> startet ein beliebiges externes Programm oder Skript (.exe, PowerShell, Python, Batch, Jar) mit Zeitlimit, Zugangsdaten aus dem Vault und Rückgabe der erzeugten Dateien in die weitere Verarbeitung. „Prozess starten" bleibt daneben unverändert bestehen.</li>
+<li><strong>Manuellen JTL-Wawi Workflow ausführen:</strong> stößt manuelle Workflows in JTL-Wawi an.</li>
+<li><strong>Daten von MS-SQL Server laden:</strong> führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei.</li>
+<li><strong>Daten per SQL einfügen/ändern:</strong> führt ein schreibendes SQL-Statement aus.</li>
+<li><strong>Job ausführen:</strong> übergibt den laufenden Job an einen anderen Job und beendet den aufrufenden Job.</li>
+</ul>
+<p><strong>Interne arpaTools Jobs</strong> (siehe eigenen Abschnitt): ProviMate-Abrechnung, Querify, Retourenportal,
+Sammelrechnung, Netstock.</p>
+<p>Im Mittelpunkt steht Jobby als Schaltzentrale der Automatisierung: die zeitgesteuerte Planung und
+automatische Ausführung sämtlicher Prozesse. Nutzer anderer Apps benötigen keine zusätzliche
+Jobby-Lizenz; die Aktionen der jeweiligen App sind ohne separate Lizenz nutzbar.</p>
+<h2 id="beispiele-für-den-einsatz">Beispiele für den Einsatz</h2>
+<h3 id="beispiel-automatischer-import-der-bestände-eines-dropshipping-lieferanten">Beispiel: Automatischer Import der Bestände eines Dropshipping-Lieferanten</h3>
+<p>Ein Lieferant stellt mehrfach täglich eine CSV-Datei mit Lagerbeständen auf einem FTP-Server bereit.
+Mit Jobby lässt sich der Import vollständig automatisieren:</p>
+<ol>
+<li><strong>Download vom FTP-Server:</strong> lädt die aktuelle Bestandsdatei in den Jobspeicher.</li>
+<li><strong>Lieferantenbestand importieren:</strong> verarbeitet die Datei und ordnet die Bestände den Artikeln zu.</li>
+<li><strong>(Optional) Daten in Verzeichnis speichern:</strong> legt die verarbeitete Datei zur Archivierung ab.</li>
+<li><strong>(Optional) E-Mail senden:</strong> informiert den Einkauf über den erfolgreichen Lauf.</li>
+</ol>
+<h3 id="beispiel-übergabe-einer-dropshipping-bestellung-an-den-lieferanten">Beispiel: Übergabe einer Dropshipping-Bestellung an den Lieferanten</h3>
+<p>JTL-Wawi legt bei Auslieferung eine CSV-Datei mit den Bestellinformationen ab. Jobby übergibt sie an
+den Lieferanten:</p>
+<ol>
+<li><strong>Daten aus Verzeichnis laden:</strong> lädt neue Dateien aus dem Verzeichnis und entfernt sie dort, um doppelte Verarbeitung zu vermeiden.</li>
+<li><strong>Upload zum FTP-Server:</strong> lädt die Datei auf den FTP-Server des Lieferanten.</li>
+<li><strong>Daten in Verzeichnis speichern:</strong> legt die Datei in einem Archiv ab (z. B. 30 Tage, danach automatisch gelöscht).</li>
+</ol>
+<h3 id="beispiel-import-von-tracking-informationen-vom-dropshipper">Beispiel: Import von Tracking-Informationen vom Dropshipper</h3>
+<p>Nach dem Versand stellt der Lieferant eine Datei mit Sendungsdaten bereit:</p>
+<ol>
+<li><strong>Download vom FTP-Server:</strong> lädt die Datei mit den Sendungsdaten.</li>
+<li><strong>Sendungsdatenimport:</strong> ordnet die Trackingnummern den Lieferscheinen zu und markiert die Sendungen als „versendet".</li>
+<li><strong>Daten in Verzeichnis speichern:</strong> archiviert die Datei (z. B. 30 Tage).</li>
+</ol>
+<h2 id="jobby-übersicht">Jobby-Übersicht</h2>
+<h3 id="jobs">Jobs</h3>
+<p>Die Ansicht <strong>Jobs</strong> ist die Hauptansicht. Hier werden alle Jobs konfiguriert; bei vielen Jobs hilft die
+Suche. Neue Jobs legt man über <strong>Hinzufügen</strong> an, bestehende ändert man über <strong>Bearbeiten</strong> (oder per
+Doppelklick), <strong>Löschen</strong> entfernt sie. <strong>Starten</strong> führt den ausgewählten Job aus; danach wird in der
+Liste das Datum „Letzter Durchlauf" aktualisiert.</p>
+<p><strong>Laden</strong> aktualisiert die Ansicht. Das ist nützlich, wenn Jobs über den arpaTools Worker automatisch
+laufen: nach dem Laden zeigt „Letzter Zeitplandurchlauf", ob und wann die letzte planmäßige Ausführung
+stattfand.</p>
+<p>Spalten in der Liste:</p>
+<ul>
+<li><strong>Aktionsanzahl:</strong> Anzahl der Aktionen pro Job.</li>
+<li><strong>Aktiv:</strong> Häkchen, wenn der Job aktiv ist.</li>
+<li><strong>Zeitplan aktiv:</strong> aktiv, wenn der Job per Zeitplan über den arpaTools Worker läuft.</li>
+</ul>
+<h3 id="e-mail-konten">E-Mail-Konten</h3>
+<p>Eine mögliche Aktion ist der Versand von E-Mails, mit reinem Text oder mit Anhängen (z. B. Ergebnisse
+aus SQL-Abfragen oder Dateien vom FTP-Server bzw. aus einem Verzeichnis).</p>
+<p>Die Einstellungen entsprechen den SMTP-Daten des Hosters. Office-365- oder Google-Mail-Authentifizierung
+werden nicht unterstützt. Einzutragen sind Server, Port, Verschlüsselung, die Absenderadresse und,
+sofern das Postfach eine Anmeldung verlangt, Benutzername und Passwort. Mit <strong>Prüfen</strong> lassen sich die
+Einstellungen testen.</p>
+<ul>
+<li><strong>Verschlüsselung:</strong> „Keine", „STARTTLS" oder „SSL/TLS". Zu jeder Art gehört üblicherweise ein
+eigener Port: „Keine" Port 25, „STARTTLS" Port 587, „SSL/TLS" Port 465. Ändern Sie die
+Verschlüsselung, zieht der Port automatisch auf den passenden Standardwert mit, solange dort noch
+einer der drei Standardports oder gar kein Wert steht. Haben Sie selbst einen abweichenden Port
+eingetragen, bleibt er beim Wechsel der Verschlüsselung unangetastet.</li>
+<li><strong>Anmeldung erforderlich:</strong> ausschalten, wenn das Postfach den Versand ohne Benutzername und
+Passwort annimmt, etwa weil es den Absender über die IP-Adresse freigibt. Ist der Schalter aus,
+sind Benutzername und Passwort nicht eingebbar und werden beim Speichern nicht verlangt.
+<strong>Benutzername und Kennwort bleiben dabei gespeichert</strong>, wenn Sie die Anmeldung ausschalten. Schalten
+Sie sie später wieder ein, finden Sie Ihre Zugangsdaten unverändert vor. Wollen Sie sie loswerden,
+schalten Sie die Anmeldung zunächst wieder ein, leeren Sie die beiden Felder von Hand und schalten
+Sie die Anmeldung danach wieder aus, bevor Sie speichern.</li>
+<li>Wählen Sie „Keine" Verschlüsselung, während die Anmeldung eingeschaltet bleibt, überträgt das
+Postfachkennwort ungeschützt über das Netz. Das ist keine verbotene Kombination, manche Postfächer
+im eigenen Netz verlangen genau das, aber arpaTools fragt beim Speichern ausdrücklich nach, ob das
+so gewollt ist.</li>
+</ul>
+<p>Bestehende E-Mail-Konten aus einer Vorversion stehen nach der Aktualisierung auf „STARTTLS" mit
+Anmeldung, dem bisherigen Verhalten. Niemand muss deswegen etwas umstellen.</p>
+<h3 id="drittanbieter-konten">Drittanbieter-Konten</h3>
+<p>Über Drittanbieter-Konten lassen sich API-Zugangsdaten in Jobby speichern und benennen. Die Daten
+werden verschlüsselt gespeichert.</p>
+<h3 id="vault">Vault</h3>
+<p>Der Vault ist ein Tresor für Zugangsdaten, die Sie in einem Job an ein externes Programm übergeben
+möchten, zum Beispiel ein Passwort für ein Skript, das über die Aktion „Prozess starten" aufgerufen
+wird. Sie legen dazu einen Schlüssel mit einem Wert an. Im Job selbst taucht nur der Schlüsselname auf,
+nie der Wert.</p>
+<ul>
+<li><strong>Schlüssel:</strong> wird zum Namen einer Umgebungsvariable des gestarteten Programms. Erlaubt sind
+Großbuchstaben, Ziffern und Unterstrich, das erste Zeichen muss ein Buchstabe sein. Kleinbuchstaben
+wandelt arpaTools beim Speichern automatisch in Großbuchstaben um.</li>
+<li><strong>Kurzbeschreibung:</strong> optionaler Hinweistext, wofür der Eintrag gedacht ist.</li>
+<li><strong>Wert:</strong> wird verschlüsselt gespeichert und lässt sich nach dem Speichern nicht mehr anzeigen. Wer
+den Wert vergessen hat, trägt einen neuen ein; einen bestehenden Wert wieder einsehen können Sie
+nicht.</li>
+</ul>
+<p>Ein Schlüssel lässt sich nicht umbenennen. Möchten Sie einen Eintrag unter einem anderen Namen führen,
+legen Sie einen neuen Schlüssel an und löschen den alten.</p>
+<p>Die Spalte <strong>Anzahl Verwendungen</strong> soll zeigen, in wie vielen Jobs der Schlüssel eingesetzt wird. Solange
+es noch keine Aktion gibt, die Vault-Werte tatsächlich benutzt, steht hier immer 0, selbst wenn Sie den
+Schlüssel längst in einer Aktion eingetragen haben. Aus demselben Grund warnt arpaTools beim Löschen
+heute noch nicht vor betroffenen Jobs: Löschen Sie einen Schlüssel, der in einer Aktion eingetragen ist,
+gibt es dafür aktuell keine Rückfrage, und die Aktion schlägt beim nächsten Lauf ohne Vorwarnung fehl,
+weil ihr die Zugangsdaten fehlen. Prüfen Sie vor dem Löschen deshalb selbst, ob und wo Sie den Schlüssel
+noch verwenden. Sobald es eine Aktion gibt, die Vault-Schlüssel benutzen kann, zählt diese Spalte korrekt
+mit, und das Löschen eines benutzten Schlüssels fragt dann vorher nach und nennt die betroffenen Jobs.</p>
+<p><strong>Wichtig:</strong> Geht in der Datenbank die Zeile mit dem Vault-Schlüssel verloren, mit dem alle Werte
+verschlüsselt sind, sind sämtliche Vault-Einträge unbrauchbar. Sie lassen sich nicht wiederherstellen
+und müssen komplett neu eingegeben werden.</p>
+<h3 id="ftp-server">FTP-Server</h3>
+<p>Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
+Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
+Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit <strong>Prüfen</strong> wird die
+Verbindung getestet.</p>
+<p><img src="../docs/bilder/jobby-ftp-server.png" alt="Fenster FTP-Server mit einer Tabelle der hinterlegten Verbindungen. Die Spalten zeigen die Bezeichnung sowie je eine Spalte dafür, ob die Verbindung in Jobby, in Netstock und im Retourenportal verwendet wird. Unten die Schaltflächen Hinzufügen, Bearbeiten, Löschen, Kopieren und Laden." /></p>
+<h3 id="datenbanken">Datenbanken</h3>
+<p>Mit Jobby lassen sich mehrere JTL-Datenbanken hinterlegen. So bedient man mehrere Mandanten innerhalb
+einer Jobby-Installation.</p>
+<h3 id="einstellungen">Einstellungen</h3>
+<p>Die Einstellungen legen fest, ob der arpaTools Worker verwendet wird und in welchem Intervall er Jobs
+ausführt. Wir empfehlen mindestens fünf Minuten. Die Installation des Windows-Dienstes „arpaTools
+Worker" ist im Abschnitt <a href="#arpatools-worker-installieren">arpaTools Worker installieren</a> beschrieben.</p>
+<h2 id="einfachen-job-erstellen">Einfachen Job erstellen</h2>
+<p>Ein Job besteht aus einer Abfolge von <strong>Aktionen</strong>, die nacheinander ausgeführt werden. Über den
+arpaTools Worker kann die Ausführung auch zeitgesteuert erfolgen.</p>
+<p>Links werden alle verfügbaren Aktionen angezeigt. Zum Hinzufügen wählt man eine Aktion aus und klickt
+<strong>Hinzufügen</strong>; danach öffnen sich ihre Einstellungen. Hinzugefügte Aktionen erscheinen rechts und
+lassen sich dort bearbeiten und in der Reihenfolge anpassen. Aktionen laufen immer von oben nach unten.</p>
+<p><strong>Wichtig:</strong> Aktionen, die mit Dateien arbeiten, speichern diese nicht automatisch ab, sondern laden
+sie nur in die Laufzeitumgebung. Dazu gehören:</p>
+<ul>
+<li>Daten von MS-SQL Server laden (lesend)</li>
+<li>Daten aus Verzeichnis laden</li>
+<li>Datei aus Web laden</li>
+<li>Download vom FTP-Server</li>
+</ul>
+<p>Nur die Aktion <strong>JTL-Ameise Export</strong> schreibt aufgrund der Ameisen-Struktur eine Datei, die im weiteren
+Verlauf geladen werden muss. Erst die Aktion <strong>Daten in Verzeichnis speichern</strong> legt die Inhalte
+dauerhaft ab.</p>
+<h2 id="jobby-aktionen">Jobby-Aktionen</h2>
+<h3 id="import-jtl-ameise-import">Import: JTL-Ameise Import</h3>
+<p>Führt strukturierte Importe (Artikeldaten, Kundenlisten, Bestände) automatisiert oder manuell über eine
+vorher definierte JTL-Ameise-Importvorlage aus. Grundlage ist eine in JTL-Ameise gespeicherte Vorlage.</p>
+<ul>
+<li><strong>Template:</strong> die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein).</li>
+<li><strong>Workflows:</strong> bestimmt, ob während des Imports hinterlegte Workflows ausgeführt werden.</li>
+<li><strong>Log Level:</strong> Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.</li>
+<li><strong>Log-Parameter:</strong> zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: <code>--log</code> (Hauptbericht), <code>--log_errors</code>, <code>--log_warnings</code>, <code>--log_imported</code>, <code>--log_update</code>, <code>--log_other</code>.</li>
+<li><strong>Platzhalter im Dateinamen:</strong> <code>%y</code> (Jahr vierstellig), <code>%m</code> (Monat), <code>%d</code> (Tag), <code>%h</code> (Stunde), <code>%i</code> (Minute), <code>%s</code> (Sekunde), <code>%db</code> (Datenbankname), <code>%id</code> (Name der Importvorlage). Beispiel: <code>import_%y-%m-%d_%h-%i-%s_%id.log</code>.</li>
+</ul>
+<h3 id="import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</h3>
+<p>Importiert Lieferantenbestände in JTL-Wawi. Der Bestand erscheint in den Artikeldetails im Reiter
+Lieferanten und wird optional dem eigenen Lagerbestand hinzugefügt. Der Lieferant sollte regelmäßig eine
+aktuelle CSV-Datei bereitstellen.</p>
+<ul>
+<li><strong>Lieferant:</strong> für welchen Lieferanten die Bestände importiert werden.</li>
+<li><strong>Startzeile:</strong> bei Dateien mit Überschriftszeile mindestens Zeile 2.</li>
+<li><strong>Identifizierungsart und Identifizierung:</strong> woran ein Artikel eindeutig erkannt wird (Lieferantenartikelnummer oder GTIN/EAN) und in welcher Spalte dieser Wert steht.</li>
+<li><strong>Spalte Lieferantenbestand:</strong> Spalte mit dem Bestandswert.</li>
+<li><strong>Verarbeitung:</strong> eine große Datei oder mehrere Dateien.</li>
+<li><strong>Nicht gesendete Artikel + Bestimmten Bestand setzen:</strong> setzt für Artikel, die nicht mehr in der Datei stehen, den Wert aus „Bestand für nicht gesendete Artikel". Andernfalls werden solche Artikel ignoriert.</li>
+<li><strong>Bestandskonvertierung:</strong> wandelt Textwerte in Zahlen, wenn der Lieferant statt Zahlen z. B. „Verfügbar"/„Nicht verfügbar" sendet (Quelle = Text in der Datei, Ziel = Zahl, z. B. Verfügbar = 10, Nicht verfügbar = 0).</li>
+</ul>
+<h3 id="import-sendungsdaten-importieren-jtlwawiexterndll">Import: Sendungsdaten importieren (JTLWawiExtern.DLL)</h3>
+<p>Importiert Sendungs- bzw. Trackingdaten aus einer CSV-Datei und markiert Sendungen als versendet, ohne
+dass JTL-Packtisch oder JTL-WMS aktiv im Vordergrund laufen müssen. Der Import läuft im Hintergrund über
+den Windows-Dienst.</p>
+<ul>
+<li><strong>Importbenutzer:</strong> der Benutzer, der den Lieferschein von Offen auf Versendet setzt.</li>
+<li><strong>Startzeile:</strong> bei Überschriftszeile mindestens Zeile 2.</li>
+<li><strong>Identifizierung:</strong> Spalte mit Auftrags- oder Lieferscheinnummer. Bei Teillieferungen empfehlen wir die Lieferscheinnummer, sonst würden alle Teillieferungen als versendet markiert.</li>
+<li><strong>Identifizierungsoption:</strong> „Auftragsnummer" oder „Automatisch ohne Auftragsnummer" (nutzt die empfohlene Lieferscheinnummer).</li>
+<li><strong>Versanddatum:</strong> Spalte mit dem Versanddatum.</li>
+<li><strong>Sendungsnummer:</strong> Spalte mit der Trackingnummer.</li>
+<li><strong>Hinweis:</strong> optionale Spalte mit einem Versandhinweis.</li>
+<li><strong>Import-Filter:</strong> hilft bei mehrzeiligen Dateien (z. B. DESADV), in denen nicht jede Zeile eine Sendungsnummer enthält. Der Filter bestimmt, welcher Wert in einer Spalte vorhanden sein muss, damit eine Zeile berücksichtigt wird.</li>
+</ul>
+<h3 id="import-xml-auftragsimport-jtlwawiexterndll">Import: XML-Auftragsimport (JTLWawiExtern.DLL)</h3>
+<p>Importiert Auftragsdaten im JTL-XML-Format direkt in die JTL-Wawi, manuell oder zeitgesteuert. Die
+Aktion verarbeitet die zuvor geladenen XML-Dateien.</p>
+<ul>
+<li><strong>Importbenutzer:</strong> der Benutzer, unter dem die Aufträge angelegt werden.</li>
+<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+</ul>
+<h3 id="export-jtl-ameise-export">Export: JTL-Ameise Export</h3>
+<p>Für regelmäßige Exporte über JTL-Ameise, z. B. einen Lagerbestandsexport für B2B-Kunden. Voraussetzung
+ist eine in JTL-Ameise angelegte Exportvorlage.</p>
+<ul>
+<li><strong>Template:</strong> die JTL-Ameise-Exportvorlage.</li>
+<li><strong>Zielverzeichnis:</strong> wohin die Datei gespeichert wird.</li>
+<li><strong>Dateiname:</strong> mit dynamischen Platzhaltern: Jahr (%y), Monat (%m), Tag (%d), Stunde (%H), Minute (%i), Sekunde (%s), Datenbankname (%db), Exportvorlagen-ID (%id).</li>
+</ul>
+<p>Exportvorlagen setzen mindestens den JTL-Tarif Advanced voraus.</p>
+<h3 id="export-lagerbewertung">Export: Lagerbewertung</h3>
+<p>Erstellt eine Datei mit dem Bestand und dem Bestandswert (Menge multipliziert mit Einkaufspreis) je
+Artikel, aufgeschlüsselt nach Lager, inklusive Summenzeile.</p>
+<ul>
+<li><strong>Lager:</strong> die Lager, die in die Bewertung einfließen (je Lager entsteht eine Spalte).</li>
+<li><strong>Header ausgeben:</strong> ob Spaltenüberschriften mitgeschrieben werden.</li>
+<li><strong>Trennzeichen:</strong> Semikolon oder Komma.</li>
+<li><strong>Dateiname:</strong> mit Datumsplatzhaltern.</li>
+<li><strong>Dateiformat:</strong> CSV oder TXT.</li>
+</ul>
+<h3 id="aufträge-lieferantenbestellung-bestätigen">Aufträge: Lieferantenbestellung bestätigen</h3>
+<p>Setzt die Bestätigungsoption einer Lieferantenbestellung in JTL-Wawi anhand einer geladenen Datei.</p>
+<ul>
+<li><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</li>
+<li><strong>Identifizierungstyp:</strong> Bestellnummer oder interne Bestellnummer.</li>
+<li><strong>Identifizierung:</strong> in welcher Spalte die Nummer steht.</li>
+<li><strong>Spalte Bestätigungswert:</strong> Spalte mit dem Bestätigungswert.</li>
+<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+<li><strong>Bestätigung konvertieren:</strong> welcher Wert als Bestätigung gilt (z. B. Vergleichsart = ist gleich, Quelle = Y, Ziel = Bestätigung).</li>
+</ul>
+<h3 id="aufträge-lieferantenbestellung-erstellen">Aufträge: Lieferantenbestellung erstellen</h3>
+<p>Legt aus einer geladenen Datei neue Lieferantenbestellungen in JTL-Wawi an. Die Zeilen werden je
+Lieferant gruppiert, jede Gruppe wird zu einer Bestellung mit Positionen (Artikel und Menge).
+Mindestbestellwert und Versandkostenfrei-ab werden dabei berücksichtigt.</p>
+<ul>
+<li><strong>Firma</strong> und <strong>Benutzer:</strong> unter welcher Firma und welchem Benutzer die Bestellungen angelegt werden.</li>
+<li><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</li>
+<li><strong>Lieferant-Identifizierung:</strong> ob der Lieferant per interner Lieferanten-ID oder per Lieferantennummer erkannt wird, und in welcher Spalte er steht.</li>
+<li><strong>Artikel-Identifizierung:</strong> ob der Artikel per Artikel-ID oder Artikelnummer erkannt wird, und in welcher Spalte er steht.</li>
+<li><strong>Spalte Menge:</strong> Spalte mit der Bestellmenge.</li>
+<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+</ul>
+<h3 id="aufträge-ohne-versand-abschließen">Aufträge: Ohne Versand abschließen</h3>
+<p>Markiert Aufträge anhand einer geladenen Datei als komplett ausgeliefert, ohne einen Versand
+auszulösen. Nützlich für Aufträge, die außerhalb des normalen Versandprozesses erledigt wurden.</p>
+<ul>
+<li><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</li>
+<li><strong>Identifizierungstyp:</strong> Auftragsnummer oder interne Auftragsnummer.</li>
+<li><strong>Identifizierung:</strong> Spalte mit der Auftragsnummer.</li>
+<li><strong>Spalte Auslieferdatum:</strong> Spalte mit dem Auslieferdatum.</li>
+<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+</ul>
+<h3 id="einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</h3>
+<p>Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eines Benutzers ein.</p>
+<ul>
+<li><strong>Benutzer:</strong> für welchen Benutzer die Einkaufsliste befüllt wird.</li>
+<li><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</li>
+<li><strong>Identifizierungstyp:</strong> Artikel-ID oder Artikelnummer.</li>
+<li><strong>Spalte Identifizierung</strong> und <strong>Spalte Menge:</strong> in welchen Spalten Artikel und Menge stehen.</li>
+<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+</ul>
+<h3 id="dateitransfer-download-vom-ftp-server">Dateitransfer: Download vom FTP-Server</h3>
+<p>Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
+Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.</p>
+<ul>
+<li><strong>FTP-Server:</strong> die konfigurierte Verbindung.</li>
+<li><strong>Dateifilter:</strong> welche Dateien geladen werden (z. B. <code>*.csv</code>, nach MS-DOS-Filterregeln).</li>
+<li><strong>Verarbeitung:</strong> ob die Datei nach dem Download gelöscht oder behalten wird.</li>
+<li><strong>Relativer Pfad:</strong> Unterverzeichnis auf dem Server, falls nötig.</li>
+</ul>
+<h3 id="dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</h3>
+<p>Überträgt Dateien aus dem Jobspeicher automatisch auf einen FTP-Server, z. B. Sendungsdaten für einen
+Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.</p>
+<ul>
+<li><strong>FTP-Server:</strong> die konfigurierte Verbindung.</li>
+<li><strong>Relativer Pfad:</strong> das Zielverzeichnis auf dem Server.</li>
+<li><strong>Existierende Datei:</strong> Verhalten bei Namensgleichheit, z. B. „Überschreiben".</li>
+</ul>
+<h3 id="sonstiges-datei-aus-web-laden">Sonstiges: Datei aus Web laden</h3>
+<p>Lädt eine Datei (z. B. eine CSV eines Lieferanten) direkt über eine URL in den Jobspeicher.</p>
+<ul>
+<li><strong>URL:</strong> Adresse der Datei.</li>
+<li><strong>Benutzername und Passwort:</strong> optional, für passwortgeschützte Pfade.</li>
+</ul>
+<h3 id="sonstiges-daten-aus-verzeichnis-laden">Sonstiges: Daten aus Verzeichnis laden</h3>
+<p>Liest mehrere Dateien aus einem Ordner zur Weiterverarbeitung ein.</p>
+<ul>
+<li><strong>Quellverzeichnis:</strong> wo die Dateien liegen.</li>
+<li><strong>Dateifilter:</strong> welche Dateien geladen werden (z. B. <code>*.csv</code>).</li>
+<li><strong>Verarbeitung:</strong> „Nach dem Laden löschen" oder „Nach dem Laden nicht löschen".</li>
+</ul>
+<h3 id="sonstiges-daten-in-verzeichnis-speichern">Sonstiges: Daten in Verzeichnis speichern</h3>
+<p>Speichert die verarbeiteten Dateien in einem Verzeichnis, z. B. zur Archivierung.</p>
+<ul>
+<li><strong>Zielverzeichnis:</strong> wohin gespeichert wird.</li>
+<li><strong>Dateien nach Tagen löschen:</strong> nach wie vielen Tagen automatisch gelöscht wird (z. B. 30).</li>
+<li><strong>Existierende Datei:</strong> „Überschreiben" oder „Ignorieren".</li>
+</ul>
+<h3 id="sonstiges-e-mail-senden">Sonstiges: E-Mail senden</h3>
+<p>Versendet eine E-Mail, optional mit Anhang aus einem vorangegangenen Schritt (JTL-Ameise Export,
+lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP-Server).</p>
+<ul>
+<li><strong>E-Mail-Konto:</strong> das konfigurierte Konto für den Versand.</li>
+<li><strong>Empfänger:</strong> Adresse des Empfängers.</li>
+<li><strong>Betreff</strong> und <strong>Nachricht:</strong> Inhalt der E-Mail.</li>
+<li><strong>Anhang:</strong> ob ein Anhang aus einem der genannten Schritte mitgesendet wird.</li>
+</ul>
+<h3 id="sonstiges-e-mail-via-brevo-senden">Sonstiges: E-Mail via Brevo senden</h3>
+<p>Versendet transaktionale E-Mails über Brevo (Sendinblue). Die Steuerung erfolgt über JSON-Dateien in
+einem festgelegten Verzeichnis. Jede Datei enthält Empfänger, Template, Anhänge und Variablen.</p>
+<p><strong>Funktionsweise</strong></p>
+<ol>
+<li><strong>JSON-Dateien erstellen:</strong> z. B. aus einem JTL-Workflow über die Aktion „Datei schreiben".</li>
+<li><strong>Ablage im Verzeichnis:</strong> z. B. <code>C:\goetools\MAILDATA\</code>.</li>
+<li><strong>Automatischer Versand:</strong> Jobby liest die Dateien und versendet die E-Mails über Brevo. Nach dem Versand kann die Datei gelöscht oder verschoben werden.</li>
+</ol>
+<p><strong>JSON-Grundaufbau</strong></p>
+<pre><code class="language-json">{
+  "to": [
+    { "email": "kunde@example.de", "name": "{{ Vorgang.Auftrag.Kunde.Vorname }} {{ Vorgang.Auftrag.Kunde.Name }}" }
+  ],
+  "templateId": 12,
+  "params": {
+    "kundename": "{{ Vorgang.Auftrag.Kunde.Vorname }}",
+    "ordernumber": "{{ Vorgang.Auftrag.ExterneAuftragsnummer }}",
+    "trackinglink": "{{ Vorgang.Tracking-URL }}"
+  },
+  "attachment": {
+    "files": [ { "file": "C:\\goetools\\INVOICE\\{{ Rechnungen.Rechnungsnummer }}.pdf" } ]
+  }
+}
+</code></pre>
+<p><strong>Felder im Überblick</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feld</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>to</code></td>
+<td>Liste der Empfänger mit E-Mail-Adresse und optionalem Namen.</td>
+</tr>
+<tr>
+<td><code>templateId</code></td>
+<td>ID des in Brevo erstellten Templates.</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>Beliebige Variablen für das Brevo-Template.</td>
+</tr>
+<tr>
+<td><code>attachment</code></td>
+<td>Anhänge als einzelne Dateien, Verzeichnisse oder Web-Dateien.</td>
+</tr>
+</tbody></table>
+<p><strong>Anhänge</strong></p>
+<p>Einzelne Dateien:</p>
+<pre><code class="language-json">{ "attachment": { "files": [ { "file": "C:\\goetools\\INVOICE\\12345.pdf" }, { "file": "C:\\goetools\\LIEFERSCHEIN\\12345.pdf" } ] } }
+</code></pre>
+<p>Ganze Verzeichnisse (alle Dateien werden angehängt):</p>
+<pre><code class="language-json">{ "attachment": { "folders": [ { "folder": "C:\\testverzeichnis" } ] } }
+</code></pre>
+<p>Dateien aus dem Web:</p>
+<pre><code class="language-json">{ "attachment": { "files": [ { "url": "https://arpatools.com/wp-content/uploads/2022/04/arpatools-top.png" } ] } }
+</code></pre>
+<p><strong>Hinweise</strong></p>
+<ul>
+<li>Die JSON-Dateien müssen syntaktisch korrekt sein.</li>
+<li><code>params</code> kann beliebige Felder enthalten und wird in Brevo als Variablenquelle genutzt.</li>
+<li>Pro JSON-Datei wird genau eine E-Mail erzeugt.</li>
+<li>Die Erstellung der JSON-Dateien ist z. B. über einen JTL-Workflow mit der Aktion „Datei schreiben" möglich.</li>
+<li>Tipp: sprechende Dateinamen im Ablageverzeichnis erleichtern Verarbeitung und Monitoring.</li>
+</ul>
+<h3 id="sonstiges-prozess-starten">Sonstiges: Prozess starten</h3>
+<p>Führt eine ausführbare Datei aus, z. B. ein PowerShell-Skript oder eine Batch-Datei, mit individuellen
+Parametern.</p>
+<ul>
+<li><strong>Ausführbare Datei:</strong> Pfad zur auszuführenden Datei.</li>
+<li><strong>Parameter-Aufbau:</strong> Parameter mit Platzhaltern, z. B. <code>##file##</code>, um die während der Laufzeit verarbeitete Datei zu übergeben.</li>
+</ul>
+<h3 id="sonstiges-benutzerdefinierte-aktion">Sonstiges: Benutzerdefinierte Aktion</h3>
+<p>Startet ein beliebiges externes Programm oder Skript, wertet dessen Rückgabewert aus und kann die
+Dateien, die es in ein Ausgabeverzeichnis schreibt, an die folgenden Aktionen weitergeben. Die Aktion
+„Prozess starten" bleibt daneben unverändert bestehen und eignet sich weiter für den einfachen Fall
+einer ausführbaren Datei ohne Skript und ohne Zugangsdaten.</p>
+<p>Die vier Pfadfelder – Programm, Interpreter, Arbeitsverzeichnis und Ausgabeverzeichnis – haben rechts
+daneben je eine Schaltfläche, über die Sie die Datei beziehungsweise den Ordner auswählen. Nutzen Sie
+sie: die Prüfung, ob arpaTools das Programm und den Interpreter findet, hängt an der Genauigkeit des
+Pfads, und ein Tippfehler fällt sonst erst beim Lauf auf.</p>
+<ul>
+<li><strong>Programm oder Skript:</strong> Pfad zur Datei, zum Beispiel eine <code>.exe</code>, <code>.ps1</code>, <code>.py</code>, <code>.bat</code>/<code>.cmd</code> oder
+<code>.jar</code>. arpaTools erkennt anhand der Endung, womit gestartet wird.</li>
+<li><strong>Interpreter:</strong> überschreibt die automatische Erkennung, zum Beispiel für PowerShell 7 statt der
+mitgelieferten Windows-PowerShell oder eine bestimmte Python-Installation. Ist die automatische
+Erkennung erfolglos, ist das Feld Pflicht.</li>
+<li><strong>Pfad gilt für die ausführende Maschine:</strong> nötig, wenn Sie den Job an Ihrem Arbeitsplatz einrichten,
+der eingetragene Interpreterpfad aber nur auf dem Server existiert, auf dem der Job später läuft.
+Sobald Sie das Häkchen setzen, verlangt arpaTools im Feld „Interpreter" einen <strong>absoluten</strong> Pfad, also
+zum Beispiel <code>C:\Python311\python.exe</code> und nicht <code>python.exe</code> oder einen relativen Pfad. Mit einem
+solchen unvollständigen Pfad lässt sich die Aktion nicht speichern: auf dem Server würde er gegen ein
+Verzeichnis aufgelöst, das Sie nicht kennen, und der Job würde nachts scheitern.</li>
+<li><strong>Parameter:</strong> die Kommandozeilenparameter für das Programm, mit den Platzhaltern unten.</li>
+<li><strong>Arbeitsverzeichnis:</strong> optional, Standard ist der Ordner des Programms.</li>
+<li><strong>Ausgabeverzeichnis:</strong> optional. Bleibt es leer, hat die Aktion nur einen Nebeneffekt und reicht die
+eingehenden Dateien unverändert weiter.</li>
+<li><strong>Ausgabeverzeichnis vorher leeren:</strong> standardmäßig an, damit Dateien eines früheren Laufs nicht als
+Ergebnis des aktuellen Laufs gelten.</li>
+<li><strong>Zeitlimit in Sekunden:</strong> ein Häkchen und daneben ein Zahlenfeld. <strong>Ohne Häkchen wartet arpaTools
+unbegrenzt</strong> auf das Ende des Programms; das Zahlenfeld ist dann ausgegraut und sein Inhalt wird nicht
+gespeichert. Mit Häkchen gilt die eingetragene Zahl: läuft die Zeit ab, wird der Prozess beendet und
+die Aktion bricht ab. Wenn Sie ein einmal gesetztes Zeitlimit wieder loswerden wollen, entfernen Sie
+das Häkchen – die Zahl im Feld dürfen Sie stehen lassen.</li>
+<li><strong>Rückgabewert ignorieren:</strong> für Programme, die auch im Erfolgsfall etwas anderes als 0 liefern.</li>
+<li><strong>Ausgabe protokollieren:</strong> schreibt Konsolenausgabe und Fehlerausgabe des Programms ins arpaTools-Log.</li>
+<li><strong>Vault-Schlüssel:</strong> die Zugangsdaten aus dem <a href="#vault">Vault</a>, die das Programm bekommen soll.</li>
+</ul>
+<p><strong>Die Meldung unter dem Interpreterfeld.</strong> Sobald ein Programm eingetragen ist, sucht arpaTools den
+passenden Interpreter und zeigt das Ergebnis direkt darunter an:</p>
+<table>
+<thead>
+<tr>
+<th>Meldung</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>„Gefunden: …"</td>
+<td>Alles in Ordnung, der genannte Pfad wird zum Starten benutzt.</td>
+</tr>
+<tr>
+<td>„Kein Interpreter gefunden…"</td>
+<td>Der Interpreter fehlt. Die Meldung nennt alle Pfade, an denen gesucht wurde. Tragen Sie einen absoluten Pfad im Feld „Interpreter" ein. Speichern ist bis dahin gesperrt.</td>
+</tr>
+<tr>
+<td>„Es wurde nur der Windows-Store-Platzhalter gefunden…"</td>
+<td>Windows liefert für <code>python.exe</code> einen Platzhalter mit, der beim Aufruf nur den Microsoft Store öffnet. Installieren Sie Python richtig oder tragen Sie einen absoluten Pfad ein.</td>
+</tr>
+<tr>
+<td>„Das Programm liegt auf diesem Rechner nicht…"</td>
+<td>Nur das Programm selbst fehlt hier, mit dem Interpreter ist alles in Ordnung. Das ist der Normalfall, wenn Sie einen Job an Ihrem Arbeitsplatz für einen Server einrichten. <strong>Speichern ist hier erlaubt</strong>, denn der Pfad muss nur auf der ausführenden Maschine stimmen.</td>
+</tr>
+</tbody></table>
+<p><strong>Platzhalter im Parameterfeld</strong></p>
+<table>
+<thead>
+<tr>
+<th>Platzhalter</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>##FILE##</code></td>
+<td>Startet das Programm einmal je eingehender Datei, ersetzt durch deren vollen Pfad.</td>
+</tr>
+<tr>
+<td><code>##INPUTFOLDER##</code></td>
+<td>Startet das Programm einmal, alle eingehenden Dateien liegen in diesem Ordner.</td>
+</tr>
+<tr>
+<td><code>##OUTPUTFOLDER##</code></td>
+<td>Pfad des eingetragenen Ausgabeverzeichnisses.</td>
+</tr>
+<tr>
+<td><code>##VAULT:SCHLUESSEL##</code></td>
+<td>Wird durch den Wert des Vault-Schlüssels ersetzt.</td>
+</tr>
+</tbody></table>
+<p><code>##FILE##</code> und <code>##INPUTFOLDER##</code> lassen sich nicht kombinieren.</p>
+<p><strong>Zugangsdaten.</strong> Angehakte Vault-Schlüssel bekommt das Programm als Umgebungsvariable mit dem
+Schlüsselnamen als Namen. Ein PowerShell-Skript liest sie über <code>$env:NAME</code>, ein Python-Skript über
+<code>os.environ["NAME"]</code>, eine Batch-Datei über <code>%NAME%</code>.</p>
+<p><strong>Beispiel PowerShell</strong></p>
+<p>Das Skript liest einen API-Schlüssel aus dem Vault, holt Daten von einer Schnittstelle und schreibt das
+Ergebnis in das Ausgabeverzeichnis.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\export.ps1</code>, Parameter <code>-Ausgabe "##OUTPUTFOLDER##"</code>,
+Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
+<pre><code class="language-powershell">param(
+    [string]$Ausgabe
+)
+
+$apiKey = $env:API_KEY
+$antwort = Invoke-RestMethod -Uri "https://beispiel-lieferant.de/api/bestand" -Headers @{ Authorization = "Bearer $apiKey" }
+$antwort | ConvertTo-Json | Out-File -FilePath (Join-Path $Ausgabe "bestand.json") -Encoding utf8
+</code></pre>
+<p><strong>Beispiel Python</strong></p>
+<p>Dasselbe Beispiel als Python-Skript, der Ausgabepfad kommt hier als Kommandozeilenargument statt als
+benannter Parameter.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\export.py</code>, Parameter <code>"##OUTPUTFOLDER##"</code>,
+Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
+<pre><code class="language-python">import json
+import os
+import sys
+import urllib.request
+
+api_key = os.environ["API_KEY"]
+ausgabe = sys.argv[1]
+
+request = urllib.request.Request(
+    "https://beispiel-lieferant.de/api/bestand",
+    headers={"Authorization": f"Bearer {api_key}"},
+)
+with urllib.request.urlopen(request) as response:
+    daten = json.load(response)
+
+with open(os.path.join(ausgabe, "bestand.json"), "w", encoding="utf-8") as datei:
+    json.dump(daten, datei)
+</code></pre>
+<p><strong>Achtung bei <code>##VAULT:...##</code> im Parameterfeld.</strong> Ein Vault-Wert, der als <code>##VAULT:SCHLUESSEL##</code> direkt
+im Parameterstring steht, landet in der Kommandozeile des gestarteten Programms und ist dort für jeden
+lokalen Benutzer ohne besondere Rechte einsehbar, zum Beispiel über die Prozessliste. Über die
+Umgebungsvariable (angehakte Vault-Schlüssel) ist er das nicht. Setzen Sie <code>##VAULT:...##</code> deshalb nur
+ein, wenn das Programm keine Umgebungsvariablen lesen kann.</p>
+<p><strong>Empfehlung für Jobs im Dienstbetrieb: absoluten Interpreterpfad eintragen.</strong> Läuft ein Job über den
+arpaTools Worker, führt ihn das Dienstkonto aus, nicht Ihr angemeldeter Benutzer. Das Dienstkonto sieht
+einen anderen <code>PATH</code> als Sie: Eine Python- oder PowerShell-Installation „nur für mich" ist für den
+Dienst unsichtbar, selbst wenn sie an Ihrem Arbeitsplatz einwandfrei funktioniert. Tragen Sie für Jobs,
+die über den Dienst laufen sollen, deshalb einen absoluten Pfad im Feld „Interpreter" ein, statt sich auf
+die automatische Erkennung zu verlassen.</p>
+<p><strong>Der Testlauf beweist nichts über den Dienst.</strong> Starten Sie einen Job zum Testen aus der Jobübersicht,
+läuft er im Kontext der Oberfläche, also unter Ihrem angemeldeten Benutzer. Gelingt der Testlauf, heißt
+das nicht, dass derselbe Job auch über den arpaTools Worker läuft: das Dienstkonto kann einen anderen
+<code>PATH</code> sehen und den Interpreter dort nicht finden. Prüfen Sie einen Job, der zeitgesteuert über den
+Dienst laufen soll, deshalb zusätzlich über einen echten geplanten Lauf.</p>
+<p><strong>Grenzen, die Sie kennen sollten</strong></p>
+<ul>
+<li>Das Zeitlimit lässt sich auf höchstens 86400 Sekunden (24 Stunden) setzen.</li>
+<li>Hält ein vom gestarteten Programm selbst gestartetes weiteres Programm die Ausgabe offen, wartet
+arpaTools nach dem Ende nur kurz nach und protokolliert dann, was bis dahin angekommen ist, statt
+unbegrenzt zu warten.</li>
+<li>Von der protokollierten Ausgabe werden je Konsolen- und Fehlerausgabe nur die letzten 200 Zeilen
+gespeichert. Wird gekürzt, steht das ausdrücklich im Protokoll.</li>
+</ul>
+<p><strong>Empfohlene Kette.</strong> Ein externes Programm kann beliebig lange laufen und beliebig wenig liefern.
+Verarbeiten Sie sein Ergebnis deshalb nicht im selben Job weiter, sondern übergeben Sie es an einen
+Sub-Job:</p>
+<ol>
+<li>Eine Aktion beschafft die Ausgangsdaten, zum Beispiel Download vom FTP-Server.</li>
+<li><strong>Benutzerdefinierte Aktion:</strong> startet das Programm mit einem Ausgabeverzeichnis. Das Programm
+schreibt sein Ergebnis dort hinein, die Aktion sammelt die Dateien ein.</li>
+<li><strong>Job ausführen:</strong> übergibt genau diese Dateien an einen Sub-Job, der mit „Daten aus Verzeichnis
+laden" beginnt und sie weiterverarbeitet.</li>
+</ol>
+<h3 id="sonstiges-manuellen-jtl-wawi-workflow-ausführen">Sonstiges: Manuellen JTL-Wawi Workflow ausführen</h3>
+<p>Stößt manuelle Workflows in JTL-Wawi an. Die Aktion kann nur laufen, wenn zuvor eine Datei geladen
+wurde, die die interne ID des gewählten Bereichs enthält.</p>
+<ul>
+<li><strong>Benutzer:</strong> wer den Workflow ausführt.</li>
+<li><strong>Bereich:</strong> z. B. Angebote, Artikel, Aufträge, Beschaffung, Kunden, Picklisten, Rechnungen, Versand.</li>
+<li><strong>Event:</strong> das auslösende Event im gewählten Bereich.</li>
+<li><strong>Trennzeichen:</strong> Komma oder Semikolon in der Datei.</li>
+<li><strong>Startzeile:</strong> ab welcher Zeile eingelesen wird.</li>
+<li><strong>Identifizierung:</strong> Spalte mit dem eindeutigen Wert (z. B. kArtikel).</li>
+</ul>
+<p>Voraussetzung ist seitens JTL mindestens der Tarif JTL-Wawi Advanced.</p>
+<h3 id="sonstiges-daten-von-ms-sql-server-laden">Sonstiges: Daten von MS-SQL Server laden</h3>
+<p>Führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei zur Weiterverarbeitung in
+folgenden Aktionen.</p>
+<ul>
+<li><strong>MS-SQL Statement:</strong> die Abfrage. Mit <strong>Prüfen</strong> wird die Gültigkeit getestet.</li>
+<li><strong>Header ausgeben:</strong> ob Spaltenüberschriften mitgeschrieben werden.</li>
+<li><strong>Trennzeichen:</strong> Semikolon oder Komma.</li>
+<li><strong>Dateiname:</strong> Platzhalter <code>##year##</code>, <code>##month##</code>, <code>##day##</code>, <code>##hour##</code>, <code>##minute##</code>, <code>##second##</code> sind möglich.</li>
+<li><strong>Dateiformat:</strong> CSV oder TXT.</li>
+</ul>
+<h3 id="sonstiges-daten-per-sql-einfügenändern">Sonstiges: Daten per SQL einfügen/ändern</h3>
+<p>Führt ein schreibendes SQL-Statement aus (INSERT/UPDATE). Anders als „Daten von MS-SQL Server laden"
+erzeugt diese Aktion keine Datei, sondern verändert Daten direkt.</p>
+<ul>
+<li><strong>MS-SQL Statement:</strong> das auszuführende Statement.</li>
+<li><strong>Datenbank:</strong> optional eine hinterlegte Datenbankverbindung, sonst die Standardverbindung.</li>
+</ul>
+<p>Diese Aktion greift direkt schreibend in die Datenbank ein. Nur mit geprüften Statements einsetzen.</p>
+<h3 id="sonstiges-job-ausführen">Sonstiges: Job ausführen</h3>
+<p>Übergibt den laufenden Job an einen anderen, bereits eingerichteten Job und startet diesen.</p>
+<p>Die Aktion beendet den aufrufenden Job: Aktionen, die in der Liste danach stehen, laufen nicht mehr.
+Sie gehört deshalb ans Ende der Aktionsliste.</p>
+<ul>
+<li><strong>Auszuführender Job:</strong> der Job, der übernimmt.</li>
+<li><strong>Übergabeordner:</strong> optional. Bleibt das Feld leer, startet der Ziel-Job ohne Dateien.</li>
+<li><strong>Übergabeordner vorher leeren:</strong> standardmäßig an. Löscht vor dem Kopieren alles, was noch im
+Übergabeordner liegt, damit Reste eines vorherigen oder abgebrochenen Laufs nicht in den neuen
+hineingeraten. Teilen Sie den Ordner mit anderen Dateien, schalten Sie die Option aus.</li>
+</ul>
+<p><strong>Übergabevertrag.</strong> Damit der Ziel-Job die Dateien wirklich bekommt, müssen zwei Seiten
+zusammenpassen, und das stellen Sie selbst her, es entsteht nicht von selbst:</p>
+<ol>
+<li>Der aufrufende Job schreibt seine Dateien über den Übergabeordner dieser Aktion.</li>
+<li>Der Ziel-Job beginnt mit der Aktion <strong>Daten aus Verzeichnis laden</strong> auf genau denselben Pfad.</li>
+</ol>
+<p>Fehlt die passende erste Aktion im Ziel-Job, liegen die Dateien zwar im Übergabeordner, werden dort
+aber nie abgeholt.</p>
+<p>Ist der Ziel-Job zwischenzeitlich gelöscht oder deaktiviert worden, schlägt der aufrufende Job fehl.
+Prüfen Sie das nach Umbauten an Ihren Jobs, bevor Sie sich auf die Übergabe verlassen.</p>
+<p>Eine Kette aus mehr als fünf Ebenen wird abgebrochen. Übergibt Job A an B, B an C, C an D, D an E und
+E an F, läuft das noch durch, denn das sind fünf Ebenen unter A. Erst die nächste Übergabe, von F an
+G, wird abgewiesen. Das verhindert, dass sich Jobs versehentlich gegenseitig endlos weiterreichen.</p>
+<p>Lädt eine vorangehende Aktion <strong>Daten aus Verzeichnis laden</strong> mehr als 1000 Dateien, werden diese in
+Blöcken zu je 1000 verarbeitet. Die Übergabe passiert dann nur beim ersten Block: der Ziel-Job startet
+genau einmal. Die Dateien der übrigen Blöcke bleiben liegen und werden erst beim nächsten Lauf abgeholt.</p>
+<h3 id="xml-zu-csv-json-zu-csv-und-excel-zu-csv">XML zu CSV, JSON zu CSV und Excel zu CSV</h3>
+<p>Viele Lieferanten liefern ihre Daten als XML, JSON oder Excel-Mappe. Die Importaktionen der Wawi erwarten
+aber CSV. Diese drei Aktionen wandeln beliebige XML-, JSON- und Excel-Dateien in eine CSV, die Sie selbst
+zusammenstellen. Danach greift jede nachgelagerte Aktion, zum Beispiel Lieferantenbestand importieren,
+Einkaufsliste schreiben oder JTL-Ameise Import.</p>
+<p>Eine typische Kette sieht so aus: Dateien vom FTP-Server laden, XML zu CSV, Lieferantenbestand
+importieren, E-Mail mit Protokoll versenden.</p>
+<p>Excel zu CSV liest sowohl <code>.xlsx</code> als auch das alte <code>.xls</code>. Beide ergeben dieselbe CSV.</p>
+<p><strong>So richten Sie das Mapping ein</strong></p>
+<p>Nach dem Laden der Beispieldatei ist die Aktion bereits fertig konfiguriert: das Programm erkennt, was ein
+Datensatz ist, hakt alle Felder an und zeigt unten die fertige CSV. Meist prüfen Sie nur noch und speichern.</p>
+<ol>
+<li>Beispieldatei auswählen. Nehmen Sie eine echte Datei des Lieferanten. Links erscheint die Struktur mit
+Häufigkeiten und Beispielwerten, etwa <code>product (250x)</code> und <code>qty "42"</code>.</li>
+<li>Datensatz-Ebene prüfen. Die grün markierte Ebene ist eine CSV-Zeile. Vorbelegt ist die äußerste Ebene,
+die sich wiederholt. Passt das nicht, wählen Sie im Baum eine andere Ebene und klicken <strong>Als
+Zeilen-Ebene setzen</strong>. Bei einer Preisliste ist das der Artikel, bei einer Bestellung die Position.</li>
+<li>Felder anhaken. Jeder Wert im Baum hat ein Kästchen: Haken setzen erzeugt eine Spalte, Haken entfernen
+löscht sie wieder. <strong>Alle Felder vorschlagen</strong> hakt alles an, was direkt zum Datensatz gehört.</li>
+<li>Werte oberhalb des Datensatzes, also im Kopf der Datei, haken Sie einfach mit an. Das Programm erkennt,
+dass sie außerhalb des Datensatzes liegen, und wiederholt sie in jeder Zeile. Typisch sind Währung,
+Gültigkeitsdatum und Lieferantennummer.</li>
+<li>Unten prüfen Sie die Vorschau. Sie zeigt die ersten Zeilen als Tabelle, genau so, wie die Datei
+geschrieben wird. Darüber steht, wie viele Zeilen, Felder und CSV-Spalten entstehen.</li>
+</ol>
+<p>Wählen Sie später eine andere Datei, wird das Mapping neu bestimmt. Selbst angelegte Spalten bleiben dabei
+erhalten, weil sie nicht zur Datei gehören.</p>
+<p><strong>Worauf Sie achten sollten</strong></p>
+<ul>
+<li><strong>Preise mit Punkt.</strong> Liefert der Lieferant <code>19.90</code>, stellen Sie für diese Spalte das Zahlformat auf
+Dezimalkomma. Ohne das kann die Wawi den Wert falsch lesen. Bei Zahlen erkennt das Programm das meist
+selbst und stellt es vor, prüfen Sie es trotzdem in der Vorschau.</li>
+<li><strong>Mehrfache Werte.</strong> Hat ein Artikel mehrere Varianten oder Staffelpreise, legen Sie in der Spalte
+fest, wie viele davon geschrieben werden (1 bis 50). Aus drei Varianten werden dann drei Spalten
+<code>Variante1;Variante2;Variante3</code>. Alternativ schreiben Sie alle Werte in eine Zelle, indem Sie ein
+Trennzeichen wie <code>|</code> eintragen.</li>
+<li><strong>Spaltennummern.</strong> In der Spalte CSV steht, an welcher Stelle die Spalte in der Datei landet. Wenn Sie
+die Anzahl der Wiederholungen ändern oder Spalten verschieben, verrutschen alle folgenden Spalten. Die
+nachgelagerte Aktion arbeitet mit festen Spaltennummern, prüfen Sie sie also nach solchen Änderungen.</li>
+<li><strong>Spalte Belegt.</strong> Sie zeigt, in wie vielen gelesenen Datensätzen eine Spalte einen Wert hatte, etwa
+<code>30/30</code> oder <code>1/30</code>. Steht dort <code>1/30</code>, kommt das Feld nur in einem einzigen Datensatz vor und gehört
+meist nicht in die CSV. Das ist die schnellste Prüfung bei einer unbekannten Datei.</li>
+<li><strong>Eigene Spalten.</strong> Über <strong>Eigene Spalte</strong> fügen Sie eine Spalte hinzu, die es in der Datei nicht gibt,
+etwa eine Lieferantennummer. Den Spaltennamen bestimmen Sie in jedem Fall frei, unabhängig vom Namen in
+der Quelldatei. Mit der Quelle <strong>Textvorlage</strong> setzen Sie einen Wert aus mehreren zusammen,
+zum Beispiel <code>{marke} {name}</code>.</li>
+<li><strong>Sehr verschachtelte Dateien.</strong> Vorgeschlagen werden Felder bis drei Ebenen unter dem Datensatz und
+höchstens 30 Stück. Wie viele Felder übrig bleiben, steht unter der Vorschau; sie bleiben im Baum und
+lassen sich anhaken.</li>
+<li><strong>Zeichensatz.</strong> Für Lieferantenbestand, Einkaufsliste, Bestellung und Trackingdaten nehmen Sie UTF-8.
+Für den JTL-Ameise Import ist meist ISO-8859-1 richtig. Die Auswahl ist entsprechend beschriftet.</li>
+</ul>
+<p><strong>Zusätzlich bei Excel zu CSV</strong></p>
+<ul>
+<li><strong>Kopfzeile.</strong> Tragen Sie die Zeilennummer der Spaltenüberschriften ein, meist <code>1</code>. Steht über den
+Überschriften noch ein Briefkopf, ist es zum Beispiel <code>3</code>. Die Spalten heißen dann so wie in der
+Überschrift, und Sie erkennen sie im Baum wieder. Hat das Blatt überhaupt keine Überschriften, tragen Sie
+<code>0</code> ein; die Spalten heißen dann <code>#A</code>, <code>#B</code>, <code>#C</code> wie in Excel.</li>
+<li><strong>Zellen über der Kopfzeile</strong> sind Kopfdaten und lassen sich wie bei XML einfach mitanhaken, etwa der
+Lieferantenname aus <code>B1</code>. Sie stehen dann in jeder Zeile.</li>
+<li><strong>Tabellenblatt.</strong> Der Zeilen-Pfad ist der Name des Blattes, zum Beispiel <code>Tabelle1</code>. Wird das Blatt jeden
+Monat umbenannt, etwa <code>Preisliste Feb 2026</code>, tragen Sie besser die Position ein: <code>#1</code> für das erste Blatt.
+Dann läuft der geplante Job auch nach der Umbenennung weiter.</li>
+<li><strong>Prozentzellen.</strong> Eine als Prozent formatierte Zelle zeigt <code>19 %</code>, gespeichert ist aber <code>0,19</code>.
+arpaTools schreibt hier <code>19</code>. Prüfen Sie den Wert in der Vorschau, wenn es um Steuersätze oder Rabatte
+geht.</li>
+<li><strong>Sehr lange Zahlen.</strong> Excel speichert nur 15 Stellen. Eine EAN oder NVE mit 18 Stellen hat ihre letzten
+Ziffern also schon in der Excel-Datei verloren, bevor arpaTools sie liest. Sie finden dann eine Warnung im
+Protokoll. Bitten Sie den Lieferanten, die Spalte in Excel als <strong>Text</strong> zu formatieren, dann bleibt der
+Wert vollständig.</li>
+<li><strong>Vor dem Anlegen aktualisieren.</strong> Diese Aktion ist neu. Ein Arbeitsplatz mit einer älteren arpaTools-
+Version kann einen Job mit dieser Aktion nicht öffnen, und ein älterer Dienst überspringt sie ohne
+Meldung. Aktualisieren Sie deshalb erst alle Arbeitsplätze und den Dienst, dann legen Sie die Aktion an.</li>
+<li><strong>Sicherheitsnetz.</strong> Unter Ausgabe können Sie eine Mindestanzahl Zeilen festlegen und wie viele
+ungültige Zeilen erlaubt sind. Liefert der Lieferant plötzlich eine geänderte Struktur, bricht der Job
+dann mit einer klaren Meldung ab, statt unvollständige Daten zu importieren. Lassen Sie diese Werte
+gesetzt, gerade bei Beständen.</li>
+<li><strong>Pflichtfeld.</strong> Die Spalte mit der Artikelnummer sollte als Pflicht markiert sein. Zeilen ohne diesen
+Wert werden dann übersprungen und protokolliert.</li>
+<li><strong>Quelldatei behalten.</strong> Die Original-XML wird nicht weitergereicht. Wenn Sie sie archivieren möchten,
+setzen Sie <strong>In Ordner speichern</strong> vor die Umwandlung.</li>
+<li><strong>Änderungen beim Lieferanten bemerken.</strong> Bleibt eine Spalte in allen Zeilen leer, steht das als
+Warnung im Protokoll. Aktivieren Sie <strong>Zusammenfassung schreiben</strong>, dann können Sie das Protokoll per
+E-Mail-Aktion mitversenden.</li>
+</ul>
+<h2 id="jobby-interne-arpatools-jobs">Jobby-Interne arpaTools Jobs</h2>
+<p>Interne Jobs verarbeiten weitere arpaTools-Tools. Statt für jedes Tool einen eigenen Worker zu
+installieren, übernimmt Jobby die automatische Verarbeitung. Besitzen Sie z. B. das Tool
+Sammelrechnung, erstellt Jobby automatisch Sammelrechnungen pro Kunde. Nutzer anderer Apps benötigen
+dafür keine zusätzliche Jobby-Lizenz; die Aktionen der jeweiligen App sind ohne separate Lizenz nutzbar.</p>
+<h3 id="provimate-abrechnung">ProviMate-Abrechnung</h3>
+<p>Da ProviMate Provisionsabrechnungen automatisch erstellen kann, lässt sich in Jobby ein Job anlegen, der
+diese regelmäßig ausführt. Für jeden Provisionsberechtigten, der abgerechnet werden soll, wird eine
+eigene Aktion angelegt. Zuerst wird der Provisionsberechtigte ausgewählt, dann die Art der Verarbeitung:</p>
+<ul>
+<li><strong>Keine Verarbeitung:</strong> die Aktion ist inaktiv.</li>
+<li><strong>Verarbeiten:</strong> erzeugt für provisionsberechtigte Kunden eine Rechnungskorrektur bzw. Provisionsgutschrift.</li>
+<li><strong>Verarbeiten und exportieren:</strong> erzeugt das Dokument und exportiert es zusätzlich.</li>
+<li><strong>Manuell abschließen:</strong> kein Dokument, kein Export; die Abrechnung gilt als abgeschlossen.</li>
+<li><strong>Manuell abschließen und exportieren:</strong> kein Dokument, aber ein Export; die Abrechnung gilt als abgeschlossen.</li>
+</ul>
+<h3 id="querify">Querify</h3>
+<p>Die Aktion Querify steht ausschließlich Kunden unseres Partners go eCommerce zur Verfügung. Sie ist auf
+die gemeinsam realisierten Integrationen zugeschnitten und nur im Rahmen dieser Partnerschaft nutzbar.</p>
+<h3 id="retourenportal">Retourenportal</h3>
+<p>Die Aktion Retourenportal richtet einen Job ein, der regelmäßig neue Lieferscheine an das Retourenportal
+überträgt und neu angelegte Retouren aus dem Portal in JTL-Wawi importiert. Die Aktion arbeitet
+vollständig automatisiert und benötigt keine weiteren Einstellungen.</p>
+<h3 id="sammelrechnung">Sammelrechnung</h3>
+<p>Die Aktion Sammelrechnung sorgt dafür, dass für jeden eingerichteten Sammelabrechnungskunden in einem
+festgelegten Intervall automatisch Sammelrechnungen erzeugt werden. Details zur Sammelrechnung selbst in
+der <a href="sammelrechnung.html">Sammelrechnung-Dokumentation</a>.</p>
+<ul>
+<li><strong>Sammelrechnungs-Profil:</strong> welches Profil (welche Konfiguration) verwendet wird.</li>
+<li><strong>Kunde:</strong> ein bestimmter Kunde oder alle Sammelabrechnungskunden.</li>
+<li><strong>Intervall ignorieren:</strong> führt den Lauf sofort aus, ohne das Kundenintervall zu prüfen.</li>
+</ul>
+<h3 id="netstock">Netstock</h3>
+<p>Die Aktion Netstock stößt den Datenexport an das externe Bestandsplanungssystem Netstock an. Details zum
+Tool in der <a href="netstock.html">Netstock-Dokumentation</a>.</p>
+<ul>
+<li><strong>Datenarten:</strong> welche Datenpakete gesendet werden (z. B. Stammdaten, Bestände, Verkäufe).</li>
+<li><strong>Lager:</strong> welche Lager einfließen, inklusive optionaler FBA-Lager.</li>
+<li><strong>Weitere Optionen:</strong> Retouren senden, Verkaufszeitraum, Stücklisten-Verhalten, Lieferantenartikelnummer/HAN/Warengruppe mitsenden.</li>
+</ul>
+<h2 id="arpatools-worker-installieren">arpaTools Worker installieren</h2>
+<p>Der arpaTools Worker ist eine Windows-Anwendung, die in einem festgelegten Intervall läuft (siehe
+Einstellungen). Bei jedem Durchlauf prüft der Worker, ob auszuführende Jobs vorhanden sind, und arbeitet
+sie nacheinander ab. Der Worker wird als Windows-Dienst installiert und läuft im Hintergrund.</p>
+<p>Dienst installieren (Eingabeaufforderung als Administrator):</p>
+<pre><code>sc.exe create "arpaTools Worker Service" binpath="C:\Program Files (x86)\arpaTools\arpaTools\ArpaToolsWorker.exe" start=auto
+</code></pre>
+<p>Dienst deinstallieren:</p>
+<pre><code>sc.exe delete "arpaTools Worker Service"
+</code></pre>
+
+    </div>
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 13. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

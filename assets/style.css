@@ -440,7 +440,9 @@ a { color: inherit; text-decoration: none; }
 .badges { display: flex; flex-wrap: wrap; gap: var(--sm); margin: 0 0 var(--sm); }
 .issue-date { margin: 0 0 var(--xl); font-size: 14px; color: var(--muted-strong); }
 
-.prose { font-size: 17px; line-height: 1.6; }
+/* Ein langer Pfad oder eine lange Adresse im Fließtext hat keine Trennstelle und
+   schiebt sonst auf schmalen Bildschirmen die ganze Seite quer. */
+.prose { font-size: 17px; line-height: 1.6; overflow-wrap: break-word; }
 .prose > *:first-child { margin-top: 0; }
 .prose h1, .prose h2, .prose h3, .prose h4 {
   margin: var(--xl) 0 var(--md);
@@ -485,6 +487,97 @@ a { color: inherit; text-decoration: none; }
 .prose hr { margin: var(--xl) 0; border: none; border-top: 1px solid var(--border); }
 .ref-muted { color: var(--muted-strong); }
 
+/* ---------- Dokumentation ---------- */
+
+.doc-page { max-width: 46rem; padding: var(--xl) 0 var(--2xl); }
+/* Schmal: Verzeichnis über dem Text, in der Reihenfolge des Markups.
+   Breit (weiter unten): Text links, Verzeichnis rechts daneben und mitlaufend. */
+.doc-body { min-width: 0; }
+.doc-page h1 {
+  margin: 0 0 var(--md);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+/* Die Kopfzeile klebt: ohne diesen Abstand landet ein Sprung unter ihr. */
+.doc-page .prose :is(h1, h2, h3, h4, h5, h6) { scroll-margin-top: 96px; }
+
+.doc-toc {
+  margin: var(--lg) 0 var(--xl);
+  padding: var(--md) var(--lg);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+.doc-toc-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sm);
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+  cursor: pointer;
+  list-style: none;
+}
+.doc-toc-title::-webkit-details-marker { display: none; }
+.doc-toc-title:hover { color: var(--text); }
+.doc-toc-title .icon { transition: transform var(--ease); }
+.doc-toc[open] .doc-toc-title { margin-bottom: var(--sm); }
+.doc-toc[open] .doc-toc-title .icon { transform: rotate(90deg); }
+.doc-toc ul { list-style: none; margin: 0; padding: 0; font-size: 15px; }
+.doc-toc li { margin: 0; }
+.doc-toc a {
+  display: block;
+  padding: 3px 0 3px 10px;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  transition: color var(--ease), border-color var(--ease);
+}
+.doc-toc a:hover { color: var(--orange); }
+/* Wo man gerade liest: dieselbe Farbe wie die aktive Rubrik in der Kopfzeile. */
+.doc-toc a.is-active { color: var(--orange); border-left-color: var(--orange); }
+.doc-toc-level-3 { padding-left: var(--md); font-size: 14px; }
+
+/* Karten statt Zeilen: fünf Einträge über 1280px wären Zeilen, die niemand liest. */
+.doc-list {
+  list-style: none;
+  margin: 0 0 var(--2xl);
+  padding: 0;
+  display: grid;
+  gap: var(--md);
+  /* min(): auf einem schmalen Gerät ist die Spalte so breit wie der Platz, sonst
+     schiebt die feste Mindestbreite die Karten über den Rand hinaus. */
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+}
+.doc-item-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sm);
+  height: 100%;
+  padding: var(--lg);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.doc-item-link:hover { border-color: var(--orange); box-shadow: var(--glow); }
+.doc-item-link:hover .doc-item-title { color: var(--orange); }
+.doc-item-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sm);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: color var(--ease);
+}
+.doc-item-title .icon { margin-left: auto; color: var(--muted-strong); }
+.doc-item-note { font-size: 15px; line-height: 1.5; color: var(--muted); }
+
 .empty { color: var(--muted-strong); }
 .is-hidden { display: none !important; }
 
@@ -520,10 +613,39 @@ a { color: inherit; text-decoration: none; }
   .wrap { padding: 0 var(--xl); }
 }
 
+/* Ist der Bildschirm breit genug für Text UND Verzeichnis, steht das Verzeichnis
+   daneben und läuft mit: 46rem Text plus 17rem Spalte plus Abstände. Darunter
+   bliebe für den Text zu wenig übrig, dann steht es weiter oben drüber. */
+@media (min-width: 1200px) {
+  .doc-page { max-width: 66rem; }
+  .doc-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: var(--xl);
+    align-items: start;
+  }
+  .doc-body .prose { grid-column: 1; grid-row: 1; }
+  .doc-toc {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 80px;
+    margin: 0;
+    /* Die Überschrift bleibt stehen, nur die Liste scrollt — bei 46 Einträgen
+       ist das Verzeichnis sonst höher als der Bildschirm. */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 8rem);
+  }
+  .doc-toc ul { overflow-y: auto; }
+}
+
 @media (max-width: 768px) {
   body { font-size: 16px; }
   .header-inner { flex-wrap: wrap; gap: var(--sm) var(--md); }
-  .nav { gap: var(--md); width: 100%; }
+  /* Vier Einträge plus Schalter und Knopf passen auf einem Telefon nicht in eine
+     Zeile; ohne Umbruch schiebt die Kopfzeile die ganze Seite quer. */
+  .nav { gap: var(--sm) var(--md); width: 100%; flex-wrap: wrap; }
   .button-download span { display: none; }
   .button-download { padding: 10px; }
   .release { padding-left: var(--lg); }

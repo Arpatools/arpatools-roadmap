@@ -24,6 +24,8 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 
 ## Programmeinstellungen
 
+![Dialog ProviMate-Moduleinstellungen. Im Bereich Allgemein die Auswahl von Firma, Benutzer, Steuerklasse und Referenzdatum, dazu Referenzdatum älter als Tage, Alte Journale aktualisieren in Wochen, Abrechnungsart und Exportverzeichnis. Im Bereich Journal das Journalintervall sowie initialer Journalwert, pauschaler Abzugsbetrag und minimaler und maximaler Journalwert. Im Bereich Abrechnung die Auszahlungsschwelle, der Umgang mit negativen Journalen und nach wie vielen Tagen abgerechnete Aufträge ausgeblendet werden.](bilder/provimate-programmeinstellungen.png)
+
 - **Firma:** unter welchem Firmennamen Provisionsgutschriften in JTL-Wawi angelegt werden.
 - **Benutzer:** mit welchem Benutzer Provisionsgutschriften erstellt werden.
 - **Steuersatz:** Standardsteuersatz für erstellte Gutschriften. Provisionen werden als Dienstleistung besteuert, daher der übliche Steuersatz des Landes. Für Nutzer von go-OSS ist er als „OSS undefiniert Standard" festgelegt.
@@ -53,6 +55,8 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 - **Löschen:** entfernt einen Provisionsberechtigten. Achtung: alle zugehörigen Journale und Abrechnungen werden ebenfalls gelöscht.
 - **Alle Abrechnen:** rechnet für alle Provisionsberechtigten ab.
 - **Laden:** aktualisiert die Liste.
+
+![Übersicht der Provisionsberechtigten in ProviMate. Oben ein Suchfeld, darunter die Liste mit ID, Bezugstyp, Kundennummer, Firma, Vorname, Name, ob die Gutschrift automatisch erzeugt wird, dem Abrechnungszeitraum und der Angabe, ob Provisionseinstellungen hinterlegt sind. Rechts die Detailspalte zum ausgewählten Eintrag samt Journalwerten und Verlaufsdiagramm. Unten die Schaltflächen Hinzufügen, Bearbeiten, Provisionseinstellungen, Löschen, Alle abrechnen und Laden.](bilder/provimate-uebersicht.png)
 
 ### Provisionsberechtigten anlegen
 

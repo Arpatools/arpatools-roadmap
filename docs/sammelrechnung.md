@@ -203,3 +203,5 @@ Kunden-ID, Sprache, Währung, Rechnungsadresse. Unterscheiden sich diese bei mar
 Kunden, werden getrennte Sammelrechnungen erstellt.
 
 > Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.
+
+![Hauptfenster der Sammelrechnung. Links die Modulleiste, daneben die Liste der Profile mit Profil-ID, Profilname und den Kennzeichen Aktiv und Standard. Rechts der Bereich Sammelrechnung mit Kundenauswahl, einem Auftragsdatum von-bis und der noch leeren Auftragsliste. Unten die Schaltflächen Einstellungen, Rechnung für alle Aufträge erstellen und Rechnung für markierte Aufträge erstellen.](bilder/sammelrechnung-auftragsliste.png)

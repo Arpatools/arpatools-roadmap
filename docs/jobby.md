@@ -6,6 +6,8 @@ Willkommen bei Jobby, dem Automatisierungstool für Ihre JTL-Wawi. Jobby ist ein
 Client und bündelt wiederkehrende Aktionen in Jobs, die automatisiert oder auf Knopfdruck laufen. Das
 spart Zeit und reduziert Fehlerquellen in den täglichen Prozessen.
 
+![Die Jobs-Übersicht in Jobby: alle angelegten Jobs mit Zeitplan und letztem Lauf](bilder/jobby-uebersicht.png)
+
 Jobby ergänzt die anderen arpaTools-Produkte wie Sammelrechnung, Retourenportal und ProviMate. Ein
 Job besteht aus einer Reihe von Aktionen, die in beliebiger Reihenfolge konfiguriert werden, zum
 Beispiel Importe, Exporte, Dateiübertragungen oder das Versenden von E-Mails. Jeder Job kann
@@ -109,8 +111,29 @@ Eine mögliche Aktion ist der Versand von E-Mails, mit reinem Text oder mit Anh�
 aus SQL-Abfragen oder Dateien vom FTP-Server bzw. aus einem Verzeichnis).
 
 Die Einstellungen entsprechen den SMTP-Daten des Hosters. Office-365- oder Google-Mail-Authentifizierung
-werden nicht unterstützt. Einzutragen sind Server, Port, Benutzername, Passwort und zwingend die
-Absenderadresse. Mit **Prüfen** lassen sich die Einstellungen testen.
+werden nicht unterstützt. Einzutragen sind Server, Port, Verschlüsselung, die Absenderadresse und,
+sofern das Postfach eine Anmeldung verlangt, Benutzername und Passwort. Mit **Prüfen** lassen sich die
+Einstellungen testen.
+
+- **Verschlüsselung:** „Keine", „STARTTLS" oder „SSL/TLS". Zu jeder Art gehört üblicherweise ein
+  eigener Port: „Keine" Port 25, „STARTTLS" Port 587, „SSL/TLS" Port 465. Ändern Sie die
+  Verschlüsselung, zieht der Port automatisch auf den passenden Standardwert mit, solange dort noch
+  einer der drei Standardports oder gar kein Wert steht. Haben Sie selbst einen abweichenden Port
+  eingetragen, bleibt er beim Wechsel der Verschlüsselung unangetastet.
+- **Anmeldung erforderlich:** ausschalten, wenn das Postfach den Versand ohne Benutzername und
+  Passwort annimmt, etwa weil es den Absender über die IP-Adresse freigibt. Ist der Schalter aus,
+  sind Benutzername und Passwort nicht eingebbar und werden beim Speichern nicht verlangt.
+  **Benutzername und Kennwort bleiben dabei gespeichert**, wenn Sie die Anmeldung ausschalten. Schalten
+  Sie sie später wieder ein, finden Sie Ihre Zugangsdaten unverändert vor. Wollen Sie sie loswerden,
+  schalten Sie die Anmeldung zunächst wieder ein, leeren Sie die beiden Felder von Hand und schalten
+  Sie die Anmeldung danach wieder aus, bevor Sie speichern.
+- Wählen Sie „Keine" Verschlüsselung, während die Anmeldung eingeschaltet bleibt, überträgt das
+  Postfachkennwort ungeschützt über das Netz. Das ist keine verbotene Kombination, manche Postfächer
+  im eigenen Netz verlangen genau das, aber arpaTools fragt beim Speichern ausdrücklich nach, ob das
+  so gewollt ist.
+
+Bestehende E-Mail-Konten aus einer Vorversion stehen nach der Aktualisierung auf „STARTTLS" mit
+Anmeldung, dem bisherigen Verhalten. Niemand muss deswegen etwas umstellen.
 
 ### Drittanbieter-Konten
 
@@ -154,6 +177,8 @@ Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung b
 Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
 Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit **Prüfen** wird die
 Verbindung getestet.
+
+![Fenster FTP-Server mit einer Tabelle der hinterlegten Verbindungen. Die Spalten zeigen die Bezeichnung sowie je eine Spalte dafür, ob die Verbindung in Jobby, in Netstock und im Retourenportal verwendet wird. Unten die Schaltflächen Hinzufügen, Bearbeiten, Löschen, Kopieren und Laden.](bilder/jobby-ftp-server.png)
 
 ### Datenbanken
 

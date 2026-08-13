@@ -16,6 +16,8 @@ Der Datenaustausch lässt sich manuell über die Netstock-Ansicht anstoßen oder
 Jobby-Aktion (siehe [Jobby-Dokumentation](/doku/jobby), Abschnitt „Netstock"). Für automatisierte Abläufe
 empfehlen wir die Jobby-Aktion.
 
+![Netstock-Ansicht in arpaTools. Oben die Tabelle Übertragungsdaten mit den Spalten Typ, Status und Zuletzt gesendet, hier noch ohne Einträge. Unten links Einstellungen, unten rechts die Schaltflächen Herunterladen, Auswahl senden, Stammdaten senden sowie Verkauf und Verbrauch senden.](bilder/netstock-uebersicht.png)
+
 ## Voraussetzungen
 
 - Eine FTP-Verbindung zu Netstock, eingerichtet unter den Jobby-FTP-Servern (siehe
