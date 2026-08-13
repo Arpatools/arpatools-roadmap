@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Netstock – Dokumentation – ArpaTools</title>
+<meta name="description" content="Netstock ist eine App im arpaTools Client und verbindet Ihre JTL-Wawi mit dem externen Bestandsplanungssystem Netstock.">
+<link rel="canonical" href="https://arpatools.github.io/arpatools-roadmap/doku/netstock.html">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link is-active" href="../doku/index.html">Dokumentation</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.28.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="doc-page rise">
+    <a class="breadcrumb" href="../doku/index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Dokumentation</a>
+    <h1>Netstock</h1>
+    <p class="badges"><span class="badge">Netstock</span></p>
+    <nav class="doc-toc" aria-label="Inhalt dieser Seite">
+      <p class="doc-toc-title">Auf dieser Seite</p>
+      <ul>
+        <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
+        <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
+        <li class="doc-toc-level-2"><a href="#daten-senden">Daten senden</a></li>
+        <li class="doc-toc-level-2"><a href="#daten-empfangen">Daten empfangen</a></li>
+        <li class="doc-toc-level-2"><a href="#einstellungen">Einstellungen</a></li>
+        <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
+        <li class="doc-toc-level-3"><a href="#job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</a></li>
+      </ul>
+    </nav>
+    <div class="prose">
+      <h2 id="einleitung">Einleitung</h2>
+<p>Netstock ist eine App im arpaTools Client und verbindet Ihre JTL-Wawi mit dem externen
+Bestandsplanungssystem Netstock. Netstock berechnet auf Basis Ihrer Artikel-, Bestands- und
+Verkaufsdaten Bedarfs- und Bestellvorschläge. arpaTools übernimmt dabei den Datenaustausch in beide
+Richtungen:</p>
+<ul>
+<li><strong>Senden:</strong> arpaTools exportiert Artikel-, Bestands-, Verkaufs- und weitere Daten aus JTL-Wawi und
+lädt sie per FTP zu Netstock hoch.</li>
+<li><strong>Empfangen:</strong> arpaTools lädt die von Netstock berechneten Bestellvorschläge per FTP herunter und
+kann sie wahlweise in die JTL-Einkaufsliste oder direkt als Lieferantenbestellung importieren.</li>
+</ul>
+<p>Der Datenaustausch lässt sich manuell über die Netstock-Ansicht anstoßen oder automatisiert über eine
+Jobby-Aktion (siehe <a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Netstock"). Für automatisierte Abläufe
+empfehlen wir die Jobby-Aktion.</p>
+<h2 id="voraussetzungen">Voraussetzungen</h2>
+<ul>
+<li>Eine FTP-Verbindung zu Netstock, eingerichtet unter den Jobby-FTP-Servern (siehe
+<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „FTP-Server"). Die Zugangsdaten erhalten Sie von Netstock.</li>
+<li>Eine gültige Netstock-Lizenz in arpaTools.</li>
+</ul>
+<h2 id="daten-senden">Daten senden</h2>
+<p>In der Netstock-Ansicht wählen Sie die zu sendenden Datenpakete aus einer Liste aus und übertragen sie
+per Knopfdruck. Folgende Datenpakete stehen zur Verfügung:</p>
+<table>
+<thead>
+<tr>
+<th>Datenpaket</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lager/Filialen</td>
+<td>Stammdaten Ihrer Lager.</td>
+</tr>
+<tr>
+<td>Lieferanten</td>
+<td>Ihre Lieferantenstammdaten.</td>
+</tr>
+<tr>
+<td>Artikelstamm</td>
+<td>Artikel-Stammdaten.</td>
+</tr>
+<tr>
+<td>Bestand je Lagerort</td>
+<td>Aktueller Lagerbestand, aufgeschlüsselt je Lager.</td>
+</tr>
+<tr>
+<td>Chargen</td>
+<td>Chargeninformationen.</td>
+</tr>
+<tr>
+<td>Artikelgruppen</td>
+<td>Ihre Warengruppen.</td>
+</tr>
+<tr>
+<td>Verkauf &amp; Verbrauch</td>
+<td>Verkaufs- und Verbrauchsdaten als Grundlage der Bedarfsplanung.</td>
+</tr>
+<tr>
+<td>Offene Lieferanten- oder Produktionsbestellungen</td>
+<td>Noch nicht abgeschlossene Bestellungen.</td>
+</tr>
+<tr>
+<td>Offene Kundenbestellungen</td>
+<td>Noch nicht abgeschlossene Kundenaufträge.</td>
+</tr>
+<tr>
+<td>Offene Artikeltransfers</td>
+<td>Umlagerungen zwischen Lagern, die noch nicht abgeschlossen sind.</td>
+</tr>
+<tr>
+<td>Abgeschlossene Einkaufsbestellungen</td>
+<td>Historische Einkaufsbestellungen.</td>
+</tr>
+<tr>
+<td>Meta Daten ('Trigger'-File)</td>
+<td>Steuerdatei, die Netstock signalisiert, dass ein Übertragungslauf abgeschlossen ist. Wird immer zuletzt gesendet.</td>
+</tr>
+<tr>
+<td>Stücklisten</td>
+<td>Stücklisteninformationen.</td>
+</tr>
+<tr>
+<td>Nachfolgeartikel</td>
+<td>Verknüpfung zwischen ausgelaufenen Artikeln und ihren Nachfolgern.</td>
+</tr>
+<tr>
+<td>Zusätzliche Daten/Optionale Felder</td>
+<td>Weitere, optionale Zusatzinformationen.</td>
+</tr>
+</tbody></table>
+<p>In der Übersicht wählen Sie die gewünschten Pakete aus und klicken auf <strong>Senden</strong>. Zwei Schnellzugriffe
+stehen zusätzlich bereit:</p>
+<ul>
+<li><strong>Grunddaten senden:</strong> überträgt in einem Schritt Lager/Filialen, Lieferanten, Artikelstamm und die Meta-Daten.</li>
+<li><strong>Verkauf &amp; Bestand senden:</strong> überträgt Verkauf &amp; Verbrauch, Bestand je Lagerort und die Meta-Daten. Dabei kann zwischen <strong>Standard</strong> und <strong>Erweitert</strong> gewählt werden.</li>
+</ul>
+<h2 id="daten-empfangen">Daten empfangen</h2>
+<p>Über <strong>Herunterladen</strong> ruft arpaTools die von Netstock berechneten Bestellvorschläge ab. Dabei stehen
+drei Verarbeitungsarten zur Auswahl:</p>
+<ul>
+<li><strong>Herunterladen:</strong> lädt die Datei nur in ein Zielverzeichnis herunter, ohne sie weiter zu verarbeiten.</li>
+<li><strong>Auf Einkaufsliste:</strong> importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.</li>
+<li><strong>Als Lieferantenbestellung:</strong> importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.</li>
+</ul>
+<h2 id="einstellungen">Einstellungen</h2>
+<p>In den Netstock-Einstellungen konfigurieren Sie, welche Firma, welcher Benutzer und welcher FTP-Server
+für den Datenaustausch verwendet werden, sowie folgende Optionen:</p>
+<ul>
+<li><strong>Retouren senden:</strong> Ja/Nein, ob Retouren mit in die Verkaufsdaten einfließen.</li>
+<li><strong>Verkaufsdaten senden:</strong> legt fest, welche Aufträge in die Verkaufsdaten einfließen: <strong>Alle Aufträge</strong>, <strong>Bezahlte Aufträge</strong> oder <strong>Gelieferte Aufträge</strong>.</li>
+<li><strong>Stücklisten-Verhalten:</strong> <strong>Stücklistenvater senden</strong> (die Stückliste wird als ein Artikel behandelt) oder <strong>Komponenten senden</strong> (die einzelnen Bestandteile werden übertragen).</li>
+<li><strong>Lieferantenartikelnummer senden:</strong> Ja/Nein.</li>
+<li><strong>HAN senden:</strong> Ja/Nein (Herstellerartikelnummer).</li>
+<li><strong>Warengruppe senden:</strong> Ja/Nein.</li>
+<li><strong>Lager:</strong> Auswahl, welche Lager in den Datenaustausch einbezogen werden, inklusive optionaler Zuordnung eigener FBA-Lager (EU und UK).</li>
+<li><strong>Eigenes Feld</strong> (bei besonderer Stücklistenbehandlung): ein eigenes Artikel-Feld, aus dem Komponenten und Mengen für Sonderfälle gelesen werden, inklusive <strong>Trenner Artikel und Menge</strong> und <strong>Trenner Komponente</strong> zur Aufteilung des Feldinhalts.</li>
+</ul>
+<h2 id="automatisierung-über-jobby">Automatisierung über Jobby</h2>
+<p>Für einen regelmäßigen, automatischen Datenaustausch richten Sie in Jobby einen Job mit der Aktion
+<strong>Netstock</strong> ein. Die Aktion sendet die konfigurierten Datenpakete automatisch, zeitgesteuert über den
+arpaTools Worker. Details zur Jobby-Aktion und zu den Grundlagen von Jobby in der
+<a href="jobby.html">Jobby-Dokumentation</a>.</p>
+<p>Für den Download-Weg richten Sie stattdessen einen Job mit den Aktionen <strong>Download vom FTP-Server</strong> und
+<strong>Auf Einkaufsliste schreiben</strong> ein.</p>
+<h3 id="job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</h3>
+<p>Sie müssen diese Jobs nicht von Hand erstellen. Nach einem manuellen Lauf in der Netstock-Ansicht fragt
+arpaTools jeweils, ob der passende Jobby-Job automatisch angelegt werden soll, in <strong>beide Richtungen</strong>:</p>
+<ul>
+<li><strong>Nach dem Senden:</strong> Sie werden gefragt, ob ein Sende-Job angelegt werden soll. Bei „Ja" entsteht ein
+Job mit der gebündelten Aktion <strong>Netstock</strong>, der Ihre Datenpakete künftig automatisch überträgt.</li>
+<li><strong>Nach dem Herunterladen:</strong> Sie werden gefragt, ob ein Download-Job angelegt werden soll. Bei „Ja"
+entsteht ein Job mit den Aktionen <strong>Download vom FTP-Server</strong> und <strong>Auf Einkaufsliste schreiben</strong>.</li>
+</ul>
+<p>Bestätigen Sie die Abfrage mit „Ja", legt arpaTools den Job an. Sie können ihn danach in Jobby prüfen und
+den Zeitplan anpassen.</p>
+<blockquote>
+<p><strong>Hinweis:</strong> Die automatische Anlage des Download-Jobs erstellt nur den Weg <strong>auf die Einkaufsliste</strong>.
+Möchten Sie die Bestellvorschläge stattdessen direkt <strong>als Lieferantenbestellung</strong> importieren, richten
+Sie diesen Job derzeit von Hand in Jobby ein.</p>
+</blockquote>
+
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 13. August 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

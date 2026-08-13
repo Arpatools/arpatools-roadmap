@@ -485,6 +485,56 @@ a { color: inherit; text-decoration: none; }
 .prose hr { margin: var(--xl) 0; border: none; border-top: 1px solid var(--border); }
 .ref-muted { color: var(--muted-strong); }
 
+/* ---------- Dokumentation ---------- */
+
+.doc-page { max-width: 46rem; padding: var(--xl) 0 var(--2xl); }
+.doc-page h1 {
+  margin: 0 0 var(--md);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+/* Die Kopfzeile klebt: ohne diesen Abstand landet ein Sprung unter ihr. */
+.doc-page .prose :is(h1, h2, h3, h4, h5, h6) { scroll-margin-top: 96px; }
+
+.doc-toc {
+  margin: var(--lg) 0 var(--xl);
+  padding: var(--md) var(--lg);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+.doc-toc-title {
+  margin: 0 0 var(--sm);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-strong);
+}
+.doc-toc ul { list-style: none; margin: 0; padding: 0; font-size: 15px; }
+.doc-toc li { margin: var(--xs) 0; }
+.doc-toc a { color: var(--muted); transition: color var(--ease); }
+.doc-toc a:hover { color: var(--orange); }
+.doc-toc-level-3 { padding-left: var(--md); font-size: 14px; }
+
+.doc-list { list-style: none; margin: 0; padding: 0; }
+.doc-item + .doc-item { border-top: 1px solid var(--border-soft); }
+.doc-item-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--xs);
+  padding: 12px var(--sm);
+  margin: 0 calc(var(--sm) * -1);
+  border-radius: var(--radius-button);
+  transition: background var(--ease);
+}
+.doc-item-link:hover { background: var(--secondary); }
+.doc-item-link:hover .doc-item-title { color: var(--orange); }
+.doc-item-title { font-size: 17px; font-weight: 600; transition: color var(--ease); }
+.doc-item-note { font-size: 14px; color: var(--muted-strong); }
+
 .empty { color: var(--muted-strong); }
 .is-hidden { display: none !important; }
 
