@@ -57,7 +57,7 @@
         <li class="doc-toc-level-3"><a href="#dienst">Dienst</a></li>
         <li class="doc-toc-level-2"><a href="#einfachen-job-erstellen">Einfachen Job erstellen</a></li>
         <li class="doc-toc-level-2"><a href="#jobby-aktionen">Jobby-Aktionen</a></li>
-        <li class="doc-toc-level-3"><a href="#import-jtl-ameise-import">Import: JTL-Ameise Import</a></li>
+        <li class="doc-toc-level-3"><a href="#import-jtl-ameise---import">Import: JTL-Ameise - Import</a></li>
         <li class="doc-toc-level-3"><a href="#import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</a></li>
         <li class="doc-toc-level-3"><a href="#import-sendungsdaten-importieren-jtlwawiexterndll">Import: Sendungsdaten importieren (JTLWawiExtern.DLL)</a></li>
         <li class="doc-toc-level-3"><a href="#import-xml-auftragsimport-jtlwawiexterndll">Import: XML-Auftragsimport (JTLWawiExtern.DLL)</a></li>
@@ -67,7 +67,7 @@
         <li class="doc-toc-level-3"><a href="#aufträge-lieferantenbestellung-erstellen">Aufträge: Lieferantenbestellung erstellen</a></li>
         <li class="doc-toc-level-3"><a href="#aufträge-ohne-versand-abschließen">Aufträge: Ohne Versand abschließen</a></li>
         <li class="doc-toc-level-3"><a href="#einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</a></li>
-        <li class="doc-toc-level-3"><a href="#dateitransfer-download-vom-ftp-server">Dateitransfer: Download vom FTP-Server</a></li>
+        <li class="doc-toc-level-3"><a href="#dateitransfer-download-von-ftp-server">Dateitransfer: Download von FTP-Server</a></li>
         <li class="doc-toc-level-3"><a href="#dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</a></li>
         <li class="doc-toc-level-3"><a href="#sonstiges-datei-aus-web-laden">Sonstiges: Datei aus Web laden</a></li>
         <li class="doc-toc-level-3"><a href="#sonstiges-daten-aus-verzeichnis-laden">Sonstiges: Daten aus Verzeichnis laden</a></li>
@@ -294,15 +294,19 @@ sie nur in die Laufzeitumgebung. Dazu gehören:</p>
 Verlauf geladen werden muss. Erst die Aktion <strong>Daten in Verzeichnis speichern</strong> legt die Inhalte
 dauerhaft ab.</p>
 <h2 id="jobby-aktionen">Jobby-Aktionen</h2>
-<h3 id="import-jtl-ameise-import">Import: JTL-Ameise Import</h3>
+<h3 id="import-jtl-ameise---import">Import: JTL-Ameise - Import</h3>
 <p>Führt strukturierte Importe (Artikeldaten, Kundenlisten, Bestände) automatisiert oder manuell über eine
-vorher definierte JTL-Ameise-Importvorlage aus. Grundlage ist eine in JTL-Ameise gespeicherte Vorlage.</p>
+vorher definierte JTL-Ameise-Importvorlage aus. Grundlage ist eine in JTL-Ameise gespeicherte Vorlage.
+Diese Aktion steht nur mit mindestens dem JTL-Tarif Advanced zur Verfügung.</p>
+<p><img src="../docs/bilder/jobby-aktion-ameise-import.png" alt="Dialog der Aktion „JTL-Ameise - Import&quot;: Kurzbeschreibung, Datenbank, Template, Workflows, Loglevel, Parameter für Logs mit Hinweistext zu den verfügbaren Logarten, und Verarbeitung." /></p>
 <ul>
+<li><strong>Kurzbeschreibung:</strong> eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.</li>
+<li><strong>Datenbank:</strong> die JTL-Datenbank, gegen die importiert wird. Standard ist die Standarddatenbank.</li>
 <li><strong>Template:</strong> die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein).</li>
 <li><strong>Workflows:</strong> bestimmt, ob während des Imports hinterlegte Workflows ausgeführt werden.</li>
-<li><strong>Log Level:</strong> Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.</li>
-<li><strong>Log-Parameter:</strong> zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: <code>--log</code> (Hauptbericht), <code>--log_errors</code>, <code>--log_warnings</code>, <code>--log_imported</code>, <code>--log_update</code>, <code>--log_other</code>.</li>
-<li><strong>Platzhalter im Dateinamen:</strong> <code>%y</code> (Jahr vierstellig), <code>%m</code> (Monat), <code>%d</code> (Tag), <code>%h</code> (Stunde), <code>%i</code> (Minute), <code>%s</code> (Sekunde), <code>%db</code> (Datenbankname), <code>%id</code> (Name der Importvorlage). Beispiel: <code>import_%y-%m-%d_%h-%i-%s_%id.log</code>.</li>
+<li><strong>Loglevel:</strong> Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.</li>
+<li><strong>Parameter für Logs:</strong> zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: <code>--log</code> (Hauptbericht), <code>--log_errors</code>, <code>--log_warnings</code>, <code>--log_imported</code>, <code>--log_update</code>, <code>--log_other</code>. Platzhalter für den Dateinamen: <code>%y</code> (Jahr vierstellig), <code>%m</code> (Monat), <code>%d</code> (Tag), <code>%h</code> (Stunde), <code>%i</code> (Minute), <code>%s</code> (Sekunde), <code>%db</code> (Datenbankname), <code>%id</code> (Name der Importvorlage). Beispiel: <code>import_%y-%m-%d_%h-%i-%s_%id.log</code>.</li>
+<li><strong>Verarbeitung:</strong> ob nur die neueste oder alle geladenen Dateien verarbeitet werden.</li>
 </ul>
 <h3 id="import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</h3>
 <p>Importiert Lieferantenbestände in JTL-Wawi. Der Bestand erscheint in den Artikeldetails im Reiter
@@ -398,14 +402,18 @@ auszulösen. Nützlich für Aufträge, die außerhalb des normalen Versandprozes
 <li><strong>Spalte Identifizierung</strong> und <strong>Spalte Menge:</strong> in welchen Spalten Artikel und Menge stehen.</li>
 <li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
 </ul>
-<h3 id="dateitransfer-download-vom-ftp-server">Dateitransfer: Download vom FTP-Server</h3>
+<h3 id="dateitransfer-download-von-ftp-server">Dateitransfer: Download von FTP-Server</h3>
 <p>Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
-Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.</p>
+Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
+<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Verbindungen").</p>
+<p><img src="../docs/bilder/jobby-aktion-ftp-download.png" alt="Dialog der Aktion „Download von FTP-Server&quot;: Kurzbeschreibung, FTP-Server, Relativer Pfad, Schaltfläche Prüfen, Dateifilter und Verarbeitung." /></p>
 <ul>
+<li><strong>Kurzbeschreibung:</strong> eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.</li>
 <li><strong>FTP-Server:</strong> die konfigurierte Verbindung.</li>
+<li><strong>Relativer Pfad:</strong> Unterverzeichnis auf dem Server, falls nötig.</li>
+<li><strong>Prüfen:</strong> testet die gewählte Verbindung.</li>
 <li><strong>Dateifilter:</strong> welche Dateien geladen werden (z. B. <code>*.csv</code>, nach MS-DOS-Filterregeln).</li>
 <li><strong>Verarbeitung:</strong> ob die Datei nach dem Download gelöscht oder behalten wird.</li>
-<li><strong>Relativer Pfad:</strong> Unterverzeichnis auf dem Server, falls nötig.</li>
 </ul>
 <h3 id="dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</h3>
 <p>Überträgt Dateien aus dem Jobspeicher automatisch auf einen FTP-Server, z. B. Sendungsdaten für einen

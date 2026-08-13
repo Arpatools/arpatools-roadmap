@@ -234,16 +234,21 @@ dauerhaft ab.
 
 ## Jobby-Aktionen
 
-### Import: JTL-Ameise Import
+### Import: JTL-Ameise - Import
 
 Führt strukturierte Importe (Artikeldaten, Kundenlisten, Bestände) automatisiert oder manuell über eine
 vorher definierte JTL-Ameise-Importvorlage aus. Grundlage ist eine in JTL-Ameise gespeicherte Vorlage.
+Diese Aktion steht nur mit mindestens dem JTL-Tarif Advanced zur Verfügung.
 
+![Dialog der Aktion „JTL-Ameise - Import": Kurzbeschreibung, Datenbank, Template, Workflows, Loglevel, Parameter für Logs mit Hinweistext zu den verfügbaren Logarten, und Verarbeitung.](bilder/jobby-aktion-ameise-import.png)
+
+- **Kurzbeschreibung:** eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.
+- **Datenbank:** die JTL-Datenbank, gegen die importiert wird. Standard ist die Standarddatenbank.
 - **Template:** die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein).
 - **Workflows:** bestimmt, ob während des Imports hinterlegte Workflows ausgeführt werden.
-- **Log Level:** Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.
-- **Log-Parameter:** zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: `--log` (Hauptbericht), `--log_errors`, `--log_warnings`, `--log_imported`, `--log_update`, `--log_other`.
-- **Platzhalter im Dateinamen:** `%y` (Jahr vierstellig), `%m` (Monat), `%d` (Tag), `%h` (Stunde), `%i` (Minute), `%s` (Sekunde), `%db` (Datenbankname), `%id` (Name der Importvorlage). Beispiel: `import_%y-%m-%d_%h-%i-%s_%id.log`.
+- **Loglevel:** Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.
+- **Parameter für Logs:** zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: `--log` (Hauptbericht), `--log_errors`, `--log_warnings`, `--log_imported`, `--log_update`, `--log_other`. Platzhalter für den Dateinamen: `%y` (Jahr vierstellig), `%m` (Monat), `%d` (Tag), `%h` (Stunde), `%i` (Minute), `%s` (Sekunde), `%db` (Datenbankname), `%id` (Name der Importvorlage). Beispiel: `import_%y-%m-%d_%h-%i-%s_%id.log`.
+- **Verarbeitung:** ob nur die neueste oder alle geladenen Dateien verarbeitet werden.
 
 ### Import: Lieferantenbestand importieren
 
@@ -349,15 +354,20 @@ Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eine
 - **Spalte Identifizierung** und **Spalte Menge:** in welchen Spalten Artikel und Menge stehen.
 - **Verarbeitung:** nur die neueste oder alle geladenen Dateien.
 
-### Dateitransfer: Download vom FTP-Server
+### Dateitransfer: Download von FTP-Server
 
 Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
-Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.
+Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
+[Jobby-Dokumentation](/doku/jobby), Abschnitt „Verbindungen").
 
+![Dialog der Aktion „Download von FTP-Server": Kurzbeschreibung, FTP-Server, Relativer Pfad, Schaltfläche Prüfen, Dateifilter und Verarbeitung.](bilder/jobby-aktion-ftp-download.png)
+
+- **Kurzbeschreibung:** eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.
 - **FTP-Server:** die konfigurierte Verbindung.
+- **Relativer Pfad:** Unterverzeichnis auf dem Server, falls nötig.
+- **Prüfen:** testet die gewählte Verbindung.
 - **Dateifilter:** welche Dateien geladen werden (z. B. `*.csv`, nach MS-DOS-Filterregeln).
 - **Verarbeitung:** ob die Datei nach dem Download gelöscht oder behalten wird.
-- **Relativer Pfad:** Unterverzeichnis auf dem Server, falls nötig.
 
 ### Dateitransfer: Upload zum FTP-Server
 
