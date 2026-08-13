@@ -28,8 +28,9 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 
 - **Firma:** unter welchem Firmennamen Provisionsgutschriften in JTL-Wawi angelegt werden.
 - **Benutzer:** mit welchem Benutzer Provisionsgutschriften erstellt werden.
-- **Steuersatz:** Standardsteuersatz für erstellte Gutschriften. Provisionen werden als Dienstleistung besteuert, daher der übliche Steuersatz des Landes. Für Nutzer von go-OSS ist er als „OSS undefiniert Standard" festgelegt.
-- **Bezahldatum älter als (Tage):** ab welchem Abstand zum Zahlungseingang eine Provision freigegeben und berechnet wird (z. B. 30 Tage, damit die Rückgabefrist abgelaufen ist). Wichtig bei gestaffelten Provisionssätzen. Mit dieser Einstellung fließen nur Rechnungen ein, die nach dem definierten Zeitraum bezahlt wurden; eine Erstattung innerhalb dieser Frist wirkt sich also gar nicht erst auf die Provision aus. Rechnungskorrekturen nach Ablauf der Frist kürzen die Provision nur, wenn die folgende Einstellung eingeschaltet ist.
+- **Steuerklasse:** Standardsteuersatz für erstellte Gutschriften. Provisionen werden als Dienstleistung besteuert, daher der übliche Steuersatz des Landes. Für Nutzer von go-OSS ist er als „OSS undefiniert Standard" festgelegt.
+- **Referenzdatum:** welches Datum als Bezugspunkt für „Referenzdatum älter als (Tage)" dient, z. B. „Bezahldatum der Rechnung".
+- **Referenzdatum älter als (Tage):** ab welchem Abstand zum Referenzdatum eine Provision freigegeben und berechnet wird (z. B. 30 Tage, damit die Rückgabefrist abgelaufen ist). Wichtig bei gestaffelten Provisionssätzen. Mit dieser Einstellung fließen nur Rechnungen ein, die den definierten Zeitraum bereits erreicht haben; eine Erstattung innerhalb dieser Frist wirkt sich also gar nicht erst auf die Provision aus. Rechnungskorrekturen nach Ablauf der Frist kürzen die Provision nur, wenn die folgende Einstellung eingeschaltet ist.
 - **Provision durch Rechnungskorrekturen kürzen:** ob eine Rechnungskorrektur in JTL-Wawi die zugehörige Provision anteilig kürzt. Standardmäßig aus, ein Update ändert Ihre Berechnung also nicht. Eingeschaltet entsteht je erstatteter Rechnungsposition eine zusätzliche Journalposition „Rechnungskorrektur" mit negativem Wert. Gehört die Ursprungsposition zu einem noch offenen Journal, steht der Abzug dort; ist dieses Journal bereits abgerechnet, geht der Abzug in das offene Journal, in dessen Zeitraum das Datum der Rechnungskorrektur fällt. In ein bereits abgerechnetes Journal wird nie geschrieben. Details und Grenzen im Kapitel „Rechnungskorrekturen".
 - **Rechnungskorrekturen berücksichtigen ab:** Stichtag für die vorige Einstellung. Nur Rechnungskorrekturen ab diesem Datum kürzen die Provision. Schalten Sie die Kürzung ein, fragt arpaTools beim Speichern nach und setzt den Stichtag auf das aktuelle Datum, damit ältere Korrekturen nicht rückwirkend abgezogen werden. Ein früheres Datum tragen Sie danach nach, in einem zweiten Speichervorgang. Ohne Datum ist die Kürzung nicht aktiv, auch wenn der Haken gesetzt ist.
 - **Alte Journale aktualisieren (in Wochen):** wie weit zurückliegende Rechnungsdaten automatisch zur Aktualisierung von Journalen berücksichtigt werden. Ein größerer Zeitraum verlängert die Ladezeit. So werden nachträgliche Zahlungen im aktuell offenen Journal berücksichtigt. Nicht abgerechnete Journale lassen sich zudem jederzeit manuell neu berechnen.
@@ -52,11 +53,16 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 - **Hinzufügen:** neuen Provisionsberechtigten anlegen (Kunde oder Benutzer der JTL-Wawi).
 - **Bearbeiten:** vorhandenen Eintrag ändern.
 - **Provisionseinstellungen:** individuelle Provisionssätze festlegen (siehe unten).
-- **Löschen:** entfernt einen Provisionsberechtigten. Achtung: alle zugehörigen Journale und Abrechnungen werden ebenfalls gelöscht.
-- **Alle Abrechnen:** rechnet für alle Provisionsberechtigten ab.
-- **Laden:** aktualisiert die Liste.
+- **Moduleinstellungen:** öffnet die globalen ProviMate-Einstellungen (siehe „Programmeinstellungen").
+- **Alle abrechnen:** rechnet für alle Provisionsberechtigten ab.
 
-![Übersicht der Provisionsberechtigten in ProviMate. Oben ein Suchfeld, darunter die Liste mit ID, Bezugstyp, Kundennummer, Firma, Vorname, Name, ob die Gutschrift automatisch erzeugt wird, dem Abrechnungszeitraum und der Angabe, ob Provisionseinstellungen hinterlegt sind. Rechts die Detailspalte zum ausgewählten Eintrag samt Journalwerten und Verlaufsdiagramm. Unten die Schaltflächen Hinzufügen, Bearbeiten, Provisionseinstellungen, Löschen, Alle abrechnen und Laden.](bilder/provimate-uebersicht.png)
+> möglicherweise in einem Kontextmenü der Zeile; nicht geprüft.
+
+![Übersicht der Provisionsberechtigten in ProviMate. Oben Suchfeld und Hinzufügen, darunter die Liste mit ID, Name, Bezugstyp, offenem Betrag und nächster Abrechnung. Rechts die Detailspalte zum ausgewählten Eintrag mit den Kacheln Abrechenbar/Wartend/Abgerechnet/Auszahlungsschwelle, Journalverlauf-Diagramm und Stammdaten. Markiert ① Moduleinstellungen, ② Alle abrechnen, ③ Hinzufügen, ④ Bearbeiten und ⑤ Provisionseinstellungen.](bilder/provimate-uebersicht.png)
+
+① Moduleinstellungen — öffnet die globalen Einstellungen. ② Alle abrechnen — rechnet alle
+Provisionsberechtigten ab. ③ Hinzufügen — legt einen neuen Provisionsberechtigten an. ④ Bearbeiten
+— ändert den ausgewählten Eintrag. ⑤ Provisionseinstellungen — individuelle Provisionssätze.
 
 ### Provisionsberechtigten anlegen
 
@@ -142,10 +148,10 @@ Regeltypen:
 
 Über den Wert „Ab Umsatzwert" lassen sich Staffeln abbilden. Beispiel: 10 % bis 99,99 €, 5 % bis
 999,99 €, ab 1000,00 € dauerhaft 2 %. Dafür werden mehrere Regeln angelegt. Bei Staffelprovisionen ist
-die globale Einstellung „Bezahldatum älter als (Tage)" Pflicht. Eine Rechnungskorrektur kürzt den
+die globale Einstellung „Referenzdatum älter als (Tage)" Pflicht. Eine Rechnungskorrektur kürzt den
 Provisionsbetrag, ändert aber nicht die erreichte Staffelstufe: Grundlage der Staffel bleibt der
 ursprüngliche Auftragswert. Rutscht ein Auftrag durch eine Erstattung unter eine Staffelschwelle, wird
-nicht auf den niedrigeren Prozentsatz zurückgestuft. Wollen Sie das vermeiden, setzen Sie „Bezahldatum
+nicht auf den niedrigeren Prozentsatz zurückgestuft. Wollen Sie das vermeiden, setzen Sie „Referenzdatum
 älter als (Tage)" so, dass die Rückgabefrist vor der Provisionsberechnung abgelaufen ist.
 
 ### Provisionsregeln: Beispiele (Regeltrichter)

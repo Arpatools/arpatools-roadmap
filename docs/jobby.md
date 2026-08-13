@@ -6,7 +6,11 @@ Willkommen bei Jobby, dem Automatisierungstool für Ihre JTL-Wawi. Jobby ist ein
 Client und bündelt wiederkehrende Aktionen in Jobs, die automatisiert oder auf Knopfdruck laufen. Das
 spart Zeit und reduziert Fehlerquellen in den täglichen Prozessen.
 
-![Die Jobs-Übersicht in Jobby: alle angelegten Jobs mit Zeitplan und letztem Lauf](bilder/jobby-uebersicht.png)
+![Die Jobs-Übersicht in Jobby: alle angelegten Jobs mit Zeitplan und letztem Lauf, markiert ① Suchfeld, ② Job anlegen, ③ Kennzahlen je Job und ④ Starten](bilder/jobby-uebersicht.png)
+
+① Suchfeld — filtert die Liste, hilfreich bei vielen Jobs. ② Job anlegen — legt einen neuen Job an.
+③ Kennzahlen je Job — Anzahl der Aktionen, Zeitplan, Zeitpunkt des letzten und nächsten Laufs.
+④ Starten — führt den Job sofort aus, unabhängig vom Zeitplan.
 
 Jobby ergänzt die anderen arpaTools-Produkte wie Sammelrechnung, Retourenportal und ProviMate. Ein
 Job besteht aus einer Reihe von Aktionen, die in beliebiger Reihenfolge konfiguriert werden, zum
@@ -89,23 +93,47 @@ Nach dem Versand stellt der Lieferant eine Datei mit Sendungsdaten bereit:
 
 ## Jobby-Übersicht
 
+Jobby gliedert sich oben in vier Bereiche: **Jobs**, **Verlauf**, **Vault** und **Dienst**. Verbindungen
+zu FTP-Servern, E-Mail-Postfächern, Drittanbietern und weiteren Datenbanken liegen dagegen nicht bei
+Jobby, sondern zentral unter **Verbindungen** in der Seitenleiste links (Bereich „Einstellungen") — von
+dort erreichbar für jedes Modul und jeden Job, nicht nur für Jobby.
+
 ### Jobs
 
 Die Ansicht **Jobs** ist die Hauptansicht. Hier werden alle Jobs konfiguriert; bei vielen Jobs hilft die
-Suche. Neue Jobs legt man über **Hinzufügen** an, bestehende ändert man über **Bearbeiten** (oder per
-Doppelklick), **Löschen** entfernt sie. **Starten** führt den ausgewählten Job aus; danach wird in der
-Liste das Datum „Letzter Durchlauf" aktualisiert.
+Suche. Neue Jobs legt man über **Job anlegen** an. **Starten** führt den ausgewählten Job direkt aus der
+Liste aus; danach wird das Datum „zuletzt" aktualisiert.
 
-**Laden** aktualisiert die Ansicht. Das ist nützlich, wenn Jobs über den arpaTools Worker automatisch
-laufen: nach dem Laden zeigt „Letzter Zeitplandurchlauf", ob und wann die letzte planmäßige Ausführung
-stattfand.
+Spalten bzw. Angaben je Job:
+- **Aktionsanzahl:** Anzahl der Aktionen im Job.
+- **Zeitplan:** ob und wie der Job per Zeitplan über den arpaTools Worker läuft.
+- **Zuletzt:** Datum und Uhrzeit des letzten Laufs.
+- **Nächster Lauf:** die nächste planmäßige Ausführung, sofern ein Zeitplan aktiv ist.
 
-Spalten in der Liste:
-- **Aktionsanzahl:** Anzahl der Aktionen pro Job.
-- **Aktiv:** Häkchen, wenn der Job aktiv ist.
-- **Zeitplan aktiv:** aktiv, wenn der Job per Zeitplan über den arpaTools Worker läuft.
+> Kopieren wie in der vorherigen Fassung; noch nicht bestätigt.
 
-### E-Mail-Konten
+### Verbindungen
+
+FTP-Server, E-Mail-Konten, Drittanbieter-Konten und Datenbankverbindungen liegen gemeinsam auf diesem
+Bildschirm, je eine Registerkarte. Ein Grund: dieselben Verbindungen werden nicht nur von Jobby benutzt,
+sondern zum Beispiel auch von Netstock, Sammelrechnung oder dem Retourenportal — deshalb stehen sie
+zentral in der Seitenleiste und nicht mehr bei Jobby selbst. Löschen lässt sich ein Eintrag erst, wenn
+kein Modul und kein Job ihn mehr verwendet.
+
+![Verbindungen-Bildschirm mit vier Registerkarten (FTP-Server, E-Mail-Konten, Drittanbieter-Konten, Datenbanken), markiert ① Registerkarten, ② Server hinzufügen und ③ Laden](bilder/jobby-verbindungen.png)
+
+① Registerkarten — wechselt zwischen den vier Verbindungsarten. ② Server hinzufügen (Beschriftung
+wechselt je Registerkarte) — legt einen neuen Eintrag der gerade gewählten Art an. ③ Laden —
+aktualisiert die Liste, falls ein Eintrag zwischenzeitlich anderswo geändert wurde.
+
+#### Registerkarte FTP-Server
+
+Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
+Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
+Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit **Prüfen** wird die
+Verbindung getestet.
+
+#### Registerkarte E-Mail-Konten
 
 Eine mögliche Aktion ist der Versand von E-Mails, mit reinem Text oder mit Anhängen (z. B. Ergebnisse
 aus SQL-Abfragen oder Dateien vom FTP-Server bzw. aus einem Verzeichnis).
@@ -135,10 +163,17 @@ Einstellungen testen.
 Bestehende E-Mail-Konten aus einer Vorversion stehen nach der Aktualisierung auf „STARTTLS" mit
 Anmeldung, dem bisherigen Verhalten. Niemand muss deswegen etwas umstellen.
 
-### Drittanbieter-Konten
+#### Registerkarte Drittanbieter-Konten
 
 Über Drittanbieter-Konten lassen sich API-Zugangsdaten in Jobby speichern und benennen. Die Daten
 werden verschlüsselt gespeichert.
+
+#### Registerkarte Datenbanken
+
+Mit Jobby lassen sich mehrere JTL-Datenbanken hinterlegen. So bedient man mehrere Mandanten innerhalb
+einer Jobby-Installation. Die Verbindung zur Haupt-JTL-Wawi-Datenbank liegt nicht hier, sondern unter
+„Einstellungen" — die zusätzlichen Datenbanken auf dieser Registerkarte sind die, die ein Job daneben
+noch lesen oder beschreiben soll.
 
 ### Vault
 
@@ -171,24 +206,10 @@ mit, und das Löschen eines benutzten Schlüssels fragt dann vorher nach und nen
 verschlüsselt sind, sind sämtliche Vault-Einträge unbrauchbar. Sie lassen sich nicht wiederherstellen
 und müssen komplett neu eingegeben werden.
 
-### FTP-Server
+### Dienst
 
-Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
-Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
-Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit **Prüfen** wird die
-Verbindung getestet.
-
-![Fenster FTP-Server mit einer Tabelle der hinterlegten Verbindungen. Die Spalten zeigen die Bezeichnung sowie je eine Spalte dafür, ob die Verbindung in Jobby, in Netstock und im Retourenportal verwendet wird. Unten die Schaltflächen Hinzufügen, Bearbeiten, Löschen, Kopieren und Laden.](bilder/jobby-ftp-server.png)
-
-### Datenbanken
-
-Mit Jobby lassen sich mehrere JTL-Datenbanken hinterlegen. So bedient man mehrere Mandanten innerhalb
-einer Jobby-Installation.
-
-### Einstellungen
-
-Die Einstellungen legen fest, ob der arpaTools Worker verwendet wird und in welchem Intervall er Jobs
-ausführt. Wir empfehlen mindestens fünf Minuten. Die Installation des Windows-Dienstes „arpaTools
+Der Bereich **Dienst** legt fest, ob der arpaTools Worker verwendet wird und in welchem Intervall er
+Jobs ausführt. Wir empfehlen mindestens fünf Minuten. Die Installation des Windows-Dienstes „arpaTools
 Worker" ist im Abschnitt [arpaTools Worker installieren](#arpatools-worker-installieren) beschrieben.
 
 ## Einfachen Job erstellen

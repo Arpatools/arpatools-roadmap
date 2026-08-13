@@ -104,7 +104,8 @@ mit <strong>Einstellungen prüfen</strong> und bestätigen Sie mit <strong>Speic
 Bestellung) und <strong>Lizenzschlüssel</strong> ein. Schlägt <strong>Lizenz prüfen</strong> fehl, prüfen Sie zuerst, ob Port
 21500 in der Firewall freigegeben ist.</p>
 <h3 id="programmeinstellungen">Programmeinstellungen</h3>
-<p>Unter <strong>Einstellungen</strong> und <strong>Programm</strong>:</p>
+<p>Unter <strong>Konfiguration</strong>, Registerkarte <strong>Grundlagen</strong>:</p>
+<p><img src="../docs/bilder/sammelrechnung-konfiguration.png" alt="Sammelrechnung-Einstellungen, Registerkarte Grundlagen: Name der Konfiguration, Startdatum, Firma, Benutzer, Zahlungsart, Versandart sowie die Tabelle Filter-Zahlungsarten." /></p>
 <ul>
 <li><strong>Startdatum verwenden:</strong> legt fest, ab welchem Zeitpunkt Sammelrechnung beginnt. Setzen Sie dieses Datum, wenn Sie von einer anderen Abrechnungsart umsteigen.</li>
 <li><strong>Zahlungsart:</strong> hat mehrere Auswirkungen:<ul>
@@ -221,14 +222,20 @@ Sammelrechnungen. Ein separater Aufruf einer eigenständigen Anwendung ist dafü
 <p>Nach der Installation wird eine Plattform namens <code>arpa_Sammelrechnung</code> angelegt. Über sie finden Sie
 Sammelaufträge und Sammelrechnungen schnell wieder und können in der JTL-Statistik danach filtern.</p>
 <h2 id="programmablauf">Programmablauf</h2>
-<p>Öffnen Sie die App Sammelrechnung. Standardmäßig ist im Dropdown <strong>Alle Kunden</strong> gewählt; angezeigt
-werden alle Kunden mit der in den Programmeinstellungen festgelegten Zahlungsart. Für einen bestimmten
-Kunden wählen Sie diesen aus. Sie können die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein
-konfiguriertes Startdatum wird übernommen. Klicken Sie auf <strong>Aufträge laden</strong>.</p>
+<p>Öffnen Sie die App Sammelrechnung. Links zeigt <strong>Konfigurationen</strong>, wie viele Konfigurationen angelegt
+sind; über <strong>Neu</strong> entsteht die erste, <strong>Duplizieren</strong> übernimmt eine bestehende als Vorlage,
+<strong>Als Standard</strong> legt die Vorauswahl fest, <strong>Löschen</strong> entfernt eine Konfiguration.</p>
+<p>Standardmäßig ist im Dropdown <strong>Alle Kunden</strong> gewählt; angezeigt werden alle Kunden mit der in der
+Konfiguration festgelegten Zahlungsart. Für einen bestimmten Kunden wählen Sie diesen aus. Sie können
+die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein konfiguriertes Startdatum wird übernommen.
+Klicken Sie auf <strong>Aufträge laden</strong>.</p>
 <ul>
-<li><strong>Rechnung für alle Aufträge erstellen:</strong> erstellt für den gewählten Kunden (oder bei „Alle Kunden" für alle angezeigten Aufträge) Sammelrechnungen.</li>
-<li><strong>Rechnung für markierte Aufträge erstellen:</strong> erstellt nur für die markierten Aufträge Sammelrechnungen.</li>
+<li><strong>Alle markieren:</strong> markiert alle angezeigten Aufträge.</li>
+<li><strong>Rechnung erstellen:</strong> erstellt Sammelrechnungen für die markierten Aufträge.</li>
 </ul>
+<blockquote>
+<p>nicht bestätigt; vermutlich ein Schnellweg, der markieren und erstellen in einem Schritt zusammenfasst.</p>
+</blockquote>
 <p>In der Liste erscheinen alle Aufträge, die infrage kommen. Bedingungen: die konfigurierte Zahlungsart,
 der Status <strong>Verpackt und Versendet</strong>, und das leere Feld <code>arpa_rechnungsnummer</code>. Andere Lieferstatus
 (Teilgeliefert, Ausstehend, Lieferschein erstellt) werden nicht berücksichtigt.</p>
@@ -248,7 +255,10 @@ Kunden, werden getrennte Sammelrechnungen erstellt.</p>
 <blockquote>
 <p>Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.</p>
 </blockquote>
-<p><img src="../docs/bilder/sammelrechnung-auftragsliste.png" alt="Hauptfenster der Sammelrechnung. Links die Modulleiste, daneben die Liste der Profile mit Profil-ID, Profilname und den Kennzeichen Aktiv und Standard. Rechts der Bereich Sammelrechnung mit Kundenauswahl, einem Auftragsdatum von-bis und der noch leeren Auftragsliste. Unten die Schaltflächen Einstellungen, Rechnung für alle Aufträge erstellen und Rechnung für markierte Aufträge erstellen." /></p>
+<p><img src="../docs/bilder/sammelrechnung-auftragsliste.png" alt="Sammelrechnung-Übersicht: links Konfigurationen (hier noch keine angelegt), rechts Kundenauswahl, Auftragsdatum von-bis und die Auftragsliste. Markiert ① Neu, ② Aufträge laden, ③ Alle markieren und ④ Rechnung erstellen." /></p>
+<p>① Neu — legt die erste Konfiguration an. ② Aufträge laden — zeigt die passenden Aufträge im
+gewählten Zeitraum. ③ Alle markieren — markiert alle angezeigten Aufträge. ④ Rechnung erstellen —
+erstellt Sammelrechnungen für die markierten Aufträge.</p>
 
     </div>
     </div>

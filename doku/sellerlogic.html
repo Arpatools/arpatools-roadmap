@@ -54,6 +54,7 @@
         <li class="doc-toc-level-2"><a href="#marktplätze-wählen">Marktplätze wählen</a></li>
         <li class="doc-toc-level-2"><a href="#fbm-fba-oder-beides">FBM, FBA oder beides</a></li>
         <li class="doc-toc-level-2"><a href="#weitere-einstellungen">Weitere Einstellungen</a></li>
+        <li class="doc-toc-level-3"><a href="#erweitert-api-weitere-felder">Erweitert (API): weitere Felder</a></li>
         <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
       </ul>
     </details>
@@ -72,11 +73,13 @@ SellerLogic statt.</li>
 <p>Der Datenexport lässt sich manuell über die SellerLogic-Ansicht anstoßen oder automatisiert über
 eine Jobby-Aktion (siehe <a href="jobby.html">Jobby-Dokumentation</a>). Für den regelmäßigen Betrieb empfehlen
 wir die Jobby-Aktion.</p>
+<p><img src="../docs/bilder/sellerlogic-uebersicht.png" alt="SellerLogic-Übersicht: Statuskacheln für Übertragungsweg, Marktplätze und Preismodus, darunter „Was der nächste Lauf mitnimmt&quot; mit Seller-ID, Fulfillment, Optimierungsvorlage und Repricing-Status. Markiert ① Jetzt senden." /></p>
+<p>① Jetzt senden — stößt den Export sofort an, mit den aktuell gespeicherten Einstellungen.</p>
 <h2 id="voraussetzungen">Voraussetzungen</h2>
 <ul>
-<li>Eine FTP-Verbindung zu SellerLogic, eingerichtet unter den Jobby-FTP-Servern (siehe
-<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „FTP-Server"). Die Zugangsdaten und Ihre Seller-ID
-erhalten Sie von SellerLogic.</li>
+<li>Eine FTP-Verbindung zu SellerLogic, eingerichtet unter Verbindungen (siehe
+<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Verbindungen", Registerkarte FTP-Server). Die
+Zugangsdaten und Ihre Seller-ID erhalten Sie von SellerLogic.</li>
 <li>Eine gültige SellerLogic-Lizenz in arpaTools.</li>
 <li>Gepflegte Amazon-Angebote in JTL-Wawi (die Zuordnung von Artikel zu Amazon-SKU nutzt arpaTools
 automatisch).</li>
@@ -111,6 +114,11 @@ UVP gelten als bereits brutto und werden nicht erneut besteuert.</p>
 1,5). Wenn die gewählte Strategie für ein Produkt keinen Mindestpreis liefert, aber ein
 Einkaufspreis vorhanden ist, berechnet arpaTools den Mindestpreis als Einkaufspreis × Faktor
 (brutto). So fällt kein Produkt unbeabsichtigt durchs Raster.</p>
+<p><img src="../docs/bilder/sellerlogic-einstellungen-kosten.png" alt="SellerLogic-Einstellungen, Registerkarte Kosten &amp; Preise: Preismodus, eigene Felder für Mindest- und Höchstpreis, Schalter „Artikel ohne Mindest- und Höchstpreis mitsenden&quot; sowie die Kosten je Artikel (Versandkosten, Pick, Pack, Kartonage, Sonstige Kosten), je wählbar zwischen eigenem Feld und festem Betrag." /></p>
+<blockquote>
+<p>Hinweis „Automatik lässt SellerLogic beide aus dem Einkaufspreis errechnen". Ob dahinter weiterhin
+die vier Strategien oben stehen oder der Modus vereinfacht wurde, ist nicht bestätigt.</p>
+</blockquote>
 <h2 id="produkte-ein--oder-ausschließen">Produkte ein- oder ausschließen</h2>
 <p>Standardmäßig exportiert arpaTools nur Produkte, die sauber kalkulierbar sind:</p>
 <ul>
@@ -153,21 +161,33 @@ an, die zu SellerLogic übertragen werden sollen.</p>
 <h2 id="weitere-einstellungen">Weitere Einstellungen</h2>
 <p>Das Einstellungsfenster ist in drei Registerkarten geteilt:</p>
 <ul>
-<li><strong>Allgemein:</strong> Übertragungsweg, FTP-Server, Seller-ID, Marktplätze, Versandart, Optimierung und
-der Filter, welche Artikel überhaupt übertragen werden.</li>
-<li><strong>Kosten &amp; Preise:</strong> Preismodus, die fünf Kostenarten und die Preisgrenzen der Automatik.</li>
+<li><strong>Allgemein:</strong> Übertragungsweg, FTP-Server, Seller-ID, Marktplätze, Fulfillment, Optimierungsvorlage,
+Repricing aktiv/inaktiv und ein eigenes Feld, das die Übertragung je Artikel filtert.</li>
+<li><strong>Kosten &amp; Preise:</strong> Preismodus, die fünf Kostenarten und ob Artikel ohne Mindest-/Höchstpreis mitgesendet werden.</li>
 <li><strong>Erweitert (API):</strong> Felder, die nur beim Übertragungsweg API wirken. Haben Sie SFTP gewählt,
 bleiben die Felder sichtbar und ein Hinweis oben sagt Ihnen, dass Ihre Eingaben zwar gespeichert,
 aber nicht übertragen werden.</li>
 </ul>
+<p><img src="../docs/bilder/sellerlogic-einstellungen-allgemein.png" alt="SellerLogic-Einstellungen, Registerkarte Allgemein: Übertragungsweg, FTP-Server, Seller-ID, Marktplätze, Fulfillment, Optimierungsvorlage, Schalter Repricing aktiv sowie das Filterfeld „Nur exportieren, wenn aktiviert&quot;." /></p>
 <p>Einzelne Einstellungen darin:</p>
 <ul>
 <li><strong>Optimierungsvorlage:</strong> BuyBox oder Profit.</li>
-<li><strong>Repricing aktiv/inaktiv:</strong> steuert, ob SellerLogic die übertragenen Angebote optimiert.</li>
-<li><strong>Einkaufspreis mitsenden:</strong> ja/nein.</li>
+<li><strong>Repricing aktiv/inaktiv:</strong> steuert, ob SellerLogic die übertragenen Angebote optimiert. Aus pausiert die Preisanpassung; die Werte werden trotzdem exportiert.</li>
 <li><strong>Eigene Felder für Mindest- und Höchstpreis:</strong> Name der Felder, aus denen arpaTools die Werte
 liest.</li>
 <li><strong>FTP-Server und Seller-ID:</strong> die Verbindung zu SellerLogic.</li>
+</ul>
+<blockquote>
+<p>der Registerkarte Allgemein aber nicht gefunden; eventuell unter Kosten &amp; Preise oder entfallen.</p>
+</blockquote>
+<h3 id="erweitert-api-weitere-felder">Erweitert (API): weitere Felder</h3>
+<p>Auf der neuen Oberfläche zusätzlich sichtbar, in der bisherigen Fassung nicht dokumentiert:</p>
+<p><img src="../docs/bilder/sellerlogic-einstellungen-api.png" alt="SellerLogic-Einstellungen, Registerkarte Erweitert (API): eigene Felder für ehemaligen Verkaufspreis, Kommentar und Standalone-Preis sowie der Schalter Turbopreisanpassung." /></p>
+<ul>
+<li><strong>Eigenes Feld ehemaliger Verkaufspreis:</strong> Strichpreis je Artikel. Ohne Auswahl wird nichts gesendet.</li>
+<li><strong>Eigenes Feld Kommentar:</strong> freier Text je Artikel. Ohne Auswahl wird nichts gesendet.</li>
+<li><strong>Eigenes Feld Standalone-Preis:</strong> Preis, der gilt, solange kein Wettbewerber auf dem Angebot steht.</li>
+<li><strong>Turbopreisanpassung:</strong> sendet das Kennzeichen <code>ultra_fast_price_change</code>. Ob es wirkt, hängt vom SellerLogic-Abo ab.</li>
 </ul>
 <h2 id="automatisierung-über-jobby">Automatisierung über Jobby</h2>
 <p>Für einen regelmäßigen, automatischen Export richten Sie in Jobby einen Job mit der Aktion

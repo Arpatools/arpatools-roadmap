@@ -14,20 +14,28 @@ Richtungen:
 
 Der Datenaustausch lässt sich manuell über die Netstock-Ansicht anstoßen oder automatisiert über eine
 Jobby-Aktion (siehe [Jobby-Dokumentation](/doku/jobby), Abschnitt „Netstock"). Für automatisierte Abläufe
-empfehlen wir die Jobby-Aktion.
+empfehlen wir die Jobby-Aktion. Die Ansicht gliedert sich in **Datenlieferungen** (Tabelle und Versand)
+und **Einstellungen**.
 
-![Netstock-Ansicht in arpaTools. Oben die Tabelle Übertragungsdaten mit den Spalten Typ, Status und Zuletzt gesendet, hier noch ohne Einträge. Unten links Einstellungen, unten rechts die Schaltflächen Herunterladen, Auswahl senden, Stammdaten senden sowie Verkauf und Verbrauch senden.](bilder/netstock-uebersicht.png)
+![Netstock-Ansicht: Tabelle der Datenpakete, gruppiert nach Stammdaten, Bestände und Bewegungsdaten, mit Bedarf, Zustand und letztem Sendezeitpunkt je Paket. Markiert ① Herunterladen, ② Alles senden, ③ Auswahl senden, ④ Stammdaten senden und ⑤ Verkauf & Verbrauch senden.](bilder/netstock-uebersicht.png)
+
+① Herunterladen — ruft Bestellvorschläge von Netstock ab (siehe „Daten empfangen"). ② Alles senden —
+überträgt sämtliche Datenpakete der Tabelle. ③ Auswahl senden — überträgt nur die markierten Zeilen.
+④ Stammdaten senden — Schnellzugriff für die Gruppe Stammdaten. ⑤ Verkauf & Verbrauch senden —
+Schnellzugriff für die Bewegungsdaten.
 
 ## Voraussetzungen
 
-- Eine FTP-Verbindung zu Netstock, eingerichtet unter den Jobby-FTP-Servern (siehe
-  [Jobby-Dokumentation](/doku/jobby), Abschnitt „FTP-Server"). Die Zugangsdaten erhalten Sie von Netstock.
+- Eine FTP-Verbindung zu Netstock, eingerichtet unter Verbindungen (siehe
+  [Jobby-Dokumentation](/doku/jobby), Abschnitt „Verbindungen", Registerkarte FTP-Server). Die
+  Zugangsdaten erhalten Sie von Netstock.
 - Eine gültige Netstock-Lizenz in arpaTools.
 
 ## Daten senden
 
-In der Netstock-Ansicht wählen Sie die zu sendenden Datenpakete aus einer Liste aus und übertragen sie
-per Knopfdruck. Folgende Datenpakete stehen zur Verfügung:
+Die Tabelle in **Datenlieferungen** listet alle Datenpakete, gruppiert nach Stammdaten, Bestände und
+Bewegungsdaten. Je Paket zeigt sie, ob es benötigt, gewünscht oder optional ist, den aktuellen Zustand
+und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:
 
 | Datenpaket | Beschreibung |
 |---|---|
@@ -44,19 +52,24 @@ per Knopfdruck. Folgende Datenpakete stehen zur Verfügung:
 | Abgeschlossene Einkaufsbestellungen | Historische Einkaufsbestellungen. |
 | Meta Daten ('Trigger'-File) | Steuerdatei, die Netstock signalisiert, dass ein Übertragungslauf abgeschlossen ist. Wird immer zuletzt gesendet. |
 | Stücklisten | Stücklisteninformationen. |
-| Nachfolgeartikel | Verknüpfung zwischen ausgelaufenen Artikeln und ihren Nachfolgern. |
-| Zusätzliche Daten/Optionale Felder | Weitere, optionale Zusatzinformationen. |
 
-In der Übersicht wählen Sie die gewünschten Pakete aus und klicken auf **Senden**. Zwei Schnellzugriffe
-stehen zusätzlich bereit:
+Die Tabelle zeigt aktuell 13 Datenpakete (siehe Zähler „Nie gesendet" im Screenshot). Zwei zuvor
+dokumentierte Pakete, Nachfolgeartikel und Zusätzliche Daten/Optionale Felder, erscheinen darin nicht
+mehr.
 
-- **Grunddaten senden:** überträgt in einem Schritt Lager/Filialen, Lieferanten, Artikelstamm und die Meta-Daten.
-- **Verkauf & Bestand senden:** überträgt Verkauf & Verbrauch, Bestand je Lagerort und die Meta-Daten. Dabei kann zwischen **Standard** und **Erweitert** gewählt werden.
+> nur in diesem Profil (ohne eingerichtete Firma) nicht angezeigt werden.
+
+Markieren Sie eine oder mehrere Zeilen und klicken Sie auf **Auswahl senden**, um genau diese Pakete zu
+übertragen. Für die üblichen Fälle stehen zusätzlich Schnellzugriffe bereit, die eine ganze Gruppe in
+einem Schritt senden: **Stammdaten senden** für die Gruppe Stammdaten und **Verkauf & Verbrauch
+senden** für die Bewegungsdaten. **Alles senden** überträgt sämtliche Pakete der Tabelle.
+
+> senden" ist nicht bestätigt; vermutlich der Zeitraum der übertragenen Verkaufsdaten.
 
 ## Daten empfangen
 
-Über **Herunterladen** ruft arpaTools die von Netstock berechneten Bestellvorschläge ab. Dabei stehen
-drei Verarbeitungsarten zur Auswahl:
+Am oberen Rand von **Datenlieferungen** stehen drei Schaltflächen für die von Netstock berechneten
+Bestellvorschläge:
 
 - **Herunterladen:** lädt die Datei nur in ein Zielverzeichnis herunter, ohne sie weiter zu verarbeiten.
 - **Auf Einkaufsliste:** importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.
@@ -64,17 +77,34 @@ drei Verarbeitungsarten zur Auswahl:
 
 ## Einstellungen
 
-In den Netstock-Einstellungen konfigurieren Sie, welche Firma, welcher Benutzer und welcher FTP-Server
-für den Datenaustausch verwendet werden, sowie folgende Optionen:
+Die Netstock-Einstellungen gliedern sich in vier Registerkarten: **Verbindung**, **Was übertragen
+wird**, **Lagerauswahl** und **Stücklisten**.
 
-- **Retouren senden:** Ja/Nein, ob Retouren mit in die Verkaufsdaten einfließen.
-- **Verkaufsdaten senden:** legt fest, welche Aufträge in die Verkaufsdaten einfließen: **Alle Aufträge**, **Bezahlte Aufträge** oder **Gelieferte Aufträge**.
-- **Stücklisten-Verhalten:** **Stücklistenvater senden** (die Stückliste wird als ein Artikel behandelt) oder **Komponenten senden** (die einzelnen Bestandteile werden übertragen).
-- **Lieferantenartikelnummer senden:** Ja/Nein.
-- **HAN senden:** Ja/Nein (Herstellerartikelnummer).
-- **Warengruppe senden:** Ja/Nein.
-- **Lager:** Auswahl, welche Lager in den Datenaustausch einbezogen werden, inklusive optionaler Zuordnung eigener FBA-Lager (EU und UK).
-- **Eigenes Feld** (bei besonderer Stücklistenbehandlung): ein eigenes Artikel-Feld, aus dem Komponenten und Mengen für Sonderfälle gelesen werden, inklusive **Trenner Artikel und Menge** und **Trenner Komponente** zur Aufteilung des Feldinhalts.
+![Netstock-Einstellungen, Registerkarte Verbindung: FTP-Server, Firma und Benutzer für den Datenaustausch.](bilder/netstock-einstellungen.png)
+
+Auf **Verbindung** legen Sie fest, welcher FTP-Server (siehe [Jobby-Dokumentation](/doku/jobby),
+Abschnitt „Verbindungen"), welche Firma und welcher Benutzer für den Datenaustausch verwendet werden.
+
+![Netstock-Einstellungen, Registerkarte „Was übertragen wird": vier Schalter (Retouren senden, Lieferantenartikelnummer/HAN/Warengruppe als Gruppe senden) sowie die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung.](bilder/netstock-einstellungen-uebertragen.png)
+
+Auf **Was übertragen wird**:
+
+- **Retouren senden:** retournierte Mengen fließen in die Bedarfsrechnung ein.
+- **Lieferantenartikelnummer als Gruppe senden:** gruppiert Artikel nach der Nummer des Lieferanten.
+- **HAN als Gruppe senden:** gruppiert nach der Herstellerartikelnummer.
+- **Warengruppe als Gruppe senden:** gruppiert nach der JTL-Warengruppe.
+- **Verkaufsermittlung:** ab wann ein Verkauf berücksichtigt wird, z. B. **Alle Aufträge**.
+- **Stücklistenverarbeitung:** z. B. **Komponenten senden** (die einzelnen Bestandteile werden übertragen) statt die Stückliste als einen Artikel zu behandeln.
+
+Auf **Lagerauswahl** wählen Sie je Lager, welchem Warenlager es zugeordnet ist, ob es Bestellvorschläge
+erhält und in welcher Gruppe es steht, dazu optional eigene Warenlager für FBA EU und FBA GB.
+
+![Netstock-Einstellungen, Registerkarte Stücklisten: Sondererstellung für Stücklisten mit eigenem Feld sowie den Trennern für Artikel/Menge und Komponente.](bilder/netstock-einstellungen-stuecklisten.png)
+
+Auf **Stücklisten** tragen Sie nur bei einer Sondererstellung ein eigenes Artikel-Feld ein, aus dem
+Komponenten und Mengen gelesen werden, inklusive **Trenner Artikel und Menge** und **Trenner
+Komponente** zur Aufteilung des Feldinhalts. Nötig ist das nur, wenn Netstock die Komponenten getrennt
+erwartet.
 
 ## Automatisierung über Jobby
 

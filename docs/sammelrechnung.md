@@ -42,7 +42,9 @@ Bestellung) und **Lizenzschlüssel** ein. Schlägt **Lizenz prüfen** fehl, prü
 
 ### Programmeinstellungen
 
-Unter **Einstellungen** und **Programm**:
+Unter **Konfiguration**, Registerkarte **Grundlagen**:
+
+![Sammelrechnung-Einstellungen, Registerkarte Grundlagen: Name der Konfiguration, Startdatum, Firma, Benutzer, Zahlungsart, Versandart sowie die Tabelle Filter-Zahlungsarten.](bilder/sammelrechnung-konfiguration.png)
 
 - **Startdatum verwenden:** legt fest, ab welchem Zeitpunkt Sammelrechnung beginnt. Setzen Sie dieses Datum, wenn Sie von einer anderen Abrechnungsart umsteigen.
 - **Zahlungsart:** hat mehrere Auswirkungen:
@@ -177,13 +179,19 @@ Sammelaufträge und Sammelrechnungen schnell wieder und können in der JTL-Stati
 
 ## Programmablauf
 
-Öffnen Sie die App Sammelrechnung. Standardmäßig ist im Dropdown **Alle Kunden** gewählt; angezeigt
-werden alle Kunden mit der in den Programmeinstellungen festgelegten Zahlungsart. Für einen bestimmten
-Kunden wählen Sie diesen aus. Sie können die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein
-konfiguriertes Startdatum wird übernommen. Klicken Sie auf **Aufträge laden**.
+Öffnen Sie die App Sammelrechnung. Links zeigt **Konfigurationen**, wie viele Konfigurationen angelegt
+sind; über **Neu** entsteht die erste, **Duplizieren** übernimmt eine bestehende als Vorlage,
+**Als Standard** legt die Vorauswahl fest, **Löschen** entfernt eine Konfiguration.
 
-- **Rechnung für alle Aufträge erstellen:** erstellt für den gewählten Kunden (oder bei „Alle Kunden" für alle angezeigten Aufträge) Sammelrechnungen.
-- **Rechnung für markierte Aufträge erstellen:** erstellt nur für die markierten Aufträge Sammelrechnungen.
+Standardmäßig ist im Dropdown **Alle Kunden** gewählt; angezeigt werden alle Kunden mit der in der
+Konfiguration festgelegten Zahlungsart. Für einen bestimmten Kunden wählen Sie diesen aus. Sie können
+die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein konfiguriertes Startdatum wird übernommen.
+Klicken Sie auf **Aufträge laden**.
+
+- **Alle markieren:** markiert alle angezeigten Aufträge.
+- **Rechnung erstellen:** erstellt Sammelrechnungen für die markierten Aufträge.
+
+> nicht bestätigt; vermutlich ein Schnellweg, der markieren und erstellen in einem Schritt zusammenfasst.
 
 In der Liste erscheinen alle Aufträge, die infrage kommen. Bedingungen: die konfigurierte Zahlungsart,
 der Status **Verpackt und Versendet**, und das leere Feld `arpa_rechnungsnummer`. Andere Lieferstatus
@@ -204,4 +212,8 @@ Kunden, werden getrennte Sammelrechnungen erstellt.
 
 > Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.
 
-![Hauptfenster der Sammelrechnung. Links die Modulleiste, daneben die Liste der Profile mit Profil-ID, Profilname und den Kennzeichen Aktiv und Standard. Rechts der Bereich Sammelrechnung mit Kundenauswahl, einem Auftragsdatum von-bis und der noch leeren Auftragsliste. Unten die Schaltflächen Einstellungen, Rechnung für alle Aufträge erstellen und Rechnung für markierte Aufträge erstellen.](bilder/sammelrechnung-auftragsliste.png)
+![Sammelrechnung-Übersicht: links Konfigurationen (hier noch keine angelegt), rechts Kundenauswahl, Auftragsdatum von-bis und die Auftragsliste. Markiert ① Neu, ② Aufträge laden, ③ Alle markieren und ④ Rechnung erstellen.](bilder/sammelrechnung-auftragsliste.png)
+
+① Neu — legt die erste Konfiguration an. ② Aufträge laden — zeigt die passenden Aufträge im
+gewählten Zeitraum. ③ Alle markieren — markiert alle angezeigten Aufträge. ④ Rechnung erstellen —
+erstellt Sammelrechnungen für die markierten Aufträge.
