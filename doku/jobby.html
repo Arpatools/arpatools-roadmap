@@ -87,6 +87,7 @@
         <li class="doc-toc-level-3"><a href="#retourenportal">Retourenportal</a></li>
         <li class="doc-toc-level-3"><a href="#sammelrechnung">Sammelrechnung</a></li>
         <li class="doc-toc-level-3"><a href="#netstock">Netstock</a></li>
+        <li class="doc-toc-level-3"><a href="#sellerlogic">SellerLogic</a></li>
         <li class="doc-toc-level-2"><a href="#arpatools-worker-installieren">arpaTools Worker installieren</a></li>
       </ul>
     </details>
@@ -871,6 +872,18 @@ Tool in der <a href="netstock.html">Netstock-Dokumentation</a>.</p>
 <li><strong>Lager:</strong> welche Lager einfließen, inklusive optionaler FBA-Lager.</li>
 <li><strong>Weitere Optionen:</strong> Retouren senden, Verkaufszeitraum, Stücklisten-Verhalten, Lieferantenartikelnummer/HAN/Warengruppe mitsenden.</li>
 </ul>
+<h3 id="sellerlogic">SellerLogic</h3>
+<p>Die Aktion SellerLogic stößt den Preisexport an den Amazon-Repricing-Dienst SellerLogic an. Details zum
+Tool in der <a href="sellerlogic.html">SellerLogic-Dokumentation</a>. Welcher Übertragungsweg genutzt wird (SFTP oder
+API), legen Sie in den SellerLogic-Moduleinstellungen fest; die Aktion übernimmt ihn automatisch und
+zeigt nur die dazu passenden Felder:</p>
+<ul>
+<li><strong>FTP-Server:</strong> nur beim Übertragungsweg SFTP sichtbar. Optional, weicht vom Standard-Server aus den
+SellerLogic-Moduleinstellungen ab.</li>
+<li><strong>SellerLogic-Konto:</strong> nur beim Übertragungsweg API sichtbar und dann Pflicht. Das
+Drittanbieter-Konto (Kunden-ID und geheimer Schlüssel, siehe Abschnitt „Drittanbieter-Konten"), mit
+dem sich arpaTools bei SellerLogic anmeldet.</li>
+</ul>
 <h2 id="arpatools-worker-installieren">arpaTools Worker installieren</h2>
 <p>Der arpaTools Worker ist eine Windows-Anwendung, die in einem festgelegten Intervall läuft (siehe
 Einstellungen). Bei jedem Durchlauf prüft der Worker, ob auszuführende Jobs vorhanden sind, und arbeitet
@@ -888,7 +901,7 @@ sie nacheinander ab. Der Worker wird als Windows-Dienst installiert und läuft i
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 14. August 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 15. August 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

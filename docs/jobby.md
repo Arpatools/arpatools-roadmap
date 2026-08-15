@@ -834,6 +834,19 @@ Tool in der [Netstock-Dokumentation](/doku/netstock).
 - **Lager:** welche Lager einfließen, inklusive optionaler FBA-Lager.
 - **Weitere Optionen:** Retouren senden, Verkaufszeitraum, Stücklisten-Verhalten, Lieferantenartikelnummer/HAN/Warengruppe mitsenden.
 
+### SellerLogic
+
+Die Aktion SellerLogic stößt den Preisexport an den Amazon-Repricing-Dienst SellerLogic an. Details zum
+Tool in der [SellerLogic-Dokumentation](/doku/sellerlogic). Welcher Übertragungsweg genutzt wird (SFTP oder
+API), legen Sie in den SellerLogic-Moduleinstellungen fest; die Aktion übernimmt ihn automatisch und
+zeigt nur die dazu passenden Felder:
+
+- **FTP-Server:** nur beim Übertragungsweg SFTP sichtbar. Optional, weicht vom Standard-Server aus den
+  SellerLogic-Moduleinstellungen ab.
+- **SellerLogic-Konto:** nur beim Übertragungsweg API sichtbar und dann Pflicht. Das
+  Drittanbieter-Konto (Kunden-ID und geheimer Schlüssel, siehe Abschnitt „Drittanbieter-Konten"), mit
+  dem sich arpaTools bei SellerLogic anmeldet.
+
 ## arpaTools Worker installieren
 
 Der arpaTools Worker ist eine Windows-Anwendung, die in einem festgelegten Intervall läuft (siehe
