@@ -62,6 +62,16 @@ Sie die auf dem Server verfügbaren Datenbanken neu, um die richtige aus der Lis
 denen arpaTools Ihre gebuchten Apps beim Lizenzserver prüft. Einzelne Apps zusätzlich buchen können Sie
 direkt über die Kacheln im Bereich **Verfügbare Module** auf der Startseite.
 
+## Nutzungskennzahlen
+
+Bei jeder Lizenzprüfung übermittelt arpaTools zusätzlich Nutzungskennzahlen aus Ihren Apps: wie
+viele Jobs, Provisionsregeln oder ähnliche Datensätze angelegt sind, wie oft sie zuletzt genutzt
+wurden, und welche Einstellungen Sie aktiviert haben. Diese Zahlen zeigen uns, welche Funktionen
+tatsächlich gebraucht werden, und fließen in die Weiterentwicklung von arpaTools ein. Die
+Übermittlung erfolgt höchstens einmal täglich je Profil, zusammen mit der Lizenzprüfung. Übertragen
+werden ausschließlich Zahlen und Zeitpunkte - niemals Job-, Kunden-, Artikel- oder Regelnamen oder
+sonstige Inhalte aus Ihren Daten.
+
 ## Einstellungen und Anwendungsprotokoll
 
 Über **Einstellungen** in der Seitenleiste legen Sie die **Protokollierungsstufe** fest, also wie
