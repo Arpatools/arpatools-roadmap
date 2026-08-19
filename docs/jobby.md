@@ -110,7 +110,69 @@ Spalten bzw. Angaben je Job:
 - **Zuletzt:** Datum und Uhrzeit des letzten Laufs.
 - **Nächster Lauf:** die nächste planmäßige Ausführung, sofern ein Zeitplan aktiv ist.
 
-> Kopieren wie in der vorherigen Fassung; noch nicht bestätigt.
+**Einen Job duplizieren** geht über den Rechtsklick auf einen Job beziehungsweise über das Menü „⋮"
+an der Job-Zeile. Die Kopie enthält alle Aktionen in derselben Reihenfolge und denselben Zeitplan und
+öffnet sich sofort zum Anpassen. Sie heißt wie das Original mit einer angehängten Nummer — aus
+„Bestellimport" wird „Bestellimport #1", beim nächsten Mal „Bestellimport #2". Zwei Jobs tragen nie
+denselben Namen.
+
+Die Kopie ist zunächst **nicht aktiv**. Das ist Absicht: Der Zeitplan wird mitkopiert, und eine
+aktive Kopie liefe schon los, bevor Sie sie angepasst haben. Schalten Sie den Job aktiv, wenn er
+fertig eingerichtet ist. Brechen Sie das Bearbeiten ab, bleibt die Kopie trotzdem in der Liste stehen
+und lässt sich dort löschen.
+
+Nicht mitkopiert werden E-Mail-Konten, Datenbankverbindungen, Drittanbieter-Konten und FTP-Zugänge:
+Die Kopie benutzt dieselben Einträge wie das Original, Ihre Verbindungsliste bleibt also so kurz wie
+vorher.
+
+#### Reihenfolge der Liste
+
+Über der Liste wählen Sie unter **Sortierung**, wonach die Jobs geordnet sind:
+
+- **Name (A-Z)** und **Name (Z-A)** — alphabetisch. A-Z ist die Voreinstellung und die Reihenfolge,
+  die die Liste auch bisher hatte.
+- **Zuletzt angelegt** — die neuesten Jobs oben. Jobs, die vor dieser Version angelegt wurden, tragen
+  kein Anlegedatum; sie stehen unten, untereinander nach ihrer Jobnummer.
+- **Zuletzt geändert** — die zuletzt bearbeiteten Jobs oben. Ein Joblauf zählt nicht als Änderung,
+  nur das Speichern im Job selbst.
+- **Zuletzt ausgeführt** — die zuletzt gelaufenen Jobs oben, nie gelaufene unten.
+- **Eigene Reihenfolge** — Sie bestimmen sie selbst, siehe unten.
+
+Ihre Wahl bleibt erhalten: Beim nächsten Öffnen ist die Liste wieder so geordnet, wie Sie sie
+verlassen haben. Die Einstellung gilt je Profil.
+
+Bei **Eigene Reihenfolge** ziehen Sie eine Jobkarte mit der Maus an die Stelle, an der sie stehen
+soll. Die Reihenfolge wird sofort gespeichert und gilt auch nach einem Neustart. In allen anderen
+Sortierungen lässt sich nicht ziehen — dort würde die Karte beim nächsten Öffnen ohnehin wieder an
+ihrem alten Platz stehen.
+
+#### Jobs gruppieren
+
+Gehören mehrere Jobs zusammen, geben Sie ihnen dieselbe **Gruppe**. In der Übersicht stehen sie dann
+unter einer gemeinsamen Überschrift, die Sie zuklappen können — praktisch, wenn Sie viele Jobs haben
+und gerade nur an einem Bereich arbeiten.
+
+Die Gruppe legen Sie im Job selbst fest, im Feld **Gruppe** unter dem Namen. Sie können eine
+vorhandene Gruppe aus der Liste wählen oder einfach einen neuen Namen eintippen — der wird beim
+Speichern angelegt. Groß- und Kleinschreibung spielt keine Rolle: „Versand" und „versand" sind
+dieselbe Gruppe.
+
+Lassen Sie das Feld leer, gehört der Job zu keiner Gruppe. Solche Jobs sammeln sich in der Übersicht
+unter **Ohne Gruppe**.
+
+Solange kein einziger Job einer Gruppe zugeordnet ist, sieht die Übersicht aus wie bisher, ohne
+Überschriften. Die Abschnitte erscheinen erst mit der ersten Gruppe und verschwinden wieder, wenn der
+letzte Job sie verlässt.
+
+**Umbenennen und löschen** geht über den Rechtsklick auf die Gruppenüberschrift in der Übersicht:
+
+- **Gruppe umbenennen** öffnet ein kleines Fenster mit dem aktuellen Namen. Vergibt ein anderer
+  Eintrag den Namen schon, erscheint der Hinweis sofort beim Tippen und **Speichern** bleibt aus.
+- **Gruppe löschen** fragt nach und entfernt danach nur die Gruppe. **Die Jobs bleiben** und
+  erscheinen anschließend unter „Ohne Gruppe" — Sie verlieren also nichts, wenn Sie sich vertun.
+
+Die Überschrift **Ohne Gruppe** lässt sich weder umbenennen noch löschen: Dahinter steht keine
+Gruppe, sondern nur die Jobs, die keiner angehören.
 
 ### Verbindungen
 
@@ -209,8 +271,20 @@ und müssen komplett neu eingegeben werden.
 ### Dienst
 
 Der Bereich **Dienst** legt fest, ob der arpaTools Worker verwendet wird und in welchem Intervall er
-Jobs ausführt. Wir empfehlen mindestens fünf Minuten. Die Installation des Windows-Dienstes „arpaTools
-Worker" ist im Abschnitt [arpaTools Worker installieren](#arpatools-worker-installieren) beschrieben.
+Jobs ausführt. Wir empfehlen mindestens fünf Minuten.
+
+Oben im Bereich steht, wie es um den Dienst auf diesem Rechner bestellt ist: unter welchem Namen er
+eingerichtet ist und ob er gerade läuft oder angehalten ist. Von dort aus richten Sie ihn auch ein,
+starten und halten ihn an oder entfernen ihn wieder. Für jeden dieser vier Schritte fragt Windows
+nach Administratorrechten; brechen Sie die Abfrage ab, bleibt alles wie es war. Steht dort „Nicht
+eingerichtet", läuft noch kein Dienst, und geplante Jobs starten nur, solange arpaTools geöffnet ist.
+
+Ist der Dienst eingerichtet, aber der Warnhinweis darunter sichtbar, läuft er zwar, bedient aber
+diesen Mandanten nicht. Beides sind verschiedene Fragen: Der Zustand oben gilt für den Rechner, der
+Hinweis darunter für den Mandanten, mit dem Sie gerade arbeiten.
+
+Den Weg über die Eingabeaufforderung beschreibt weiterhin der Abschnitt
+[arpaTools Worker installieren](#arpatools-worker-installieren).
 
 ## Einfachen Job erstellen
 
@@ -852,6 +926,11 @@ zeigt nur die dazu passenden Felder:
 Der arpaTools Worker ist eine Windows-Anwendung, die in einem festgelegten Intervall läuft (siehe
 Einstellungen). Bei jedem Durchlauf prüft der Worker, ob auszuführende Jobs vorhanden sind, und arbeitet
 sie nacheinander ab. Der Worker wird als Windows-Dienst installiert und läuft im Hintergrund.
+
+**Der einfachste Weg führt über arpaTools selbst:** im Bereich **Dienst** steht, ob der Dienst
+eingerichtet ist und ob er läuft, und dort richten Sie ihn auch ein. Windows fragt dabei nach
+Administratorrechten. Die folgenden Befehle brauchen Sie nur noch, wenn Sie den Dienst ohne
+geöffnetes arpaTools einrichten wollen.
 
 Dienst installieren (Eingabeaufforderung als Administrator):
 ```
