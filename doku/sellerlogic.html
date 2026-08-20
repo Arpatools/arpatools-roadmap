@@ -31,7 +31,7 @@
       <a class="nav-link is-active" href="../doku/index.html">Dokumentation</a>
       <a class="nav-link" href="https://arpatools.com">Website</a>
       <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_5.30.0.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_.x.x.x.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
     </nav>
   </div>
 </header>
@@ -55,6 +55,7 @@
         <li class="doc-toc-level-2"><a href="#fbm-fba-oder-beides">FBM, FBA oder beides</a></li>
         <li class="doc-toc-level-2"><a href="#weitere-einstellungen">Weitere Einstellungen</a></li>
         <li class="doc-toc-level-3"><a href="#erweitert-api-weitere-felder">Erweitert (API): weitere Felder</a></li>
+        <li class="doc-toc-level-3"><a href="#preisoptimierung-einschalten-vorlagen-zuordnung-api">Preisoptimierung einschalten: Vorlagen-Zuordnung (API)</a></li>
         <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
       </ul>
     </details>
@@ -189,6 +190,39 @@ liest.</li>
 <li><strong>Eigenes Feld Standalone-Preis:</strong> Preis, der gilt, solange kein Wettbewerber auf dem Angebot steht.</li>
 <li><strong>Turbopreisanpassung:</strong> sendet das Kennzeichen <code>ultra_fast_price_change</code>. Ob es wirkt, hängt vom SellerLogic-Abo ab.</li>
 </ul>
+<h3 id="preisoptimierung-einschalten-vorlagen-zuordnung-api">Preisoptimierung einschalten: Vorlagen-Zuordnung (API)</h3>
+<p>Übertragen Sie über den Weg <strong>API</strong>, kann arpaTools bei SellerLogic direkt die Preisoptimierung
+für Ihre Artikel einschalten. Dafür braucht SellerLogic eine Optimierungsvorlage je Artikel. Die
+Gruppe <strong>„Vorlagen-Zuordnung (API)"</strong> auf der Registerkarte „Erweitert (API)" regelt das.</p>
+<p><strong>Standard-Vorlage:</strong> Eine Auswahlliste, die arpaTools beim Öffnen der Einstellungen live aus
+Ihrem SellerLogic-Konto lädt. Wählen Sie hier die Vorlage, die für alle Artikel gelten soll, für
+die Sie keine abweichende Zuordnung eingetragen haben (siehe unten). Lässt sich die Liste gerade
+nicht laden, bleibt Ihre bisherige Auswahl unangetastet, und Sie erhalten eine Meldung — Sie
+verlieren also nichts, wenn die Verbindung zu SellerLogic beim Öffnen einmal klemmt.</p>
+<p><strong>Eigenes Feld Vorlagenname:</strong> Für Artikel, die eine andere Vorlage als die Standard-Vorlage
+bekommen sollen, tragen Sie hier den Namen eines eigenen Feldes aus JTL ein. In dieses Feld
+schreiben Sie je Artikel den <strong>Titel</strong> der gewünschten Vorlage, <strong>genau</strong> so, wie er in Ihrem
+SellerLogic-Konto benannt ist — Groß-/Kleinschreibung und Leerzeichen eingeschlossen. Kennt
+SellerLogic den eingetragenen Titel nicht, wird der Artikel trotzdem übertragen, dann aber mit
+der Standard-Vorlage, und der Lauf vermerkt den unbekannten Titel in seinem Protokoll, damit
+Ihnen ein Tippfehler auffällt. Ein leeres Feld bedeutet: Standard-Vorlage.</p>
+<p>Ist keine Standard-Vorlage gewählt und liegt für einen Artikel auch keine gültige eigene
+Zuordnung vor, überträgt arpaTools für ihn weiterhin Preise und Kosten wie gewohnt, schaltet die
+Optimierung bei SellerLogic aber nicht ein. Das ist kein Fehler, sondern der sichere
+Ausgangszustand direkt nach dem Update — bis Sie bewusst eine Vorlage wählen, ändert sich am
+bisherigen Verhalten nichts.</p>
+<p><strong>Produktstand auffrischen nach (Tage):</strong> Bevor arpaTools beim API-Weg Preise sendet, prüft es,
+welche Ihrer Artikel bei SellerLogic überhaupt ein Angebot haben — Artikel ohne Angebot dort
+werden übersprungen statt vergeblich übertragen (siehe „Artikel ohne Angebot bei SellerLogic
+überspringen" unten). Diesen Produktabgleich hält arpaTools in einem eigenen Stand vor und
+frischt ihn bei Bedarf automatisch vor jedem Lauf auf. Hier legen Sie fest, nach wie vielen Tagen
+ein gespeicherter Stand als veraltet gilt und erneut abgerufen wird.</p>
+<p><strong>Artikel ohne Angebot bei SellerLogic überspringen:</strong> Ist der Schalter aktiv, lässt arpaTools
+Artikel, für die der Produktabgleich kein Angebot bei SellerLogic kennt, beim Versand einfach
+aus, statt den Lauf mit einer Fehlermeldung von SellerLogic abzubrechen.</p>
+<p>Wollen Sie den Produktabgleich unabhängig vom Preis-Export planen — zum Beispiel nachts, getrennt
+vom eigentlichen Versand —, richten Sie dafür in Jobby einen eigenen Job mit der Aktion
+<strong>SellerLogic-Produktabgleich</strong> ein.</p>
 <h2 id="automatisierung-über-jobby">Automatisierung über Jobby</h2>
 <p>Für einen regelmäßigen, automatischen Export richten Sie in Jobby einen Job mit der Aktion
 <strong>SellerLogic</strong> ein. Die Aktion sendet die Daten zeitgesteuert über den arpaTools Worker, mit den

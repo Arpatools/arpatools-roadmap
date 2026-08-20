@@ -154,6 +154,47 @@ Auf der neuen Oberfläche zusätzlich sichtbar, in der bisherigen Fassung nicht 
 - **Eigenes Feld Standalone-Preis:** Preis, der gilt, solange kein Wettbewerber auf dem Angebot steht.
 - **Turbopreisanpassung:** sendet das Kennzeichen `ultra_fast_price_change`. Ob es wirkt, hängt vom SellerLogic-Abo ab.
 
+### Preisoptimierung einschalten: Vorlagen-Zuordnung (API)
+
+Übertragen Sie über den Weg **API**, kann arpaTools bei SellerLogic direkt die Preisoptimierung
+für Ihre Artikel einschalten. Dafür braucht SellerLogic eine Optimierungsvorlage je Artikel. Die
+Gruppe **„Vorlagen-Zuordnung (API)"** auf der Registerkarte „Erweitert (API)" regelt das.
+
+**Standard-Vorlage:** Eine Auswahlliste, die arpaTools beim Öffnen der Einstellungen live aus
+Ihrem SellerLogic-Konto lädt. Wählen Sie hier die Vorlage, die für alle Artikel gelten soll, für
+die Sie keine abweichende Zuordnung eingetragen haben (siehe unten). Lässt sich die Liste gerade
+nicht laden, bleibt Ihre bisherige Auswahl unangetastet, und Sie erhalten eine Meldung — Sie
+verlieren also nichts, wenn die Verbindung zu SellerLogic beim Öffnen einmal klemmt.
+
+**Eigenes Feld Vorlagenname:** Für Artikel, die eine andere Vorlage als die Standard-Vorlage
+bekommen sollen, tragen Sie hier den Namen eines eigenen Feldes aus JTL ein. In dieses Feld
+schreiben Sie je Artikel den **Titel** der gewünschten Vorlage, **genau** so, wie er in Ihrem
+SellerLogic-Konto benannt ist — Groß-/Kleinschreibung und Leerzeichen eingeschlossen. Kennt
+SellerLogic den eingetragenen Titel nicht, wird der Artikel trotzdem übertragen, dann aber mit
+der Standard-Vorlage, und der Lauf vermerkt den unbekannten Titel in seinem Protokoll, damit
+Ihnen ein Tippfehler auffällt. Ein leeres Feld bedeutet: Standard-Vorlage.
+
+Ist keine Standard-Vorlage gewählt und liegt für einen Artikel auch keine gültige eigene
+Zuordnung vor, überträgt arpaTools für ihn weiterhin Preise und Kosten wie gewohnt, schaltet die
+Optimierung bei SellerLogic aber nicht ein. Das ist kein Fehler, sondern der sichere
+Ausgangszustand direkt nach dem Update — bis Sie bewusst eine Vorlage wählen, ändert sich am
+bisherigen Verhalten nichts.
+
+**Produktstand auffrischen nach (Tage):** Bevor arpaTools beim API-Weg Preise sendet, prüft es,
+welche Ihrer Artikel bei SellerLogic überhaupt ein Angebot haben — Artikel ohne Angebot dort
+werden übersprungen statt vergeblich übertragen (siehe „Artikel ohne Angebot bei SellerLogic
+überspringen" unten). Diesen Produktabgleich hält arpaTools in einem eigenen Stand vor und
+frischt ihn bei Bedarf automatisch vor jedem Lauf auf. Hier legen Sie fest, nach wie vielen Tagen
+ein gespeicherter Stand als veraltet gilt und erneut abgerufen wird.
+
+**Artikel ohne Angebot bei SellerLogic überspringen:** Ist der Schalter aktiv, lässt arpaTools
+Artikel, für die der Produktabgleich kein Angebot bei SellerLogic kennt, beim Versand einfach
+aus, statt den Lauf mit einer Fehlermeldung von SellerLogic abzubrechen.
+
+Wollen Sie den Produktabgleich unabhängig vom Preis-Export planen — zum Beispiel nachts, getrennt
+vom eigentlichen Versand —, richten Sie dafür in Jobby einen eigenen Job mit der Aktion
+**SellerLogic-Produktabgleich** ein.
+
 ## Automatisierung über Jobby
 
 Für einen regelmäßigen, automatischen Export richten Sie in Jobby einen Job mit der Aktion
