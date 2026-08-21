@@ -193,6 +193,13 @@ Liste aus; danach wird das Datum „zuletzt" aktualisiert.</p>
 <li><strong>Zuletzt:</strong> Datum und Uhrzeit des letzten Laufs.</li>
 <li><strong>Nächster Lauf:</strong> die nächste planmäßige Ausführung, sofern ein Zeitplan aktiv ist.</li>
 </ul>
+<p>Zum Zeitplan gehören zwei Angaben: der <strong>Startzeitpunkt</strong> und das Häkchen <strong>Wiederholen alle</strong>. Ohne
+das Häkchen läuft der Job genau einmal, zum Startzeitpunkt. Zahl und Einheit daneben sind dann
+ausgegraut und ohne Wirkung — der Job wiederholt sich nicht.</p>
+<p>Bricht ein geplanter Lauf mit einem Fehler ab, gilt er trotzdem als gelaufen: Der Job wartet auf
+seinen nächsten regulären Termin, statt sofort erneut anzulaufen. Was schiefging, steht in der
+Ansicht <strong>Log</strong>. Wer den Job vorher noch einmal versuchen will, startet ihn über <strong>Starten</strong> von
+Hand.</p>
 <p><strong>Einen Job duplizieren</strong> geht über den Rechtsklick auf einen Job beziehungsweise über das Menü „⋮"
 an der Job-Zeile. Die Kopie enthält alle Aktionen in derselben Reihenfolge und denselben Zeitplan und
 öffnet sich sofort zum Anpassen. Sie heißt wie das Original mit einer angehängten Nummer — aus
@@ -502,6 +509,16 @@ Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerich
 <li><strong>Dateien nach Tagen löschen:</strong> nach wie vielen Tagen automatisch gelöscht wird (z. B. 30).</li>
 <li><strong>Existierende Datei:</strong> „Überschreiben" oder „Ignorieren".</li>
 </ul>
+<p>Legt arpaTools das Zielverzeichnis selbst an, weil es noch nicht vorhanden ist, erhalten alle
+Windows-Benutzer des Rechners darin das Recht „Ändern". Das ist nötig, wenn mehrere Personen
+denselben Job von Hand starten: Ohne dieses Recht könnte nur derjenige die Datei überschreiben, der
+sie beim ersten Lauf angelegt hat, und alle anderen bekämen beim Start eine Zugriffsmeldung. Ein
+Verzeichnis, das Sie selbst angelegt haben, ändert arpaTools nicht — dort erhält stattdessen jede
+geschriebene Datei dieses Recht.</p>
+<p>Meldet ein Job trotzdem, dass eine Datei nicht überschrieben oder gelöscht werden konnte, nennt die
+Meldung die Datei und das Verzeichnis. Geben Sie dann in den Windows-Eigenschaften dieses
+Verzeichnisses unter <em>Sicherheit</em> allen Benutzern, die den Job ausführen, das Recht „Ändern". Das
+gilt auch für Dateien, die vor der Umstellung entstanden sind.</p>
 <h3 id="sonstiges-e-mail-senden">Sonstiges: E-Mail senden</h3>
 <p>Versendet eine E-Mail, optional mit Anhang aus einem vorangegangenen Schritt (JTL-Ameise Export,
 lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP-Server).</p>

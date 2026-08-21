@@ -110,6 +110,15 @@ Spalten bzw. Angaben je Job:
 - **Zuletzt:** Datum und Uhrzeit des letzten Laufs.
 - **Nächster Lauf:** die nächste planmäßige Ausführung, sofern ein Zeitplan aktiv ist.
 
+Zum Zeitplan gehören zwei Angaben: der **Startzeitpunkt** und das Häkchen **Wiederholen alle**. Ohne
+das Häkchen läuft der Job genau einmal, zum Startzeitpunkt. Zahl und Einheit daneben sind dann
+ausgegraut und ohne Wirkung — der Job wiederholt sich nicht.
+
+Bricht ein geplanter Lauf mit einem Fehler ab, gilt er trotzdem als gelaufen: Der Job wartet auf
+seinen nächsten regulären Termin, statt sofort erneut anzulaufen. Was schiefging, steht in der
+Ansicht **Log**. Wer den Job vorher noch einmal versuchen will, startet ihn über **Starten** von
+Hand.
+
 **Einen Job duplizieren** geht über den Rechtsklick auf einen Job beziehungsweise über das Menü „⋮"
 an der Job-Zeile. Die Kopie enthält alle Aktionen in derselben Reihenfolge und denselben Zeitplan und
 öffnet sich sofort zum Anpassen. Sie heißt wie das Original mit einer angehängten Nummer — aus
@@ -474,6 +483,18 @@ Speichert die verarbeiteten Dateien in einem Verzeichnis, z. B. zur Archivierung
 - **Zielverzeichnis:** wohin gespeichert wird.
 - **Dateien nach Tagen löschen:** nach wie vielen Tagen automatisch gelöscht wird (z. B. 30).
 - **Existierende Datei:** „Überschreiben" oder „Ignorieren".
+
+Legt arpaTools das Zielverzeichnis selbst an, weil es noch nicht vorhanden ist, erhalten alle
+Windows-Benutzer des Rechners darin das Recht „Ändern". Das ist nötig, wenn mehrere Personen
+denselben Job von Hand starten: Ohne dieses Recht könnte nur derjenige die Datei überschreiben, der
+sie beim ersten Lauf angelegt hat, und alle anderen bekämen beim Start eine Zugriffsmeldung. Ein
+Verzeichnis, das Sie selbst angelegt haben, ändert arpaTools nicht — dort erhält stattdessen jede
+geschriebene Datei dieses Recht.
+
+Meldet ein Job trotzdem, dass eine Datei nicht überschrieben oder gelöscht werden konnte, nennt die
+Meldung die Datei und das Verzeichnis. Geben Sie dann in den Windows-Eigenschaften dieses
+Verzeichnisses unter *Sicherheit* allen Benutzern, die den Job ausführen, das Recht „Ändern". Das
+gilt auch für Dateien, die vor der Umstellung entstanden sind.
 
 ### Sonstiges: E-Mail senden
 
