@@ -54,6 +54,8 @@ Diese Aufgaben decken typische Prozesse rund um Import, Export, Dateitransfer un
 - **Daten von MS-SQL Server laden:** führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei.
 - **Daten per SQL einfügen/ändern:** führt ein schreibendes SQL-Statement aus.
 - **Job ausführen:** übergibt den laufenden Job an einen anderen Job und beendet den aufrufenden Job.
+- **Bedingung:** prüft einen Wert und steuert danach die Kette — normal weiterlaufen, beenden oder eine
+  festgelegte Anzahl der folgenden Aktionen überspringen.
 
 **Interne arpaTools Jobs** (siehe eigenen Abschnitt): ProviMate-Abrechnung, Querify, Retourenportal,
 Sammelrechnung, Netstock.
@@ -315,6 +317,88 @@ Nur die Aktion **JTL-Ameise Export** schreibt aufgrund der Ameisen-Struktur eine
 Verlauf geladen werden muss. Erst die Aktion **Daten in Verzeichnis speichern** legt die Inhalte
 dauerhaft ab.
 
+## Jobs übertragen und fertige Vorlagen einspielen
+
+Ein Job, der auf einer Installation läuft, lässt sich auf eine andere übertragen. Und für
+wiederkehrende Aufgaben gibt es fertige Vorlagen, die sich mit wenigen Angaben einspielen lassen,
+statt den Job von Hand nachzubauen.
+
+Beides führt über dieselbe Stelle: Ein Paket beschreibt einen oder mehrere Jobs samt ihren Aktionen.
+Was darin **nicht** steht, ist genauso wichtig wie das, was darin steht.
+
+### Was ein Paket nicht mitnimmt
+
+**Keine Kennwörter und keine Zugangsdaten.** Ein Job, der über ein E-Mail-Konto verschickt oder sich
+an einem FTP-Server anmeldet, nimmt dieses Konto nicht mit. Im Paket steht nur, *dass* ein Postfach
+gebraucht wird, nicht welches und schon gar nicht mit welchem Kennwort. Beim Einspielen wählen Sie
+das Gegenstück auf Ihrer Installation aus.
+
+**Keine internen Nummern.** Lager, Benutzer, Lieferanten, Datenbankverbindungen und Ameisenvorlagen
+tragen auf jeder Wawi eigene Nummern. Ein Paket nennt sie beim Namen, und Sie ordnen sie beim
+Einspielen zu. Genau dafür gibt es das Fenster, das nach dem Auswählen erscheint.
+
+Ein Kennwort, das eine Aktion direkt braucht und nicht über ein Konto bezieht, wird beim Ausgeben
+entfernt und beim Einspielen als Eingabefeld abgefragt. Ihr Wert landet verschlüsselt in der
+Datenbank, nicht im Klartext.
+
+### Einen Job ausgeben
+
+Rechtsklick auf die Jobkarte, dann **Job exportieren**. Sind mehrere Jobs markiert, gehen alle in
+*dieselbe* Datei — das ist wichtig, wenn ein Job einen anderen startet: Beide zusammen ergeben eine
+Kette, die auch auf der Zielinstallation funktioniert. Einzeln ausgegeben zerfiele sie.
+
+Die Datei trägt die Endung `.jobby.json` und lässt sich per Mail oder Dateiablage weitergeben.
+
+Zeigt ein Job auf einen Datensatz, den es nicht mehr gibt — etwa ein gelöschtes Sprungziel —, bricht
+die Ausgabe ab und nennt die Stelle. Es entsteht dann keine Datei. Das ist Absicht: Ein Paket, das
+auf Lücken zeigt, wäre auf der Zielinstallation nicht einspielbar, und der Fehler fiele erst dort auf.
+
+### Ein Paket einspielen
+
+In der Jobs-Übersicht **Importieren**, dann die Datei wählen. Danach erscheint ein Fenster, das drei
+Dinge sagt und eines fragt:
+
+- **welche Jobs entstehen**, mit Namen
+- **dass sie abgeschaltet ankommen** und erst laufen, wenn Sie sie einschalten
+- **woher das Paket stammt**, wenn es aus der Vorlagenbibliothek kommt
+- und es fragt nach den Zuordnungen und Eingaben, die das Paket braucht
+
+Bringt ein Paket nichts davon mit, steht das ausdrücklich da — dann genügt ein Klick.
+
+Pflichtangaben sind so lange offen, bis sie beantwortet sind; erst dann wird **Installieren** frei.
+Eine Jobgruppe ist freiwillig, „ohne Gruppe" ist eine gültige Antwort.
+
+Fehlt ein Datensatz auf Ihrer Installation, lässt er sich für die meisten Arten direkt aus dem
+Fenster heraus anlegen. Für Datensätze der Wawi oder anderer Programme nennt die Zeile stattdessen,
+wo sie entstehen; über **Aktualisieren** liest das Fenster die Listen danach neu ein, ohne Ihre
+bisherigen Antworten zu verwerfen.
+
+**Führt ein Paket Programme aus,** zeigt Jobby vor dem Einspielen im Klartext, welche das sind und
+mit welchen Argumenten — bei einer benutzerdefinierten Aktion, einem Programmstart oder einer freien
+SQL-Anweisung. Sie bestätigen das ausdrücklich. Eine Paketdatei kommt von aussen, und was sie
+ausführt, läuft mit den Rechten Ihres arpaTools.
+
+**Nach dem Einspielen sind die Jobs abgeschaltet.** Prüfen Sie den Zeitplan und die Zuordnungen und
+schalten Sie sie erst dann ein.
+
+### Die Vorlagenbibliothek
+
+Unter **Jobby → Vorlagen** stehen fertige Jobs, die arpaTools bereitstellt. Jede Karte zeigt Name,
+Beschreibung, Kategorie, Schlagworte, die Fassung, wie viele Jobs die Vorlage anlegt und ab welcher
+arpaTools- beziehungsweise Wawi-Fassung sie gedacht ist.
+
+**Einspielen** holt genau die Fassung, die auf der Karte steht, und führt danach in dasselbe Fenster
+wie eine Paketdatei. Ob die Vorlage auf Ihrer Installation läuft, entscheidet sich beim Einspielen:
+Passt die Fassung nicht oder fehlt eine Lizenz für ein beteiligtes Modul, sagt Jobby das und legt
+nichts an.
+
+Das Suchfeld durchsucht Name, Beschreibung, Kategorie und Schlagworte der bereits geladenen Vorlagen.
+**Aktualisieren** holt den Katalog neu.
+
+Ist die Vorlagenablage gerade nicht erreichbar, bleibt der zuletzt geladene Stand stehen und ein
+Hinweis nennt den Grund. Ihre eingerichteten Jobs sind davon nicht betroffen — die liegen in Ihrer
+Datenbank, nicht in der Ablage.
+
 ## Jobby-Aktionen
 
 ### Import: JTL-Ameise - Import
@@ -503,8 +587,13 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 
 - **E-Mail-Konto:** das konfigurierte Konto für den Versand.
 - **Empfänger:** Adresse des Empfängers.
-- **Betreff** und **Nachricht:** Inhalt der E-Mail.
-- **Anhang:** ob ein Anhang aus einem der genannten Schritte mitgesendet wird.
+- **Betreff** und **Nachricht:** Inhalt der E-Mail. Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`, `##SECOND##` sind möglich und werden beim Versand durch das aktuelle Datum bzw. die aktuelle Uhrzeit ersetzt, zum Beispiel „Bericht vom ##DAY##.##MONTH##.##YEAR##".
+- **Anhang:** ob ein Anhang aus einem der genannten Schritte mitgesendet wird. Bei
+  *E-Mail nur mit Anhang senden* wird nichts verschickt, solange kein Anhang zustande kommt —
+  etwa wenn der Download keine passende Datei gefunden oder die Abfrage keine Zeilen geliefert
+  hat. Der Job gilt trotzdem als erfolgreich gelaufen; im Anwendungsprotokoll steht, dass der
+  Versand mangels Anhang ausgelassen wurde. Die beiden anderen Einstellungen verschicken die
+  E-Mail wie bisher, auch ohne Anhang.
 
 ### Sonstiges: E-Mail via Brevo senden
 
@@ -788,6 +877,57 @@ G, wird abgewiesen. Das verhindert, dass sich Jobs versehentlich gegenseitig end
 Lädt eine vorangehende Aktion **Daten aus Verzeichnis laden** mehr als 1000 Dateien, werden diese in
 Blöcken zu je 1000 verarbeitet. Die Übergabe passiert dann nur beim ersten Block: der Ziel-Job startet
 genau einmal. Die Dateien der übrigen Blöcke bleiben liegen und werden erst beim nächsten Lauf abgeholt.
+
+### Sonstiges: Bedingung
+
+Prüft einen Wert und entscheidet danach, wie es mit den folgenden Aktionen weitergeht: normal
+weiterlaufen, die Kette beenden oder eine festgelegte Anzahl der folgenden Aktionen überspringen. Die
+Aktion selbst lädt keine Datei und verändert keine Daten.
+
+- **Quelle:** woher der geprüfte Wert kommt — **Eigene Abfrage** (eine eigene, nur lesende
+  SQL-Abfrage) oder **Ergebnis der vorherigen Aktion** (das, was die Aktion davor geliefert hat).
+- **Datenbank** und **Abfrage:** nur bei „Eigene Abfrage" sichtbar.
+- **Messgröße:** was geprüft wird — **Anzahl Zeilen** (bei beiden Quellen), **Erster Wert** (nur bei
+  eigener Abfrage: der Inhalt der ersten Spalte der ersten Zeile) oder **Anzahl Dateien** (nur beim
+  Ergebnis der vorherigen Aktion).
+- **Vergleich:** ist gleich, ist ungleich, ist kleiner als, ist größer als, ist kleiner oder gleich,
+  ist größer oder gleich.
+- **Wert:** der Vergleichswert. Sind Messgröße und Wert beide Zahlen, wird numerisch verglichen, dabei
+  **ohne** Tausendertrennzeichen — „1,5" gilt dann als Text, nicht als Zahl 15. Ist mindestens eine
+  Seite keine Zahl, wird als Text verglichen, ohne Unterscheidung von Groß- und Kleinschreibung.
+- **Wenn nicht erfüllt:** **Kette beenden** oder **Die nächsten Aktionen überspringen**.
+- **Anzahl:** nur bei „Die nächsten Aktionen überspringen" sichtbar — wie viele der folgenden Aktionen
+  entfallen (1 bis 999).
+
+Trifft die Bedingung nicht zu, gilt der Job trotzdem als **erfolgreich abgeschlossen**, nicht als
+fehlgeschlagen. Das Anwendungsprotokoll vermerkt aber, dass die Bedingung nicht zutraf, mit dem
+gemessenen Wert und der eingestellten Regel.
+
+**Wenn/Sonst nachbauen.** Die Anzahl beim Überspringen existiert, damit sich mit zwei Bedingungen mit
+entgegengesetzter Regel ein Wenn/Sonst-Zweig abbilden lässt — jede Bedingung überspringt den Block
+der anderen:
+
+1. Daten von MS-SQL Server laden
+2. Bedingung: Anzahl Zeilen ist größer als 0, sonst überspringe 2
+3. E-Mail senden „es gibt etwas zu tun"
+4. Daten in Verzeichnis speichern
+5. Bedingung: Anzahl Zeilen ist gleich 0, sonst überspringe 1
+6. E-Mail senden „nichts zu tun"
+
+Liefert die Abfrage Zeilen, laufen die Aktionen 3 und 4, Aktion 6 entfällt. Liefert sie keine Zeilen,
+entfallen die Aktionen 3 und 4, nur Aktion 6 läuft.
+
+Das gilt so nur, solange E-Mail und Speichern die Abfrage unverändert durchreichen. Steht im
+Dann-Block stattdessen ein Schritt, der neue Dateien erzeugt — etwa **XML zu CSV**, **JSON zu CSV**
+oder **Excel zu CSV** —, ist die Zeilenzahl danach nicht mehr die der ursprünglichen Abfrage. Die
+zweite Bedingung misst dann 0 Zeilen, trifft ebenfalls zu, und es laufen **beide** Zweige statt nur
+einem. Setzen Sie einen solchen Schritt deshalb erst nach der zweiten Bedingung ein, nicht davor.
+
+Eine Bedingung, die selbst innerhalb des übersprungenen Bereichs einer vorherigen Bedingung liegt,
+wird trotzdem ausgewertet — sie wird nicht mit übersprungen, sondern setzt die laufende
+Überspringen-Anzahl neu. Beim Wenn/Sonst-Nachbau ist das folgenlos, solange die zweite Bedingung wie
+im Beispiel hinter dem Dann-Block steht statt darin; eine dritte Bedingung mitten im übersprungenen
+Block würde dagegen den Zähler der ersten überschreiben.
 
 ### XML zu CSV, JSON zu CSV und Excel zu CSV
 

@@ -46,6 +46,7 @@
       <summary class="doc-toc-title">Auf dieser Seite<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>
       <ul>
         <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
+        <li class="doc-toc-level-2"><a href="#systemvoraussetzungen">Systemvoraussetzungen</a></li>
         <li class="doc-toc-level-2"><a href="#erstmaliger-start">Erstmaliger Start</a></li>
         <li class="doc-toc-level-2"><a href="#startseite">Startseite</a></li>
         <li class="doc-toc-level-2"><a href="#profile-verwalten">Profile verwalten</a></li>
@@ -65,6 +66,15 @@ verbindet. Statt einer einzelnen Anwendung erhalten Sie einen Client, in dem ein
 Retourenportal, Netstock, SellerLogic oder SmartSupply. Jede App hat ihre eigene Dokumentation; dieser
 Text beschreibt, was allen gemeinsam ist: Programmstart, Profile, Datenbankverbindung, Lizenz und die
 Grundeinstellungen.</p>
+<h2 id="systemvoraussetzungen">Systemvoraussetzungen</h2>
+<p>arpaTools läuft unter Windows und benötigt die <strong>.NET Desktop Runtime 10.0</strong> von Microsoft.
+Diese ist auf vielen Rechnern bereits vorhanden. Fehlt sie, meldet das Setup das beim
+Installieren und bietet Ihnen an, die Downloadseite direkt zu öffnen. Installieren Sie die
+Runtime dann und starten Sie das Setup erneut.</p>
+<p>Auf der Downloadseite <a href="https://dotnet.microsoft.com/download/dotnet/10.0">https://dotnet.microsoft.com/download/dotnet/10.0</a> stehen mehrere
+Pakete nebeneinander. Sie brauchen <strong>.NET Desktop Runtime</strong>, in der Regel die Ausgabe für
+x64. Die daneben angebotene „.NET Runtime" allein genügt nicht.</p>
+<p>Sie brauchen die Runtime einmal je Rechner, nicht bei jedem Update von arpaTools.</p>
 <h2 id="erstmaliger-start">Erstmaliger Start</h2>
 <p>Beim ersten Start zeigt arpaTools die Endbenutzer-Lizenzvereinbarung (EULA). Erst wenn Sie die
 Checkbox <strong>Ich akzeptiere die Nutzungsbedingungen</strong> setzen und speichern, lässt sich arpaTools nutzen.</p>
@@ -141,7 +151,7 @@ arpaTools-Version.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 26. August 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 27. August 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

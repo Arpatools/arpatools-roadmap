@@ -9,6 +9,19 @@ Retourenportal, Netstock, SellerLogic oder SmartSupply. Jede App hat ihre eigene
 Text beschreibt, was allen gemeinsam ist: Programmstart, Profile, Datenbankverbindung, Lizenz und die
 Grundeinstellungen.
 
+## Systemvoraussetzungen
+
+arpaTools läuft unter Windows und benötigt die **.NET Desktop Runtime 10.0** von Microsoft.
+Diese ist auf vielen Rechnern bereits vorhanden. Fehlt sie, meldet das Setup das beim
+Installieren und bietet Ihnen an, die Downloadseite direkt zu öffnen. Installieren Sie die
+Runtime dann und starten Sie das Setup erneut.
+
+Auf der Downloadseite <https://dotnet.microsoft.com/download/dotnet/10.0> stehen mehrere
+Pakete nebeneinander. Sie brauchen **.NET Desktop Runtime**, in der Regel die Ausgabe für
+x64. Die daneben angebotene „.NET Runtime" allein genügt nicht.
+
+Sie brauchen die Runtime einmal je Rechner, nicht bei jedem Update von arpaTools.
+
 ## Erstmaliger Start
 
 Beim ersten Start zeigt arpaTools die Endbenutzer-Lizenzvereinbarung (EULA). Erst wenn Sie die

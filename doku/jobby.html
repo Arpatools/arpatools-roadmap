@@ -56,6 +56,11 @@
         <li class="doc-toc-level-3"><a href="#vault">Vault</a></li>
         <li class="doc-toc-level-3"><a href="#dienst">Dienst</a></li>
         <li class="doc-toc-level-2"><a href="#einfachen-job-erstellen">Einfachen Job erstellen</a></li>
+        <li class="doc-toc-level-2"><a href="#jobs-übertragen-und-fertige-vorlagen-einspielen">Jobs übertragen und fertige Vorlagen einspielen</a></li>
+        <li class="doc-toc-level-3"><a href="#was-ein-paket-nicht-mitnimmt">Was ein Paket nicht mitnimmt</a></li>
+        <li class="doc-toc-level-3"><a href="#einen-job-ausgeben">Einen Job ausgeben</a></li>
+        <li class="doc-toc-level-3"><a href="#ein-paket-einspielen">Ein Paket einspielen</a></li>
+        <li class="doc-toc-level-3"><a href="#die-vorlagenbibliothek">Die Vorlagenbibliothek</a></li>
         <li class="doc-toc-level-2"><a href="#jobby-aktionen">Jobby-Aktionen</a></li>
         <li class="doc-toc-level-3"><a href="#import-jtl-ameise---import">Import: JTL-Ameise - Import</a></li>
         <li class="doc-toc-level-3"><a href="#import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</a></li>
@@ -80,6 +85,7 @@
         <li class="doc-toc-level-3"><a href="#sonstiges-daten-von-ms-sql-server-laden">Sonstiges: Daten von MS-SQL Server laden</a></li>
         <li class="doc-toc-level-3"><a href="#sonstiges-daten-per-sql-einfügenändern">Sonstiges: Daten per SQL einfügen/ändern</a></li>
         <li class="doc-toc-level-3"><a href="#sonstiges-job-ausführen">Sonstiges: Job ausführen</a></li>
+        <li class="doc-toc-level-3"><a href="#sonstiges-bedingung">Sonstiges: Bedingung</a></li>
         <li class="doc-toc-level-3"><a href="#xml-zu-csv-json-zu-csv-und-excel-zu-csv">XML zu CSV, JSON zu CSV und Excel zu CSV</a></li>
         <li class="doc-toc-level-2"><a href="#jobby-interne-arpatools-jobs">Jobby-Interne arpaTools Jobs</a></li>
         <li class="doc-toc-level-3"><a href="#provimate-abrechnung">ProviMate-Abrechnung</a></li>
@@ -146,6 +152,8 @@ zeitgesteuert oder manuell gestartet werden.</p>
 <li><strong>Daten von MS-SQL Server laden:</strong> führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei.</li>
 <li><strong>Daten per SQL einfügen/ändern:</strong> führt ein schreibendes SQL-Statement aus.</li>
 <li><strong>Job ausführen:</strong> übergibt den laufenden Job an einen anderen Job und beendet den aufrufenden Job.</li>
+<li><strong>Bedingung:</strong> prüft einen Wert und steuert danach die Kette — normal weiterlaufen, beenden oder eine
+festgelegte Anzahl der folgenden Aktionen überspringen.</li>
 </ul>
 <p><strong>Interne arpaTools Jobs</strong> (siehe eigenen Abschnitt): ProviMate-Abrechnung, Querify, Retourenportal,
 Sammelrechnung, Netstock.</p>
@@ -359,6 +367,66 @@ sie nur in die Laufzeitumgebung. Dazu gehören:</p>
 <p>Nur die Aktion <strong>JTL-Ameise Export</strong> schreibt aufgrund der Ameisen-Struktur eine Datei, die im weiteren
 Verlauf geladen werden muss. Erst die Aktion <strong>Daten in Verzeichnis speichern</strong> legt die Inhalte
 dauerhaft ab.</p>
+<h2 id="jobs-übertragen-und-fertige-vorlagen-einspielen">Jobs übertragen und fertige Vorlagen einspielen</h2>
+<p>Ein Job, der auf einer Installation läuft, lässt sich auf eine andere übertragen. Und für
+wiederkehrende Aufgaben gibt es fertige Vorlagen, die sich mit wenigen Angaben einspielen lassen,
+statt den Job von Hand nachzubauen.</p>
+<p>Beides führt über dieselbe Stelle: Ein Paket beschreibt einen oder mehrere Jobs samt ihren Aktionen.
+Was darin <strong>nicht</strong> steht, ist genauso wichtig wie das, was darin steht.</p>
+<h3 id="was-ein-paket-nicht-mitnimmt">Was ein Paket nicht mitnimmt</h3>
+<p><strong>Keine Kennwörter und keine Zugangsdaten.</strong> Ein Job, der über ein E-Mail-Konto verschickt oder sich
+an einem FTP-Server anmeldet, nimmt dieses Konto nicht mit. Im Paket steht nur, <em>dass</em> ein Postfach
+gebraucht wird, nicht welches und schon gar nicht mit welchem Kennwort. Beim Einspielen wählen Sie
+das Gegenstück auf Ihrer Installation aus.</p>
+<p><strong>Keine internen Nummern.</strong> Lager, Benutzer, Lieferanten, Datenbankverbindungen und Ameisenvorlagen
+tragen auf jeder Wawi eigene Nummern. Ein Paket nennt sie beim Namen, und Sie ordnen sie beim
+Einspielen zu. Genau dafür gibt es das Fenster, das nach dem Auswählen erscheint.</p>
+<p>Ein Kennwort, das eine Aktion direkt braucht und nicht über ein Konto bezieht, wird beim Ausgeben
+entfernt und beim Einspielen als Eingabefeld abgefragt. Ihr Wert landet verschlüsselt in der
+Datenbank, nicht im Klartext.</p>
+<h3 id="einen-job-ausgeben">Einen Job ausgeben</h3>
+<p>Rechtsklick auf die Jobkarte, dann <strong>Job exportieren</strong>. Sind mehrere Jobs markiert, gehen alle in
+<em>dieselbe</em> Datei — das ist wichtig, wenn ein Job einen anderen startet: Beide zusammen ergeben eine
+Kette, die auch auf der Zielinstallation funktioniert. Einzeln ausgegeben zerfiele sie.</p>
+<p>Die Datei trägt die Endung <code>.jobby.json</code> und lässt sich per Mail oder Dateiablage weitergeben.</p>
+<p>Zeigt ein Job auf einen Datensatz, den es nicht mehr gibt — etwa ein gelöschtes Sprungziel —, bricht
+die Ausgabe ab und nennt die Stelle. Es entsteht dann keine Datei. Das ist Absicht: Ein Paket, das
+auf Lücken zeigt, wäre auf der Zielinstallation nicht einspielbar, und der Fehler fiele erst dort auf.</p>
+<h3 id="ein-paket-einspielen">Ein Paket einspielen</h3>
+<p>In der Jobs-Übersicht <strong>Importieren</strong>, dann die Datei wählen. Danach erscheint ein Fenster, das drei
+Dinge sagt und eines fragt:</p>
+<ul>
+<li><strong>welche Jobs entstehen</strong>, mit Namen</li>
+<li><strong>dass sie abgeschaltet ankommen</strong> und erst laufen, wenn Sie sie einschalten</li>
+<li><strong>woher das Paket stammt</strong>, wenn es aus der Vorlagenbibliothek kommt</li>
+<li>und es fragt nach den Zuordnungen und Eingaben, die das Paket braucht</li>
+</ul>
+<p>Bringt ein Paket nichts davon mit, steht das ausdrücklich da — dann genügt ein Klick.</p>
+<p>Pflichtangaben sind so lange offen, bis sie beantwortet sind; erst dann wird <strong>Installieren</strong> frei.
+Eine Jobgruppe ist freiwillig, „ohne Gruppe" ist eine gültige Antwort.</p>
+<p>Fehlt ein Datensatz auf Ihrer Installation, lässt er sich für die meisten Arten direkt aus dem
+Fenster heraus anlegen. Für Datensätze der Wawi oder anderer Programme nennt die Zeile stattdessen,
+wo sie entstehen; über <strong>Aktualisieren</strong> liest das Fenster die Listen danach neu ein, ohne Ihre
+bisherigen Antworten zu verwerfen.</p>
+<p><strong>Führt ein Paket Programme aus,</strong> zeigt Jobby vor dem Einspielen im Klartext, welche das sind und
+mit welchen Argumenten — bei einer benutzerdefinierten Aktion, einem Programmstart oder einer freien
+SQL-Anweisung. Sie bestätigen das ausdrücklich. Eine Paketdatei kommt von aussen, und was sie
+ausführt, läuft mit den Rechten Ihres arpaTools.</p>
+<p><strong>Nach dem Einspielen sind die Jobs abgeschaltet.</strong> Prüfen Sie den Zeitplan und die Zuordnungen und
+schalten Sie sie erst dann ein.</p>
+<h3 id="die-vorlagenbibliothek">Die Vorlagenbibliothek</h3>
+<p>Unter <strong>Jobby → Vorlagen</strong> stehen fertige Jobs, die arpaTools bereitstellt. Jede Karte zeigt Name,
+Beschreibung, Kategorie, Schlagworte, die Fassung, wie viele Jobs die Vorlage anlegt und ab welcher
+arpaTools- beziehungsweise Wawi-Fassung sie gedacht ist.</p>
+<p><strong>Einspielen</strong> holt genau die Fassung, die auf der Karte steht, und führt danach in dasselbe Fenster
+wie eine Paketdatei. Ob die Vorlage auf Ihrer Installation läuft, entscheidet sich beim Einspielen:
+Passt die Fassung nicht oder fehlt eine Lizenz für ein beteiligtes Modul, sagt Jobby das und legt
+nichts an.</p>
+<p>Das Suchfeld durchsucht Name, Beschreibung, Kategorie und Schlagworte der bereits geladenen Vorlagen.
+<strong>Aktualisieren</strong> holt den Katalog neu.</p>
+<p>Ist die Vorlagenablage gerade nicht erreichbar, bleibt der zuletzt geladene Stand stehen und ein
+Hinweis nennt den Grund. Ihre eingerichteten Jobs sind davon nicht betroffen — die liegen in Ihrer
+Datenbank, nicht in der Ablage.</p>
 <h2 id="jobby-aktionen">Jobby-Aktionen</h2>
 <h3 id="import-jtl-ameise---import">Import: JTL-Ameise - Import</h3>
 <p>Führt strukturierte Importe (Artikeldaten, Kundenlisten, Bestände) automatisiert oder manuell über eine
@@ -525,8 +593,13 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 <ul>
 <li><strong>E-Mail-Konto:</strong> das konfigurierte Konto für den Versand.</li>
 <li><strong>Empfänger:</strong> Adresse des Empfängers.</li>
-<li><strong>Betreff</strong> und <strong>Nachricht:</strong> Inhalt der E-Mail.</li>
-<li><strong>Anhang:</strong> ob ein Anhang aus einem der genannten Schritte mitgesendet wird.</li>
+<li><strong>Betreff</strong> und <strong>Nachricht:</strong> Inhalt der E-Mail. Platzhalter <code>##YEAR##</code>, <code>##MONTH##</code>, <code>##DAY##</code>, <code>##HOUR##</code>, <code>##MINUTE##</code>, <code>##SECOND##</code> sind möglich und werden beim Versand durch das aktuelle Datum bzw. die aktuelle Uhrzeit ersetzt, zum Beispiel „Bericht vom ##DAY##.##MONTH##.##YEAR##".</li>
+<li><strong>Anhang:</strong> ob ein Anhang aus einem der genannten Schritte mitgesendet wird. Bei
+<em>E-Mail nur mit Anhang senden</em> wird nichts verschickt, solange kein Anhang zustande kommt —
+etwa wenn der Download keine passende Datei gefunden oder die Abfrage keine Zeilen geliefert
+hat. Der Job gilt trotzdem als erfolgreich gelaufen; im Anwendungsprotokoll steht, dass der
+Versand mangels Anhang ausgelassen wurde. Die beiden anderen Einstellungen verschicken die
+E-Mail wie bisher, auch ohne Anhang.</li>
 </ul>
 <h3 id="sonstiges-e-mail-via-brevo-senden">Sonstiges: E-Mail via Brevo senden</h3>
 <p>Versendet transaktionale E-Mails über Brevo (Sendinblue). Die Steuerung erfolgt über JSON-Dateien in
@@ -822,6 +895,52 @@ G, wird abgewiesen. Das verhindert, dass sich Jobs versehentlich gegenseitig end
 <p>Lädt eine vorangehende Aktion <strong>Daten aus Verzeichnis laden</strong> mehr als 1000 Dateien, werden diese in
 Blöcken zu je 1000 verarbeitet. Die Übergabe passiert dann nur beim ersten Block: der Ziel-Job startet
 genau einmal. Die Dateien der übrigen Blöcke bleiben liegen und werden erst beim nächsten Lauf abgeholt.</p>
+<h3 id="sonstiges-bedingung">Sonstiges: Bedingung</h3>
+<p>Prüft einen Wert und entscheidet danach, wie es mit den folgenden Aktionen weitergeht: normal
+weiterlaufen, die Kette beenden oder eine festgelegte Anzahl der folgenden Aktionen überspringen. Die
+Aktion selbst lädt keine Datei und verändert keine Daten.</p>
+<ul>
+<li><strong>Quelle:</strong> woher der geprüfte Wert kommt — <strong>Eigene Abfrage</strong> (eine eigene, nur lesende
+SQL-Abfrage) oder <strong>Ergebnis der vorherigen Aktion</strong> (das, was die Aktion davor geliefert hat).</li>
+<li><strong>Datenbank</strong> und <strong>Abfrage:</strong> nur bei „Eigene Abfrage" sichtbar.</li>
+<li><strong>Messgröße:</strong> was geprüft wird — <strong>Anzahl Zeilen</strong> (bei beiden Quellen), <strong>Erster Wert</strong> (nur bei
+eigener Abfrage: der Inhalt der ersten Spalte der ersten Zeile) oder <strong>Anzahl Dateien</strong> (nur beim
+Ergebnis der vorherigen Aktion).</li>
+<li><strong>Vergleich:</strong> ist gleich, ist ungleich, ist kleiner als, ist größer als, ist kleiner oder gleich,
+ist größer oder gleich.</li>
+<li><strong>Wert:</strong> der Vergleichswert. Sind Messgröße und Wert beide Zahlen, wird numerisch verglichen, dabei
+<strong>ohne</strong> Tausendertrennzeichen — „1,5" gilt dann als Text, nicht als Zahl 15. Ist mindestens eine
+Seite keine Zahl, wird als Text verglichen, ohne Unterscheidung von Groß- und Kleinschreibung.</li>
+<li><strong>Wenn nicht erfüllt:</strong> <strong>Kette beenden</strong> oder <strong>Die nächsten Aktionen überspringen</strong>.</li>
+<li><strong>Anzahl:</strong> nur bei „Die nächsten Aktionen überspringen" sichtbar — wie viele der folgenden Aktionen
+entfallen (1 bis 999).</li>
+</ul>
+<p>Trifft die Bedingung nicht zu, gilt der Job trotzdem als <strong>erfolgreich abgeschlossen</strong>, nicht als
+fehlgeschlagen. Das Anwendungsprotokoll vermerkt aber, dass die Bedingung nicht zutraf, mit dem
+gemessenen Wert und der eingestellten Regel.</p>
+<p><strong>Wenn/Sonst nachbauen.</strong> Die Anzahl beim Überspringen existiert, damit sich mit zwei Bedingungen mit
+entgegengesetzter Regel ein Wenn/Sonst-Zweig abbilden lässt — jede Bedingung überspringt den Block
+der anderen:</p>
+<ol>
+<li>Daten von MS-SQL Server laden</li>
+<li>Bedingung: Anzahl Zeilen ist größer als 0, sonst überspringe 2</li>
+<li>E-Mail senden „es gibt etwas zu tun"</li>
+<li>Daten in Verzeichnis speichern</li>
+<li>Bedingung: Anzahl Zeilen ist gleich 0, sonst überspringe 1</li>
+<li>E-Mail senden „nichts zu tun"</li>
+</ol>
+<p>Liefert die Abfrage Zeilen, laufen die Aktionen 3 und 4, Aktion 6 entfällt. Liefert sie keine Zeilen,
+entfallen die Aktionen 3 und 4, nur Aktion 6 läuft.</p>
+<p>Das gilt so nur, solange E-Mail und Speichern die Abfrage unverändert durchreichen. Steht im
+Dann-Block stattdessen ein Schritt, der neue Dateien erzeugt — etwa <strong>XML zu CSV</strong>, <strong>JSON zu CSV</strong>
+oder <strong>Excel zu CSV</strong> —, ist die Zeilenzahl danach nicht mehr die der ursprünglichen Abfrage. Die
+zweite Bedingung misst dann 0 Zeilen, trifft ebenfalls zu, und es laufen <strong>beide</strong> Zweige statt nur
+einem. Setzen Sie einen solchen Schritt deshalb erst nach der zweiten Bedingung ein, nicht davor.</p>
+<p>Eine Bedingung, die selbst innerhalb des übersprungenen Bereichs einer vorherigen Bedingung liegt,
+wird trotzdem ausgewertet — sie wird nicht mit übersprungen, sondern setzt die laufende
+Überspringen-Anzahl neu. Beim Wenn/Sonst-Nachbau ist das folgenlos, solange die zweite Bedingung wie
+im Beispiel hinter dem Dann-Block steht statt darin; eine dritte Bedingung mitten im übersprungenen
+Block würde dagegen den Zähler der ersten überschreiben.</p>
 <h3 id="xml-zu-csv-json-zu-csv-und-excel-zu-csv">XML zu CSV, JSON zu CSV und Excel zu CSV</h3>
 <p>Viele Lieferanten liefern ihre Daten als XML, JSON oder Excel-Mappe. Die Importaktionen der Wawi erwarten
 aber CSV. Diese drei Aktionen wandeln beliebige XML-, JSON- und Excel-Dateien in eine CSV, die Sie selbst
@@ -980,7 +1099,7 @@ geöffnetes arpaTools einrichten wollen.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 26. August 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 27. August 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

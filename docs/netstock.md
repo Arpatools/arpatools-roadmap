@@ -82,8 +82,16 @@ wird**, **Lagerauswahl** und **Stücklisten**.
 
 ![Netstock-Einstellungen, Registerkarte Verbindung: FTP-Server, Firma und Benutzer für den Datenaustausch.](bilder/netstock-einstellungen.png)
 
+> „Zeitlimit für Übertragungen (Sekunden)", das im obigen Bild noch fehlt. Aufnahme mangels laufender
+> interaktiver Sitzung in dieser Umgebung nicht möglich, bei der Abnahme nachholen.
+
 Auf **Verbindung** legen Sie fest, welcher FTP-Server (siehe [Jobby-Dokumentation](/doku/jobby),
 Abschnitt „Verbindungen"), welche Firma und welcher Benutzer für den Datenaustausch verwendet werden.
+
+- **Zeitlimit für Übertragungen (Sekunden):** wie lange arpaTools auf die Antwort einer einzelnen
+  Übertragungsabfrage wartet, bevor sie abgebrochen wird. Erlaubt sind Werte von 0 bis 3600 Sekunden,
+  Vorgabe ist 30. **0 bedeutet unbegrenzt.** Erhöhen Sie den Wert, wenn Übertragungen bei großen
+  Datenmengen mit einer Zeitüberschreitung abbrechen.
 
 ![Netstock-Einstellungen, Registerkarte „Was übertragen wird": vier Schalter (Retouren senden, Lieferantenartikelnummer/HAN/Warengruppe als Gruppe senden) sowie die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung.](bilder/netstock-einstellungen-uebertragen.png)
 
