@@ -156,9 +156,12 @@ mehr.</p>
 übertragen. Für die üblichen Fälle stehen zusätzlich Schnellzugriffe bereit, die eine ganze Gruppe in
 einem Schritt senden: <strong>Stammdaten senden</strong> für die Gruppe Stammdaten und <strong>Verkauf &amp; Verbrauch
 senden</strong> für die Bewegungsdaten. <strong>Alles senden</strong> überträgt sämtliche Pakete der Tabelle.</p>
-<blockquote>
-<p>senden" ist nicht bestätigt; vermutlich der Zeitraum der übertragenen Verkaufsdaten.</p>
-</blockquote>
+<p>Das Feld <strong>Verkaufszeitraum in Monaten</strong> neben <strong>Verkauf &amp; Verbrauch senden</strong> legt fest, wie weit die
+übertragenen Verkäufe zurückreichen. Gezählt wird ab dem Ersten des laufenden Monats: Der Wert 2
+überträgt die beiden abgeschlossenen Vormonate und den laufenden Monat. Maßgeblich ist dabei das
+Rechnungs- beziehungsweise Versanddatum, nicht das Datum der Auftragserfassung — genau danach ordnet
+Netstock die Mengen den Monaten zu. Ein Auftrag, der im Januar erfasst und im März ausgeliefert wurde,
+zählt also zum März.</p>
 <h2 id="daten-empfangen">Daten empfangen</h2>
 <p>Am oberen Rand von <strong>Datenlieferungen</strong> stehen drei Schaltflächen für die von Netstock berechneten
 Bestellvorschläge:</p>
@@ -180,8 +183,9 @@ Abschnitt „Verbindungen"), welche Firma und welcher Benutzer für den Datenaus
 <ul>
 <li><strong>Zeitlimit für Übertragungen (Sekunden):</strong> wie lange arpaTools auf die Antwort einer einzelnen
 Übertragungsabfrage wartet, bevor sie abgebrochen wird. Erlaubt sind Werte von 0 bis 3600 Sekunden,
-Vorgabe ist 30. <strong>0 bedeutet unbegrenzt.</strong> Erhöhen Sie den Wert, wenn Übertragungen bei großen
-Datenmengen mit einer Zeitüberschreitung abbrechen.</li>
+Vorgabe ist 90. <strong>0 bedeutet unbegrenzt.</strong> Erhöhen Sie den Wert, wenn Übertragungen bei großen
+Datenmengen mit einer Zeitüberschreitung abbrechen. Wer den Wert nie verändert hat, wird beim
+Update von den früheren 30 Sekunden auf die 90 gehoben; ein selbst eingetragener Wert bleibt stehen.</li>
 </ul>
 <p><img src="../docs/bilder/netstock-einstellungen-uebertragen.png" alt="Netstock-Einstellungen, Registerkarte „Was übertragen wird&quot;: vier Schalter (Retouren senden, Lieferantenartikelnummer/HAN/Warengruppe als Gruppe senden) sowie die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung." /></p>
 <p>Auf <strong>Was übertragen wird</strong>:</p>
@@ -230,7 +234,7 @@ Sie diesen Job derzeit von Hand in Jobby ein.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 28. August 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 07. September 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

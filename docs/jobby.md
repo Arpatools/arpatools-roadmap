@@ -49,9 +49,10 @@ Diese Aufgaben decken typische Prozesse rund um Import, Export, Dateitransfer un
 - **E-Mail senden:** versendet Benachrichtigungen oder Berichte, optional mit Anhang.
 - **E-Mail via Brevo senden:** versendet transaktionale E-Mails über Brevo.
 - **Prozess starten:** startet externe Programme oder Skripte mit Parametern.
-- **Benutzerdefinierte Aktion:** startet ein beliebiges externes Programm oder Skript (.exe, PowerShell, Python, Batch, Jar) mit Zeitlimit, Zugangsdaten aus dem Vault und Rückgabe der erzeugten Dateien in die weitere Verarbeitung. „Prozess starten" bleibt daneben unverändert bestehen.
+- **Benutzerdefinierte Aktion:** startet ein beliebiges externes Programm oder Skript (.exe, PowerShell, Python, Batch, Jar) mit Zeitlimit, Zugangsdaten aus dem Vault und Rückgabe der erzeugten Dateien in die weitere Verarbeitung. Ein kurzes PowerShell-Skript können Sie auch direkt in der Aktion hinterlegen, statt eine Datei anzulegen. „Prozess starten" bleibt daneben unverändert bestehen.
 - **Manuellen JTL-Wawi Workflow ausführen:** stößt manuelle Workflows in JTL-Wawi an.
 - **Daten von MS-SQL Server laden:** führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei.
+- **JTL-API abrufen:** ruft Stammdaten (Hersteller, Lager), gefilterte Artikel oder die Verbindungsinfo direkt über die Programmierschnittstelle der JTL-Wawi ab und reicht sie an die nächste Aktion weiter.
 - **Daten per SQL einfügen/ändern:** führt ein schreibendes SQL-Statement aus.
 - **Job ausführen:** übergibt den laufenden Job an einen anderen Job und beendet den aufrufenden Job.
 - **Bedingung:** prüft einen Wert und steuert danach die Kette — normal weiterlaufen, beenden oder eine
@@ -112,9 +113,47 @@ Spalten bzw. Angaben je Job:
 - **Zuletzt:** Datum und Uhrzeit des letzten Laufs.
 - **Nächster Lauf:** die nächste planmäßige Ausführung, sofern ein Zeitplan aktiv ist.
 
-Zum Zeitplan gehören zwei Angaben: der **Startzeitpunkt** und das Häkchen **Wiederholen alle**. Ohne
-das Häkchen läuft der Job genau einmal, zum Startzeitpunkt. Zahl und Einheit daneben sind dann
-ausgegraut und ohne Wirkung — der Job wiederholt sich nicht.
+#### Zeitplan
+
+Im Zeitplan-Dialog eines Jobs wählen Sie zuerst unter **Wiederholung** den Modus. Der Dialog zeigt
+danach nur noch die Felder, die zu diesem Modus gehören:
+
+| Modus | Wofür |
+|---|---|
+| Einmalig | Der Job läuft genau einmal, zum eingestellten Datum und zur Uhrzeit, und danach nicht mehr. |
+| Alle X Minuten | Für sehr häufige Läufe, etwa ein Sendungsimport alle 15 Minuten. |
+| Alle X Stunden | Für mehrere Läufe am Tag. |
+| Täglich | Ein fester Zeitpunkt jeden Tag oder alle X Tage. |
+| Wöchentlich | Ein fester Zeitpunkt an einem oder mehreren Wochentagen, etwa jeden Montag und Donnerstag. |
+| Monatlich | Ein fester Zeitpunkt jeden Monat oder alle X Monate. |
+
+In jedem Modus lässt sich der Startzeitpunkt weglassen: Schalter **Ab einem festen Zeitpunkt
+starten** aus, und der Job läuft ab sofort im gewählten Takt, gerechnet vom Moment des Speicherns
+an.
+
+Bei **Täglich**, **Wöchentlich** und **Monatlich** legt dieser Moment zugleich die Uhrzeit fest:
+speichern Sie um 14:20, läuft der Job um 14:20. Jedes erneute Speichern verschiebt ihn neu. Soll der
+Job zu einer bestimmten Uhrzeit laufen, lassen Sie den Schalter an und tragen den Zeitpunkt ein —
+so ist er vorbelegt.
+
+Bei **Wöchentlich** wählen Sie zusätzlich die **Wochentage**, an denen der Job laufen soll — mehrere
+sind möglich. Wählen Sie keinen Tag aus, läuft der Job am Wochentag des eingestellten Startdatums.
+
+Bei **Monatlich** gilt: Startet der Job am Monatsende, wiederholt er sich automatisch am jeweiligen
+Monatsende, auch wenn der Monat kürzer ist — ein Start am 31. läuft im Februar am 28. bzw. 29.
+
+Unter den Feldern steht, wann der Job als Nächstes läuft, zum Beispiel „Nächste Ausführung: Montag,
+31.08.2026 08:00". Diese Vorschau rechnet mit denselben Werten, die auch der arpaTools Worker beim
+Prüfen verwendet, und zeigt deshalb immer den tatsächlich nächsten Lauf. Ist keiner mehr geplant,
+steht dort „Keine weitere Ausführung geplant."
+
+Stellen Sie beim Modus **Alle X Minuten** ein Intervall ein, das kürzer ist als die Prüfzeit des
+arpaTools Worker, weist der Dialog darauf hin: Der Worker prüft standardmäßig alle 5 Minuten
+(einstellbar unter **Dienst**), ein kürzeres Intervall greift erst ab diesem Wert. Bei den anderen
+Modi erscheint dieser Hinweis nicht, ein zu kurzes Intervall ist dort in der Praxis aber ohnehin
+nicht einstellbar.
+
+> Diensttakthinweis)
 
 Bricht ein geplanter Lauf mit einem Fehler ab, gilt er trotzdem als gelaufen: Der Job wartet auf
 seinen nächsten regulären Termin, statt sofort erneut anzulaufen. Was schiefging, steht in der
@@ -317,6 +356,87 @@ Nur die Aktion **JTL-Ameise Export** schreibt aufgrund der Ameisen-Struktur eine
 Verlauf geladen werden muss. Erst die Aktion **Daten in Verzeichnis speichern** legt die Inhalte
 dauerhaft ab.
 
+**Einen Schritt vorübergehend stilllegen.** Über den Rechtsklick auf einen Schritt und **Status
+ändern** schalten Sie ihn ab. Er bleibt in der Liste stehen, wird blass dargestellt und ist als
+inaktiv beschriftet — und beim Lauf übersprungen. Der Job läuft mit den übrigen Schritten weiter und
+endet als erfolgreich. Schalten Sie eine **Bedingung** ab, fällt mit ihr auch alles weg, was in
+ihrem Dann- und ihrem Sonst-Block hängt. So legen Sie einen Schritt still, ohne ihn zu löschen und
+später neu einrichten zu müssen.
+
+> **Bitte einmal nachsehen, wenn Sie das Feld schon benutzt haben.** Bis zu dieser Version lief ein
+> abgeschalteter Schritt trotz der Anzeige mit. Wer einen Schritt abgeschaltet hat und dessen
+> Ergebnis seither trotzdem bekam, bekommt es ab jetzt nicht mehr. Prüfen Sie Ihre Jobs auf
+> abgeschaltete Schritte und schalten Sie ein, was weiterlaufen soll.
+
+### Den Ablauf als Zeichnung ansehen
+
+> **Noch nicht allgemein verfügbar.** Die Ablaufansicht steht vorerst nur mit Entwicklerlizenz zur
+> Verfügung. Ohne sie sieht die Ablauf-Karte aus wie bisher, mit der Schrittliste und sonst nichts.
+
+Am rechten Rand der Überschrift **Ablauf**, über der Schrittliste, stehen zwei Schaltflächen. Zeigen
+Sie mit der Maus darauf, nennen sie sich **Als Liste anzeigen** und **Als Ablauf anzeigen**. Die
+linke zeigt die Schrittliste, so wie bisher; die rechte zeichnet denselben Ablauf auf. Die
+Schaltfläche der Ansicht, die gerade zu sehen ist, ist farbig hervorgehoben — so ist auf einen Blick
+zu erkennen, worauf Sie schauen. Es ist dieselbe Kette, nur anders dargestellt. Bei einem Job mit vielen Schritten ist auf einen Blick zu
+sehen, was wohin führt, ohne dass Sie die Liste durchscrollen müssen. Und die Zeichnung lässt sich
+einem Kollegen oder einem Kunden zeigen, ohne dass er die Liste erst lesen muss.
+
+Die Zeichnung läuft von oben nach unten:
+
+- Jeder Schritt ist ein **Kästchen** mit seiner Nummer und der Art der Aktion. Die Nummern sind
+  dieselben wie in der Liste.
+- Die **Linien** dazwischen zeigen, in welcher Reihenfolge die Schritte laufen.
+- Bei einer **Bedingung** mit Dann- und Sonst-Block teilt sich der Weg in zwei Spalten nebeneinander.
+  Über ihnen stehen **Dann** und **Sonst**. Hinter der Bedingung laufen beide Wege wieder zusammen,
+  und der Job geht dort gemeinsam weiter. Genau das ist in der Liste am schwersten zu sehen.
+- Steht eine Bedingung auf **Kette beenden**, hängt an ihrem einen Ausgang eine Marke. Dahinter
+  folgt nichts mehr.
+- Steht eine Bedingung auf **Die nächsten Aktionen überspringen**, bleiben die betroffenen Schritte
+  stehen, und eine Linie führt seitlich an ihnen vorbei zum ersten Schritt dahinter. So ist zu
+  sehen, welche Schritte gemeint sind.
+
+**Zeigen Sie mit der Maus auf ein Kästchen**, erscheint zuerst die Art der Aktion in voller Länge —
+im Kästchen selbst ist der Platz begrenzt, und ein langer Name wie *Sendungsdaten importieren
+(JTLWawiExtern.dll)* endet dort in Pünktchen. Darunter stehen die Einzelheiten des Schritts:
+dieselbe Zeile, die in der Liste unter dem Titel steht, also Ihre Kurzbeschreibung, der Ordner, das
+Konto oder der Filter, je nachdem was der Schritt trägt. Trägt ein Schritt keine solche Angabe,
+nennt die Kurzinfo nur die Art der Aktion.
+
+Ein **abgeschalteter Schritt** ist blass gezeichnet, bleibt aber sichtbar. Er gehört zur Kette und
+verschwindet nicht, nur weil er gerade nicht mitläuft.
+
+**Bearbeitet wird weiterhin in der Liste.** Die Zeichnung ist zum Ansehen da: Ein Klick auf ein
+Kästchen wählt den zugehörigen Schritt aus, damit Sie ihn nach dem Zurückschalten gleich wiederfinden.
+Es öffnet sich kein Dialog, und es lässt sich dort nichts verschieben oder verbinden. Zum Ändern
+schalten Sie über die linke Schaltfläche zurück auf die Liste.
+
+Welche der beiden Ansichten Sie gewählt haben, gilt, solange die Job-Maske offen ist, und wird nicht
+gespeichert. Beim nächsten Öffnen eines Jobs steht wieder die Liste da. Am Job selbst ändert das
+Umschalten nichts.
+
+### Eine einzelne Aktion testen
+
+In der Maske einer Aktion gibt es einen Knopf **Ausführen**, der nur diese eine Aktion laufen lässt, mit
+dem gespeicherten Ergebnis der vorherigen Aktion als Eingang. Die Kette davor läuft dabei ausdrücklich
+nicht mit: Sonst löste das Ausprobieren einer hinteren Aktion zum Beispiel einen Bestandsimport aus, der
+weiter vorn in der Kette steht. Gibt es keine vorherige Aktion oder kein gespeichertes Ergebnis, läuft
+die Aktion ohne Eingangsdaten.
+
+Zwei Dinge sind dabei zu wissen:
+
+- **Ausgeführt wird der Stand, der gerade in der Maske steht**, nicht der zuletzt gespeicherte. Sie
+  können also etwas ausprobieren, ohne vorher zu speichern.
+- **Der Knopf ist gesperrt, bis die Aktion einmal gespeichert wurde.** Das Ergebnis wird an der Aktion
+  hinterlegt, und dafür braucht sie eine gespeicherte Kennung.
+
+Das Ergebnis erscheint darunter in drei Ansichten: **Struktur** (ein Baum, bei XML- und JSON-Ergebnissen),
+**Rohdaten** (der reine Text, mit Hinweis, wenn nur ein Ausschnitt gezeigt wird) und **Tabelle** (nur bei
+einem CSV-Ergebnis; bei JSON und XML fehlt dafür erst noch eine Spaltenzuordnung). Gehört die Aktion zu
+einem Modul, für das keine gültige Lizenz vorliegt, lässt sie sich auch einzeln nicht ausführen.
+
+Bislang steht der Knopf in der Aktion **JTL-API abrufen** zur Verfügung; weitere Aktionsmasken erhalten
+ihn nach und nach.
+
 ## Jobs übertragen und fertige Vorlagen einspielen
 
 Ein Job, der auf einer Installation läuft, lässt sich auf eine andere übertragen. Und für
@@ -375,8 +495,10 @@ bisherigen Antworten zu verwerfen.
 
 **Führt ein Paket Programme aus,** zeigt Jobby vor dem Einspielen im Klartext, welche das sind und
 mit welchen Argumenten — bei einer benutzerdefinierten Aktion, einem Programmstart oder einer freien
-SQL-Anweisung. Sie bestätigen das ausdrücklich. Eine Paketdatei kommt von aussen, und was sie
-ausführt, läuft mit den Rechten Ihres arpaTools.
+SQL-Anweisung. Bringt eine benutzerdefinierte Aktion ihr PowerShell-Skript selbst mit, steht auch
+dieses dort; bei einem langen Skript zeigt Jobby die ersten Zeilen und dahinter, wie viele es noch
+sind. Sie bestätigen das ausdrücklich. Eine Paketdatei kommt von aussen, und was sie ausführt, läuft
+mit den Rechten Ihres arpaTools.
 
 **Nach dem Einspielen sind die Jobs abgeschaltet.** Prüfen Sie den Zeitplan und die Zuordnungen und
 schalten Sie sie erst dann ein.
@@ -562,11 +684,34 @@ Liest mehrere Dateien aus einem Ordner zur Weiterverarbeitung ein.
 
 ### Sonstiges: Daten in Verzeichnis speichern
 
-Speichert die verarbeiteten Dateien in einem Verzeichnis, z. B. zur Archivierung.
+Speichert die verarbeiteten Dateien in einem Verzeichnis, z. B. zur Archivierung. Wahlweise landet die
+Datei gar nicht dauerhaft auf der Platte, sondern bleibt nur für den Rest dieser Kette erhalten —
+praktisch, wenn eine nachfolgende Aktion im selben Job die Datei kurz braucht, sie danach aber niemand
+mehr finden soll.
 
-- **Zielverzeichnis:** wohin gespeichert wird.
-- **Dateien nach Tagen löschen:** nach wie vielen Tagen automatisch gelöscht wird (z. B. 30).
-- **Existierende Datei:** „Überschreiben" oder „Ignorieren".
+- **Quelle:** „Dateien aus der Kette" (Vorgabe, unverändertes Verhalten) speichert Dateien, die eine
+  vorherige Aktion abgelegt hat. „Ergebnis der vorherigen Aktion" speichert stattdessen ein Ergebnis,
+  aus dem noch keine Datei geworden ist, zum Beispiel die Antwort der Aktion „JTL-API abrufen". Haben
+  mehrere vorangegangene Aktionen ein Ergebnis geliefert, wählen Sie es über **Bestimmtes Ergebnis**
+  aus; bleibt das Feld leer, wird das zuletzt erzeugte genommen.
+- **Ziel:** ein Zielverzeichnis, oder „Nur für die Kette" — dann entfällt auch das automatische
+  Löschen nach Tagen, weil nichts dauerhaft abgelegt wird.
+- **Zielverzeichnis:** wohin gespeichert wird, wenn das Ziel ein Verzeichnis ist.
+- **Dateiname:** wie die abgelegte Datei heißen soll. Bleibt das Feld leer, behält die Datei ihren
+  bisherigen Namen. Die Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`,
+  `##SECOND##` sind auch hier möglich und werden beim Speichern durch das aktuelle Datum bzw. die
+  aktuelle Uhrzeit ersetzt: aus `export_##YEAR####MONTH####DAY##.csv` wird am 28. August 2026 die
+  Datei `export_20260828.csv`. Tragen Sie einen Namen ohne Dateiendung ein (z. B. `export_##YEAR##`),
+  ergänzt arpaTools automatisch die Endung der Quelldatei, damit eine Datei entsteht, die sich öffnen
+  lässt; ein Name mit eigener Endung wird unverändert übernommen.
+  Bei „Alle Dateien" gilt derselbe eingetragene Name für jede ausgewählte Datei — dann bleibt am Ziel
+  nur eine davon übrig, die anderen verschwinden. Wählen Sie in diesem Fall entweder „Nur die neueste
+  Datei" oder lassen Sie das Feld leer, damit jede Datei ihren eigenen Namen behält.
+- **Dateien nach Tagen löschen:** nach wie vielen Tagen automatisch gelöscht wird (z. B. 30). Gilt nur
+  für ein Zielverzeichnis.
+- **Existierende Datei:** „Überschreiben" oder „Ignorieren". Bei „Ignorieren" bleibt eine bereits
+  vorhandene Datei unverändert — das trägt seit dieser Erweiterung eine Warnung ins
+  Anwendungsprotokoll ein, statt unbemerkt zu bleiben.
 
 Legt arpaTools das Zielverzeichnis selbst an, weil es noch nicht vorhanden ist, erhalten alle
 Windows-Benutzer des Rechners darin das Recht „Ändern". Das ist nötig, wenn mehrere Personen
@@ -588,6 +733,9 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 - **E-Mail-Konto:** das konfigurierte Konto für den Versand.
 - **Empfänger:** Adresse des Empfängers.
 - **Betreff** und **Nachricht:** Inhalt der E-Mail. Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`, `##SECOND##` sind möglich und werden beim Versand durch das aktuelle Datum bzw. die aktuelle Uhrzeit ersetzt, zum Beispiel „Bericht vom ##DAY##.##MONTH##.##YEAR##".
+
+  Empfänger, Betreff und Nachricht fassen jeweils 500 Zeichen. Das Feld nimmt nicht mehr an, sobald
+  die Grenze erreicht ist — so fällt sie beim Schreiben auf und nicht erst beim Speichern.
 - **Anhang:** ob ein Anhang aus einem der genannten Schritte mitgesendet wird. Bei
   *E-Mail nur mit Anhang senden* wird nichts verschickt, solange kein Anhang zustande kommt —
   etwa wenn der Download keine passende Datei gefunden oder die Abfrage keine Zeilen geliefert
@@ -675,8 +823,17 @@ daneben je eine Schaltfläche, über die Sie die Datei beziehungsweise den Ordne
 sie: die Prüfung, ob arpaTools das Programm und den Interpreter findet, hängt an der Genauigkeit des
 Pfads, und ein Tippfehler fällt sonst erst beim Lauf auf.
 
+- **PowerShell-Skript in dieser Aktion:** ein Schalter über den Feldern. Ohne ihn starten Sie wie
+  bisher eine Programmdatei, die auf dem ausführenden Rechner liegt. Mit ihm tritt an die Stelle des
+  Pfads ein Eingabefeld, in das Sie das Skript direkt schreiben. Das lohnt sich für kurze Skripte:
+  Sie müssen keine Datei anlegen, pflegen und auf den Server mitnehmen, und beim Export eines Jobs
+  reist das Skript mit. Arbeitsverzeichnis, Zeitlimit, Rückgabewert, Ausgabeverzeichnis und die
+  Zugangsdaten aus dem Vault gelten unverändert weiter.
+  Zugangsdaten stehen im Skript als Umgebungsvariablen bereit, also `$env:NAME`; Platzhalter wie
+  `##VAULT:NAME##` werden im Skripttext selbst **nicht** ersetzt.
 - **Programm oder Skript:** Pfad zur Datei, zum Beispiel eine `.exe`, `.ps1`, `.py`, `.bat`/`.cmd` oder
-  `.jar`. arpaTools erkennt anhand der Endung, womit gestartet wird.
+  `.jar`. arpaTools erkennt anhand der Endung, womit gestartet wird. Steht der Schalter oben auf
+  Skript, entfällt dieses Feld.
 - **Interpreter:** überschreibt die automatische Erkennung, zum Beispiel für PowerShell 7 statt der
   mitgelieferten Windows-PowerShell oder eine bestimmte Python-Installation. Ist die automatische
   Erkennung erfolglos, ist das Feld Pflicht.
@@ -830,10 +987,75 @@ Führt eine lesende SQL-Abfrage aus und speichert das Ergebnis als Datei zur Wei
 folgenden Aktionen.
 
 - **MS-SQL Statement:** die Abfrage. Mit **Prüfen** wird die Gültigkeit getestet.
+- **Werte der Abfrage:** siehe unten. Erscheint nur, wenn die Abfrage Variablen deklariert.
 - **Header ausgeben:** ob Spaltenüberschriften mitgeschrieben werden.
 - **Trennzeichen:** Semikolon oder Komma.
 - **Dateiname:** Platzhalter `##year##`, `##month##`, `##day##`, `##hour##`, `##minute##`, `##second##` sind möglich.
 - **Dateiformat:** CSV oder TXT.
+
+#### Grenzwerte ändern, ohne die Abfrage anzufassen
+
+Beginnt Ihre Abfrage mit einer `DECLARE`-Zeile, erscheint der Wert nach dem Speichern als eigenes
+Feld über der Abfrage. Sie ändern ihn dort, statt die passende Stelle im Text zu suchen.
+
+Ein Beispiel: Diese Abfrage findet Aufträge, die länger als drei Tage offen sind.
+
+```sql
+DECLARE @VerzugTage int = 3;
+
+SELECT cAuftragsNr
+FROM Verkauf.tAuftrag
+WHERE nKomplettAusgeliefert = 0
+  AND dErstellt < DATEADD(day, -@VerzugTage, GETDATE());
+```
+
+Nach dem Speichern steht über der Abfrage ein Feld **VerzugTage (int)** mit dem Wert 3. Tragen Sie
+dort 10 ein, rechnet der Job mit 10 — der Abfragetext bleibt unverändert. Er ist also weiterhin das,
+was Sie geschrieben haben, und der Wert liegt daneben.
+
+Zwei Dinge sind zu wissen:
+
+- **Der Typ wird geprüft.** In ein Feld einer als `int` deklarierten Variablen gehören nur ganze
+  Zahlen; Speichern bleibt gesperrt, solange etwas anderes darin steht. Zahlen und Datumsangaben
+  dürfen Sie in der gewohnten Schreibweise eingeben, also `12,5` und `24.12.2026`.
+- **Eine Variable ohne Wert im Text ist ein Pflichtfeld.** Schreiben Sie `DECLARE @artikel int;`
+  ohne Zuweisung, müssen Sie das Feld ausfüllen. Bliebe es leer, liefe die Abfrage mit einem
+  leeren Wert und fände nie etwas — der Job liefe jede Nacht durch und meldete nichts, ohne dass
+  ein Fehler sichtbar würde.
+
+Lassen Sie ein Feld leer, dessen Variable im Text bereits einen Wert zugewiesen bekommt, gilt der
+Wert aus dem Text. Bestehende Abfragen ohne `DECLARE`-Zeile ändern sich durch all das nicht.
+
+### Sonstiges: JTL-API abrufen
+
+Ruft Stammdaten oder Artikel direkt über die eigene Programmierschnittstelle der JTL-Wawi ab, statt
+über eine Datei oder eine JTL-Ameise-Vorlage. Das Ergebnis geht unmittelbar an die nächste Aktion
+weiter: Sie können es zum Beispiel mit **Daten in Verzeichnis speichern** ablegen, mit **JSON zu
+CSV** in eine CSV umwandeln oder per E-Mail verschicken.
+
+- **Zugänge:** der eingerichtete Zugang zur JTL-Wawi-Programmierschnittstelle.
+- **Was abgerufen wird:** Hersteller, Lager, Artikel oder Verbindungsinfo. Die Verbindungsinfo liefert
+  Version und Mandant der angebundenen Wawi. Anders als die Aktion „JTL-API-Status", die dasselbe nur
+  ins Protokoll schreibt, wird die Auskunft hier an die nächste Aktion weitergereicht und lässt sich
+  damit speichern, prüfen oder verschicken.
+- **Nur bei Artikeln — vier Eingrenzungen, alle optional und miteinander kombinierbar:**
+  Suchbegriff (durchsucht Artikelname und Artikelnummer), Kategorie, Hersteller und geändert seit
+  einem bestimmten Datum. Über „geändert seit" lässt sich ein Job auf das beschränken, was sich seit
+  dem letzten Lauf geändert hat, statt jedes Mal den gesamten Artikelbestand zu ziehen.
+- **Höchstens X Artikel:** bricht den Abruf nach der angegebenen Anzahl ab, auch wenn mehr Artikel
+  zur Auswahl stünden. Leer lassen holt alle passenden Artikel. Praktisch, um beim Einrichten schnell
+  ein Ergebnis zu sehen, ohne gleich den ganzen Bestand abzurufen.
+- **Name für das Ergebnis:** wie das Ergebnis in der Kette heißt, damit eine folgende Aktion genau
+  dieses auswählen kann. Nur nötig, wenn mehrere Aktionen davor ein Ergebnis liefern; bleibt das Feld
+  leer, nimmt eine folgende Aktion ohne eigene Auswahl das zuletzt erzeugte.
+
+Bei einer umfangreichen Artikelliste liefert die Aktion ihr Ergebnis direkt als Datei statt als
+Ergebnis, das erst noch zu einer Datei werden müsste. Verwenden Sie in diesem Fall bei **Daten in
+Verzeichnis speichern** die Quelle „Dateien aus der Kette" statt „Ergebnis der vorherigen Aktion",
+damit die nachfolgende Aktion die Artikeldaten sicher findet; bei Herstellern und Lagern, die immer
+klein bleiben, ändert sich nichts.
+
+Voraussetzung ist ein eingerichteter Zugang zur JTL-Wawi-Programmierschnittstelle (Modul JTL-API).
 
 ### Sonstiges: Daten per SQL einfügen/ändern
 
@@ -880,9 +1102,9 @@ genau einmal. Die Dateien der übrigen Blöcke bleiben liegen und werden erst be
 
 ### Sonstiges: Bedingung
 
-Prüft einen Wert und entscheidet danach, wie es mit den folgenden Aktionen weitergeht: normal
-weiterlaufen, die Kette beenden oder eine festgelegte Anzahl der folgenden Aktionen überspringen. Die
-Aktion selbst lädt keine Datei und verändert keine Daten.
+Prüft einen Wert und entscheidet danach, wie es weitergeht: entweder läuft der Job normal weiter, oder
+die Kette endet, oder es laufen die Schritte, die Sie in den **Dann**- und **Sonst**-Block der
+Bedingung gelegt haben. Die Aktion selbst lädt keine Datei und verändert keine Daten.
 
 - **Quelle:** woher der geprüfte Wert kommt — **Eigene Abfrage** (eine eigene, nur lesende
   SQL-Abfrage) oder **Ergebnis der vorherigen Aktion** (das, was die Aktion davor geliefert hat).
@@ -895,17 +1117,86 @@ Aktion selbst lädt keine Datei und verändert keine Daten.
 - **Wert:** der Vergleichswert. Sind Messgröße und Wert beide Zahlen, wird numerisch verglichen, dabei
   **ohne** Tausendertrennzeichen — „1,5" gilt dann als Text, nicht als Zahl 15. Ist mindestens eine
   Seite keine Zahl, wird als Text verglichen, ohne Unterscheidung von Groß- und Kleinschreibung.
-- **Wenn nicht erfüllt:** **Kette beenden** oder **Die nächsten Aktionen überspringen**.
-- **Anzahl:** nur bei „Die nächsten Aktionen überspringen" sichtbar — wie viele der folgenden Aktionen
-  entfallen (1 bis 999).
+- **Wenn nicht erfüllt:** **Kette beenden** oder **Dann- und Sonst-Block verwenden**.
 
 Trifft die Bedingung nicht zu, gilt der Job trotzdem als **erfolgreich abgeschlossen**, nicht als
-fehlgeschlagen. Das Anwendungsprotokoll vermerkt aber, dass die Bedingung nicht zutraf, mit dem
+fehlgeschlagen. Das Anwendungsprotokoll vermerkt aber, was die Bedingung entschieden hat, mit dem
 gemessenen Wert und der eingestellten Regel.
 
-**Wenn/Sonst nachbauen.** Die Anzahl beim Überspringen existiert, damit sich mit zwei Bedingungen mit
-entgegengesetzter Regel ein Wenn/Sonst-Zweig abbilden lässt — jede Bedingung überspringt den Block
-der anderen:
+#### Der Dann- und der Sonst-Block
+
+Wählen Sie **Dann- und Sonst-Block verwenden**, bekommt die Bedingung in der Schrittliste zwei
+Abschnitte: **Dann** und **Sonst**. Was im Dann-Block liegt, läuft, wenn die Prüfung zutrifft; was im
+Sonst-Block liegt, läuft, wenn sie nicht zutrifft. Der jeweils andere Block wird übergangen. Danach
+geht der Job in beiden Fällen hinter der Bedingung weiter, mit den Schritten, die unter den beiden
+Blöcken stehen.
+
+Ein leerer Block ist erlaubt. Trifft die Prüfung zu und der Dann-Block ist leer, passiert an dieser
+Stelle einfach nichts, und der Job läuft weiter.
+
+**Einen Schritt in einen Block legen.** Legen Sie den Schritt zunächst wie gewohnt an; er landet
+unterhalb der Bedingung. Öffnen Sie dann sein Punktemenü (die drei Punkte am rechten Rand der Zeile)
+und wählen Sie:
+
+- **In den Dann-Block** — der Schritt rückt in den Dann-Block der nächsten Bedingung, die auf seiner
+  Ebene darüber steht, und zwar ans Ende des Blocks.
+- **In den Sonst-Block** — dasselbe für den Sonst-Block.
+- **Aus dem Block lösen** — der Schritt verlässt seinen Block wieder und steht danach auf der Ebene
+  seiner bisherigen Bedingung, also hinter ihr.
+
+Die beiden ersten Einträge sind nur wählbar, wenn über dem Schritt tatsächlich eine Bedingung steht,
+in deren Block er passt; der dritte nur, wenn der Schritt in einem Block liegt. Eine Bedingung
+selbst lässt sich nur so lange in einen Block legen, wie dabei keine dritte Ebene entstünde.
+
+Schritte in einem Block sind eingerückt dargestellt, damit auf einen Blick zu sehen ist, wozu sie
+gehören. Die Nummern laufen über den ganzen Job durch, von oben nach unten, so wie die Liste steht.
+
+**Hoch und Runter bleiben im Block.** Die beiden Pfeile verschieben einen Schritt nur innerhalb
+seines Blocks beziehungsweise innerhalb der Hauptkette. Ein Schritt springt damit nie versehentlich
+in einen Block hinein oder aus einem heraus; dafür gibt es allein die drei Einträge im Punktemenü.
+Steht eine Bedingung mit gefüllten Blöcken im Weg, wandert sie beim Verschieben mit ihrem ganzen
+Inhalt vorbei.
+
+**Eine Bedingung in einem Block ist erlaubt, eine Bedingung in deren Block nicht.** Sie können also
+innerhalb eines Dann- oder Sonst-Blocks noch einmal verzweigen, aber nicht noch eine Ebene tiefer.
+Wird ein Job doch tiefer verschachtelt, etwa durch ein von Hand gebautes Vorlagenpaket, laufen die
+zu tief liegenden Schritte in der Hauptkette mit, statt verloren zu gehen; das Anwendungsprotokoll
+vermerkt es.
+
+**Eine Bedingung mit Inhalt löschen.** Löschen Sie eine Bedingung, in deren Blöcken noch Schritte
+liegen, fragt arpaTools nach, weil mehr als eine Zeile betroffen ist:
+
+- **Ja** — die Schritte bleiben erhalten und rücken an die Stelle der gelöschten Bedingung in die
+  Hauptkette. Nur die Bedingung selbst verschwindet.
+- **Nein** — die Schritte werden zusammen mit der Bedingung gelöscht.
+- **Abbrechen** — es passiert nichts.
+
+Wirksam wird beides erst, wenn Sie den Job speichern. Eine Bedingung mit leeren Blöcken und jeder
+andere Schritt werden wie bisher ohne Nachfrage entfernt.
+
+#### Der Überspringzähler bestehender Bedingungen
+
+Vor den Blöcken gab es einen dritten Weg: **Die nächsten Aktionen überspringen**, mit einer Anzahl
+von 1 bis 999. Bestehende Bedingungen, die so eingestellt sind, laufen unverändert weiter, und die
+Maske zeigt ihnen die Einstellung samt Anzahl weiterhin an. **Neu angelegte Bedingungen bekommen sie
+nicht mehr angeboten**, weil die beiden Blöcke dasselbe sagen, nur direkt an den Schritten statt in
+einer Zahl.
+
+Unter dem Zahlenfeld einer solchen Bedingung steht deshalb ein Hinweis und darunter der Knopf **Auf
+Dann-/Sonst-Blöcke umstellen**. Er stellt die Bedingung verlustfrei um: Die Schritte, die bisher
+übersprungen wurden, wandern in den Dann-Block. Der Job tut danach genau dasselbe wie vorher, denn
+„bei Nichterfüllung die nächsten drei überspringen" heißt nichts anderes als „diese drei laufen nur
+bei Erfüllung". Der Sonst-Block bleibt leer; der Zähler kannte keinen zweiten Weg.
+
+Stellen Sie eine Bedingung umgekehrt von den Blöcken zurück auf „Kette beenden" oder auf den Zähler,
+und in ihren Blöcken liegen noch Schritte, fragt arpaTools nach: **Ja** hebt die Schritte in die
+Hauptkette, wo sie weiterlaufen, **Nein** behält Blöcke und Blockmodus. In den anderen Modi führt
+der Job Blockinhalte nämlich nicht aus, und die Schritte stünden sonst in der Liste, ohne je zu
+laufen.
+
+**Wenn/Sonst mit zwei Bedingungen (der alte Weg).** Vor den Blöcken ließ sich eine Verzweigung nur
+mit zwei Bedingungen mit entgegengesetzter Regel nachbauen, von denen jede den Block der anderen
+überspringt:
 
 1. Daten von MS-SQL Server laden
 2. Bedingung: Anzahl Zeilen ist größer als 0, sonst überspringe 2
@@ -929,6 +1220,9 @@ wird trotzdem ausgewertet — sie wird nicht mit übersprungen, sondern setzt di
 im Beispiel hinter dem Dann-Block steht statt darin; eine dritte Bedingung mitten im übersprungenen
 Block würde dagegen den Zähler der ersten überschreiben.
 
+Mit den beiden Blöcken entfällt dieser Nachbau. Eine Bedingung reicht, und beide Fälle stehen
+sichtbar untereinander.
+
 ### XML zu CSV, JSON zu CSV und Excel zu CSV
 
 Viele Lieferanten liefern ihre Daten als XML, JSON oder Excel-Mappe. Die Importaktionen der Wawi erwarten
@@ -941,13 +1235,24 @@ importieren, E-Mail mit Protokoll versenden.
 
 Excel zu CSV liest sowohl `.xlsx` als auch das alte `.xls`. Beide ergeben dieselbe CSV.
 
+**Woher die Struktur kommt**
+
+Wurde die vorherige Aktion in der Kette bereits einmal über [Ausführen](#eine-einzelne-aktion-testen)
+getestet und passt ihr Ergebnis zum Format dieser Maske (JSON bei „JSON zu CSV", XML bei „XML zu CSV"),
+baut arpaTools die Struktur zuerst aus diesem Ergebnis auf, ohne dass Sie eine Beispieldatei suchen
+müssen. Über dem Baum steht dann, woher die Struktur stammt, samt Datum des Probelaufs. Wählen Sie
+danach selbst eine Beispieldatei, gewinnt sie: Die Struktur wird von da an aus der Datei aufgebaut, bis
+Sie erneut eine andere wählen. Bei „Excel zu CSV" gibt es das nicht, dort bleibt die Beispieldatei der
+einzige Weg.
+
 **So richten Sie das Mapping ein**
 
 Nach dem Laden der Beispieldatei ist die Aktion bereits fertig konfiguriert: das Programm erkennt, was ein
 Datensatz ist, hakt alle Felder an und zeigt unten die fertige CSV. Meist prüfen Sie nur noch und speichern.
 
-1. Beispieldatei auswählen. Nehmen Sie eine echte Datei des Lieferanten. Links erscheint die Struktur mit
-   Häufigkeiten und Beispielwerten, etwa `product (250x)` und `qty "42"`.
+1. Beispieldatei auswählen (nur nötig, wenn keine passende Struktur aus der vorherigen Aktion vorliegt).
+   Nehmen Sie eine echte Datei des Lieferanten. Links erscheint die Struktur mit Häufigkeiten und
+   Beispielwerten, etwa `product (250x)` und `qty "42"`.
 2. Datensatz-Ebene prüfen. Die grün markierte Ebene ist eine CSV-Zeile. Vorbelegt ist die äußerste Ebene,
    die sich wiederholt. Passt das nicht, wählen Sie im Baum eine andere Ebene und klicken **Als
    Zeilen-Ebene setzen**. Bei einer Preisliste ist das der Artikel, bei einer Bestellung die Position.
@@ -1088,10 +1393,15 @@ Der arpaTools Worker ist eine Windows-Anwendung, die in einem festgelegten Inter
 Einstellungen). Bei jedem Durchlauf prüft der Worker, ob auszuführende Jobs vorhanden sind, und arbeitet
 sie nacheinander ab. Der Worker wird als Windows-Dienst installiert und läuft im Hintergrund.
 
-**Der einfachste Weg führt über arpaTools selbst:** im Bereich **Dienst** steht, ob der Dienst
-eingerichtet ist und ob er läuft, und dort richten Sie ihn auch ein. Windows fragt dabei nach
-Administratorrechten. Die folgenden Befehle brauchen Sie nur noch, wenn Sie den Dienst ohne
-geöffnetes arpaTools einrichten wollen.
+**Neuere Fassungen richten den Dienst beim Installieren selbst ein.** Sie müssen dafür nichts
+mehr tun: Ein Update hält den Dienst kurz an, tauscht die Dateien und startet ihn wieder. Haben
+Sie den Dienst früher von Hand eingerichtet, übernimmt das Installationsprogramm ihn samt seiner
+Startart.
+
+**Wenn Sie ihn selbst steuern wollen:** in arpaTools zeigt der Bereich **Dienst**, ob er
+eingerichtet ist und ob er läuft, und dort schalten Sie ihn ein und aus. Windows fragt dabei nach
+Administratorrechten. Die folgenden Befehle brauchen Sie nur noch im Ausnahmefall, etwa wenn der
+Dienst entfernt wurde und arpaTools gerade nicht zur Hand ist.
 
 Dienst installieren (Eingabeaufforderung als Administrator):
 ```

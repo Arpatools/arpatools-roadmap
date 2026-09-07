@@ -2,46 +2,82 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/changelog.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/index.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/arpatools.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/jobby.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/netstock.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/provimate.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/retourenportal.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/sammelrechnung.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/sellerlogic.html</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-09-07</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/doku/smartsupply.html</loc>
+    <lastmod>2026-09-07</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/doku/goreturn.html</loc>
+    <lastmod>2026-09-07</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/935.html</loc>
+    <lastmod>2026-09-07</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/921.html</loc>
+    <lastmod>2026-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/915.html</loc>
+    <lastmod>2026-09-01</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/903.html</loc>
+    <lastmod>2026-09-01</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/893.html</loc>
+    <lastmod>2026-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/890.html</loc>
+    <lastmod>2026-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/875.html</loc>
+    <lastmod>2026-09-02</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/873.html</loc>
     <lastmod>2026-08-28</lastmod>
   </url>
   <url>
@@ -50,7 +86,19 @@
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/858.html</loc>
-    <lastmod>2026-08-27</lastmod>
+    <lastmod>2026-08-28</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/855.html</loc>
+    <lastmod>2026-08-28</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/852.html</loc>
+    <lastmod>2026-08-28</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/851.html</loc>
+    <lastmod>2026-08-28</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/835.html</loc>
@@ -58,11 +106,11 @@
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/824.html</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-30</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/821.html</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/818.html</loc>
@@ -142,6 +190,10 @@
   </url>
   <url>
     <loc>https://arpatools.github.io/arpatools-roadmap/issues/715.html</loc>
+    <lastmod>2026-08-18</lastmod>
+  </url>
+  <url>
+    <loc>https://arpatools.github.io/arpatools-roadmap/issues/706.html</loc>
     <lastmod>2026-08-18</lastmod>
   </url>
   <url>

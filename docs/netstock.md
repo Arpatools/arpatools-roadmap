@@ -64,7 +64,12 @@ Markieren Sie eine oder mehrere Zeilen und klicken Sie auf **Auswahl senden**, u
 einem Schritt senden: **Stammdaten senden** für die Gruppe Stammdaten und **Verkauf & Verbrauch
 senden** für die Bewegungsdaten. **Alles senden** überträgt sämtliche Pakete der Tabelle.
 
-> senden" ist nicht bestätigt; vermutlich der Zeitraum der übertragenen Verkaufsdaten.
+Das Feld **Verkaufszeitraum in Monaten** neben **Verkauf & Verbrauch senden** legt fest, wie weit die
+übertragenen Verkäufe zurückreichen. Gezählt wird ab dem Ersten des laufenden Monats: Der Wert 2
+überträgt die beiden abgeschlossenen Vormonate und den laufenden Monat. Maßgeblich ist dabei das
+Rechnungs- beziehungsweise Versanddatum, nicht das Datum der Auftragserfassung — genau danach ordnet
+Netstock die Mengen den Monaten zu. Ein Auftrag, der im Januar erfasst und im März ausgeliefert wurde,
+zählt also zum März.
 
 ## Daten empfangen
 
@@ -90,8 +95,9 @@ Abschnitt „Verbindungen"), welche Firma und welcher Benutzer für den Datenaus
 
 - **Zeitlimit für Übertragungen (Sekunden):** wie lange arpaTools auf die Antwort einer einzelnen
   Übertragungsabfrage wartet, bevor sie abgebrochen wird. Erlaubt sind Werte von 0 bis 3600 Sekunden,
-  Vorgabe ist 30. **0 bedeutet unbegrenzt.** Erhöhen Sie den Wert, wenn Übertragungen bei großen
-  Datenmengen mit einer Zeitüberschreitung abbrechen.
+  Vorgabe ist 90. **0 bedeutet unbegrenzt.** Erhöhen Sie den Wert, wenn Übertragungen bei großen
+  Datenmengen mit einer Zeitüberschreitung abbrechen. Wer den Wert nie verändert hat, wird beim
+  Update von den früheren 30 Sekunden auf die 90 gehoben; ein selbst eingetragener Wert bleibt stehen.
 
 ![Netstock-Einstellungen, Registerkarte „Was übertragen wird": vier Schalter (Retouren senden, Lieferantenartikelnummer/HAN/Warengruppe als Gruppe senden) sowie die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung.](bilder/netstock-einstellungen-uebertragen.png)
 
