@@ -643,6 +643,20 @@ Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eine
 - **Spalte Identifizierung** und **Spalte Menge:** in welchen Spalten Artikel und Menge stehen.
 - **Verarbeitung:** nur die neueste oder alle geladenen Dateien.
 
+- **Trennzeichen:** *Automatisch erkennen* (Vorgabe), *Semikolon* oder *Komma*.
+
+Normalerweise bleibt es beim automatischen Erkennen: Semikolon, Komma und Tabulator werden anhand
+der ersten Zeilen bestimmt, und Dateien, die bisher verarbeitet wurden, laufen unverändert weiter —
+auch solche mit Semikolon und Dezimalkomma wie `4711;3;7,95`.
+
+Das Erkennen braucht mehrere Zeilen, um sicher zu sein. Enthält eine Datei nur eine einzige
+Datenzeile **und** steht in einem Textfeld mehr als ein Komma, etwa `4711;Schraube, verzinkt, 5mm,
+M8;3`, kann es danebengreifen. Dann wird das Trennzeichen hier fest eingestellt. Beide Angaben
+gelten genauso für **Lieferantenbestellung schreiben**.
+
+Importiert ein Lauf nichts, obwohl die Datei Zeilen enthält, steht im Anwendungsprotokoll eine
+Warnung mit dem verwendeten Trennzeichen — das ist die erste Stelle zum Nachsehen.
+
 ### Dateitransfer: Download von FTP-Server
 
 Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des

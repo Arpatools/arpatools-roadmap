@@ -49,6 +49,7 @@
         <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
         <li class="doc-toc-level-2"><a href="#daten-senden">Daten senden</a></li>
         <li class="doc-toc-level-2"><a href="#daten-empfangen">Daten empfangen</a></li>
+        <li class="doc-toc-level-3"><a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a></li>
         <li class="doc-toc-level-2"><a href="#einstellungen">Einstellungen</a></li>
         <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
         <li class="doc-toc-level-3"><a href="#job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</a></li>
@@ -170,6 +171,17 @@ Bestellvorschläge:</p>
 <li><strong>Auf Einkaufsliste:</strong> importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.</li>
 <li><strong>Als Lieferantenbestellung:</strong> importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.</li>
 </ul>
+<h3 id="wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</h3>
+<p>Eine abgeholte Datei bleibt auf dem Server liegen und kommt beim nächsten Abholen erneut mit. Wer
+zweimal übernimmt, hat die Bestellung zweimal in der Wawi.</p>
+<p>Dagegen gibt es in den Netstock-Einstellungen den Schalter <strong>Bestelldatei nach dem Übernehmen vom
+Server entfernen</strong>. Er ist zunächst aus, damit sich am gewohnten Verhalten nichts ändert.</p>
+<p>Eingeschaltet wird die Datei entfernt, sobald die Einkaufsliste oder die Lieferantenbestellung
+geschrieben ist. Sie bleibt liegen, wenn dabei etwas schiefgeht <strong>und auch dann, wenn die Datei
+keine verwertbare Zeile enthielt</strong> — sonst wäre die Bestellung weg, ohne dass etwas in der Wawi
+angekommen ist.</p>
+<p>Beim reinen <strong>Herunterladen</strong> greift der Schalter nicht: dort ist die abgelegte Datei das Ergebnis,
+und sie soll nicht verschwinden.</p>
 <h2 id="einstellungen">Einstellungen</h2>
 <p>Die Netstock-Einstellungen gliedern sich in vier Registerkarten: <strong>Verbindung</strong>, <strong>Was übertragen
 wird</strong>, <strong>Lagerauswahl</strong> und <strong>Stücklisten</strong>.</p>

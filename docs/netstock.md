@@ -80,6 +80,22 @@ Bestellvorschläge:
 - **Auf Einkaufsliste:** importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.
 - **Als Lieferantenbestellung:** importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.
 
+### Wenn dieselbe Bestellung zweimal ankommt
+
+Eine abgeholte Datei bleibt auf dem Server liegen und kommt beim nächsten Abholen erneut mit. Wer
+zweimal übernimmt, hat die Bestellung zweimal in der Wawi.
+
+Dagegen gibt es in den Netstock-Einstellungen den Schalter **Bestelldatei nach dem Übernehmen vom
+Server entfernen**. Er ist zunächst aus, damit sich am gewohnten Verhalten nichts ändert.
+
+Eingeschaltet wird die Datei entfernt, sobald die Einkaufsliste oder die Lieferantenbestellung
+geschrieben ist. Sie bleibt liegen, wenn dabei etwas schiefgeht **und auch dann, wenn die Datei
+keine verwertbare Zeile enthielt** — sonst wäre die Bestellung weg, ohne dass etwas in der Wawi
+angekommen ist.
+
+Beim reinen **Herunterladen** greift der Schalter nicht: dort ist die abgelegte Datei das Ergebnis,
+und sie soll nicht verschwinden.
+
 ## Einstellungen
 
 Die Netstock-Einstellungen gliedern sich in vier Registerkarten: **Verbindung**, **Was übertragen

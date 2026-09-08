@@ -663,12 +663,27 @@ auszulösen. Nützlich für Aufträge, die außerhalb des normalen Versandprozes
 <h3 id="einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</h3>
 <p>Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eines Benutzers ein.</p>
 <ul>
-<li><strong>Benutzer:</strong> für welchen Benutzer die Einkaufsliste befüllt wird.</li>
-<li><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</li>
-<li><strong>Identifizierungstyp:</strong> Artikel-ID oder Artikelnummer.</li>
-<li><strong>Spalte Identifizierung</strong> und <strong>Spalte Menge:</strong> in welchen Spalten Artikel und Menge stehen.</li>
-<li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+<li><p><strong>Benutzer:</strong> für welchen Benutzer die Einkaufsliste befüllt wird.</p>
+</li>
+<li><p><strong>Startzeile:</strong> ab welcher Zeile verarbeitet wird.</p>
+</li>
+<li><p><strong>Identifizierungstyp:</strong> Artikel-ID oder Artikelnummer.</p>
+</li>
+<li><p><strong>Spalte Identifizierung</strong> und <strong>Spalte Menge:</strong> in welchen Spalten Artikel und Menge stehen.</p>
+</li>
+<li><p><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</p>
+</li>
+<li><p><strong>Trennzeichen:</strong> <em>Automatisch erkennen</em> (Vorgabe), <em>Semikolon</em> oder <em>Komma</em>.</p>
+</li>
 </ul>
+<p>Normalerweise bleibt es beim automatischen Erkennen: Semikolon, Komma und Tabulator werden anhand
+der ersten Zeilen bestimmt, und Dateien, die bisher verarbeitet wurden, laufen unverändert weiter —
+auch solche mit Semikolon und Dezimalkomma wie <code>4711;3;7,95</code>.</p>
+<p>Das Erkennen braucht mehrere Zeilen, um sicher zu sein. Enthält eine Datei nur eine einzige
+Datenzeile <strong>und</strong> steht in einem Textfeld mehr als ein Komma, etwa <code>4711;Schraube, verzinkt, 5mm, M8;3</code>, kann es danebengreifen. Dann wird das Trennzeichen hier fest eingestellt. Beide Angaben
+gelten genauso für <strong>Lieferantenbestellung schreiben</strong>.</p>
+<p>Importiert ein Lauf nichts, obwohl die Datei Zeilen enthält, steht im Anwendungsprotokoll eine
+Warnung mit dem verwendeten Trennzeichen — das ist die erste Stelle zum Nachsehen.</p>
 <h3 id="dateitransfer-download-von-ftp-server">Dateitransfer: Download von FTP-Server</h3>
 <p>Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
 Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
