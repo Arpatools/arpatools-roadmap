@@ -633,6 +633,18 @@ auszulösen. Nützlich für Aufträge, die außerhalb des normalen Versandprozes
 - **Spalte Auslieferdatum:** Spalte mit dem Auslieferdatum.
 - **Verarbeitung:** nur die neueste oder alle geladenen Dateien.
 
+### Einkauf: Netstock: Lieferantenbestellung
+
+Holt die Bestellvorschläge von Netstock ab und legt daraus Lieferantenbestellungen an — derselbe
+Weg wie die Schaltfläche im Netstock-Bildschirm, nur zeitgesteuert.
+
+Es gibt nichts einzustellen: FTP-Zugang, Firma, Bearbeiter und die Ameise-Vorlage stehen in den
+Netstock-Einstellungen. Die Aktion holt die Datei selbst, sie braucht also keine vorgeschaltete
+Download-Aktion.
+
+Für diesen Weg ist die Aktion nötig, weil Netstock Lieferant und Lager als Schlüssel schreibt und
+nicht als Namen. Eine allgemeine Ameise-Vorlage kann daraus nichts zuordnen.
+
 ### Einkauf: Einkaufsliste schreiben
 
 Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eines Benutzers ein.

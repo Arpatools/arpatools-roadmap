@@ -73,6 +73,7 @@
         <li class="doc-toc-level-3"><a href="#aufträge-lieferantenbestellung-bestätigen">Aufträge: Lieferantenbestellung bestätigen</a></li>
         <li class="doc-toc-level-3"><a href="#aufträge-lieferantenbestellung-erstellen">Aufträge: Lieferantenbestellung erstellen</a></li>
         <li class="doc-toc-level-3"><a href="#aufträge-ohne-versand-abschließen">Aufträge: Ohne Versand abschließen</a></li>
+        <li class="doc-toc-level-3"><a href="#einkauf-netstock-lieferantenbestellung">Einkauf: Netstock: Lieferantenbestellung</a></li>
         <li class="doc-toc-level-3"><a href="#einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</a></li>
         <li class="doc-toc-level-3"><a href="#dateitransfer-download-von-ftp-server">Dateitransfer: Download von FTP-Server</a></li>
         <li class="doc-toc-level-3"><a href="#dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</a></li>
@@ -660,6 +661,14 @@ auszulösen. Nützlich für Aufträge, die außerhalb des normalen Versandprozes
 <li><strong>Spalte Auslieferdatum:</strong> Spalte mit dem Auslieferdatum.</li>
 <li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
 </ul>
+<h3 id="einkauf-netstock-lieferantenbestellung">Einkauf: Netstock: Lieferantenbestellung</h3>
+<p>Holt die Bestellvorschläge von Netstock ab und legt daraus Lieferantenbestellungen an — derselbe
+Weg wie die Schaltfläche im Netstock-Bildschirm, nur zeitgesteuert.</p>
+<p>Es gibt nichts einzustellen: FTP-Zugang, Firma, Bearbeiter und die Ameise-Vorlage stehen in den
+Netstock-Einstellungen. Die Aktion holt die Datei selbst, sie braucht also keine vorgeschaltete
+Download-Aktion.</p>
+<p>Für diesen Weg ist die Aktion nötig, weil Netstock Lieferant und Lager als Schlüssel schreibt und
+nicht als Namen. Eine allgemeine Ameise-Vorlage kann daraus nichts zuordnen.</p>
 <h3 id="einkauf-einkaufsliste-schreiben">Einkauf: Einkaufsliste schreiben</h3>
 <p>Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eines Benutzers ein.</p>
 <ul>

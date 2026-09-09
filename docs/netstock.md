@@ -80,6 +80,20 @@ Bestellvorschläge:
 - **Auf Einkaufsliste:** importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.
 - **Als Lieferantenbestellung:** importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.
 
+### Bestellvorschläge zeitgesteuert übernehmen
+
+Beide Wege lassen sich auch als Job einrichten, damit sie ohne Zutun laufen:
+
+- **Auf Einkaufsliste:** nach einem Lauf über die Schaltfläche bietet arpaTools an, den passenden
+  Job selbst anzulegen.
+- **Als Lieferantenbestellung:** in Jobby eine Aktion **Netstock: Lieferantenbestellung**
+  hinzufügen. Sie holt die Bestellvorschläge selbst ab und legt sie an; einzustellen ist nichts,
+  denn Zugang und Zuordnung stehen in den Netstock-Einstellungen.
+
+Für den zweiten Weg ist die eigene Aktion nötig. Netstock schreibt Lieferant und Lager als
+Schlüssel in die Datei, nicht als Namen. Wer die Datei stattdessen über eine allgemeine
+Ameise-Vorlage einliest, bekommt dort keine Zuordnung zustande.
+
 ### Wenn dieselbe Bestellung zweimal ankommt
 
 Eine abgeholte Datei bleibt auf dem Server liegen und kommt beim nächsten Abholen erneut mit. Wer

@@ -49,6 +49,7 @@
         <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
         <li class="doc-toc-level-2"><a href="#daten-senden">Daten senden</a></li>
         <li class="doc-toc-level-2"><a href="#daten-empfangen">Daten empfangen</a></li>
+        <li class="doc-toc-level-3"><a href="#bestellvorschläge-zeitgesteuert-übernehmen">Bestellvorschläge zeitgesteuert übernehmen</a></li>
         <li class="doc-toc-level-3"><a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a></li>
         <li class="doc-toc-level-2"><a href="#einstellungen">Einstellungen</a></li>
         <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
@@ -171,6 +172,18 @@ Bestellvorschläge:</p>
 <li><strong>Auf Einkaufsliste:</strong> importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.</li>
 <li><strong>Als Lieferantenbestellung:</strong> importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.</li>
 </ul>
+<h3 id="bestellvorschläge-zeitgesteuert-übernehmen">Bestellvorschläge zeitgesteuert übernehmen</h3>
+<p>Beide Wege lassen sich auch als Job einrichten, damit sie ohne Zutun laufen:</p>
+<ul>
+<li><strong>Auf Einkaufsliste:</strong> nach einem Lauf über die Schaltfläche bietet arpaTools an, den passenden
+Job selbst anzulegen.</li>
+<li><strong>Als Lieferantenbestellung:</strong> in Jobby eine Aktion <strong>Netstock: Lieferantenbestellung</strong>
+hinzufügen. Sie holt die Bestellvorschläge selbst ab und legt sie an; einzustellen ist nichts,
+denn Zugang und Zuordnung stehen in den Netstock-Einstellungen.</li>
+</ul>
+<p>Für den zweiten Weg ist die eigene Aktion nötig. Netstock schreibt Lieferant und Lager als
+Schlüssel in die Datei, nicht als Namen. Wer die Datei stattdessen über eine allgemeine
+Ameise-Vorlage einliest, bekommt dort keine Zuordnung zustande.</p>
 <h3 id="wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</h3>
 <p>Eine abgeholte Datei bleibt auf dem Server liegen und kommt beim nächsten Abholen erneut mit. Wer
 zweimal übernimmt, hat die Bestellung zweimal in der Wawi.</p>
