@@ -48,6 +48,7 @@
         <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
         <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
         <li class="doc-toc-level-2"><a href="#daten-senden">Daten senden</a></li>
+        <li class="doc-toc-level-3"><a href="#der-lieferant-setartikel">Der Lieferant „Setartikel&quot;</a></li>
         <li class="doc-toc-level-2"><a href="#daten-empfangen">Daten empfangen</a></li>
         <li class="doc-toc-level-3"><a href="#bestellvorschläge-zeitgesteuert-übernehmen">Bestellvorschläge zeitgesteuert übernehmen</a></li>
         <li class="doc-toc-level-3"><a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a></li>
@@ -101,7 +102,7 @@ und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:<
 </tr>
 <tr>
 <td>Lieferanten</td>
-<td>Ihre Lieferantenstammdaten.</td>
+<td>Ihre Lieferantenstammdaten, dazu der Sammeleintrag <strong>Setartikel</strong>.</td>
 </tr>
 <tr>
 <td>Artikelstamm</td>
@@ -151,6 +152,11 @@ und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:<
 <p>Die Tabelle zeigt aktuell 13 Datenpakete (siehe Zähler „Nie gesendet" im Screenshot). Zwei zuvor
 dokumentierte Pakete, Nachfolgeartikel und Zusätzliche Daten/Optionale Felder, erscheinen darin nicht
 mehr.</p>
+<h3 id="der-lieferant-setartikel">Der Lieferant „Setartikel"</h3>
+<p>Stücklistenartikel haben in JTL-Wawi keinen Lieferanten. Damit sie sich in Netstock trotzdem
+auswerten lassen, sendet arpaTools sie gesammelt unter dem Lieferanten <strong>Setartikel</strong> mit. Artikel,
+die keine Stückliste sind und für die kein Standardlieferant hinterlegt ist, werden diesem
+Lieferanten <strong>nicht</strong> zugeordnet und erscheinen in Netstock ohne Lieferantenstammsatz.</p>
 <blockquote>
 <p>nur in diesem Profil (ohne eingerichtete Firma) nicht angezeigt werden.</p>
 </blockquote>
@@ -229,6 +235,23 @@ erhält und in welcher Gruppe es steht, dazu optional eigene Warenlager für FBA
 Komponenten und Mengen gelesen werden, inklusive <strong>Trenner Artikel und Menge</strong> und <strong>Trenner
 Komponente</strong> zur Aufteilung des Feldinhalts. Nötig ist das nur, wenn Netstock die Komponenten getrennt
 erwartet.</p>
+<p>Dazu stellen Sie unter <strong>Reihenfolge im Feld</strong> ein, welcher der beiden Werte zuerst steht. Bei
+<code>10;MSU12002</code> steht die Menge vorn, bei <code>MSU12002;10</code> die Artikelnummer. Passt die Einstellung nicht zu
+Ihren gepflegten Werten, kommen falsche Mengen bei Netstock an oder der Artikel wird übersprungen.</p>
+<blockquote>
+<p><strong>Hinweis:</strong> Wer die Sondererstellung schon vor dem Update genutzt hat, findet die Einstellung
+danach auf <strong>Menge, dann Artikelnummer</strong>. Pflegen Sie Ihr Feld andersherum, stellen Sie einmalig um.</p>
+</blockquote>
+<p><strong>Einträge, die nicht gelesen werden können, halten den Versand nicht mehr auf.</strong> Steht mitten im Feld
+ein Trenner zu viel, fehlt eine Menge, steht dort statt einer Menge etwas anderes, oder gibt es eine der
+genannten Artikelnummern in der Wawi nicht, wird dieser Artikel samt allen seinen Komponenten
+übersprungen; die übrigen Stücklisten gehen normal an Netstock. Ein Trenner am Ende (<code>10;MSU12002|</code>)
+ist dagegen unschädlich und wird einfach überlesen. Groß- und Kleinschreibung der Artikelnummer spielt
+keine Rolle. Jeder übersprungene Artikel steht mit Artikelnummer, Komponente und Feldinhalt im
+<strong>Anwendungsprotokoll</strong>, sodass Sie die betroffenen Stellen gezielt nacharbeiten können.</p>
+<blockquote>
+<p>mangels laufender interaktiver Sitzung in dieser Umgebung nicht möglich.</p>
+</blockquote>
 <h2 id="automatisierung-über-jobby">Automatisierung über Jobby</h2>
 <p>Für einen regelmäßigen, automatischen Datenaustausch richten Sie in Jobby einen Job mit der Aktion
 <strong>Netstock</strong> ein. Die Aktion sendet die konfigurierten Datenpakete automatisch, zeitgesteuert über den

@@ -40,7 +40,7 @@ und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:
 | Datenpaket | Beschreibung |
 |---|---|
 | Lager/Filialen | Stammdaten Ihrer Lager. |
-| Lieferanten | Ihre Lieferantenstammdaten. |
+| Lieferanten | Ihre Lieferantenstammdaten, dazu der Sammeleintrag **Setartikel**. |
 | Artikelstamm | Artikel-Stammdaten. |
 | Bestand je Lagerort | Aktueller Lagerbestand, aufgeschlüsselt je Lager. |
 | Chargen | Chargeninformationen. |
@@ -56,6 +56,13 @@ und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:
 Die Tabelle zeigt aktuell 13 Datenpakete (siehe Zähler „Nie gesendet" im Screenshot). Zwei zuvor
 dokumentierte Pakete, Nachfolgeartikel und Zusätzliche Daten/Optionale Felder, erscheinen darin nicht
 mehr.
+
+### Der Lieferant „Setartikel"
+
+Stücklistenartikel haben in JTL-Wawi keinen Lieferanten. Damit sie sich in Netstock trotzdem
+auswerten lassen, sendet arpaTools sie gesammelt unter dem Lieferanten **Setartikel** mit. Artikel,
+die keine Stückliste sind und für die kein Standardlieferant hinterlegt ist, werden diesem
+Lieferanten **nicht** zugeordnet und erscheinen in Netstock ohne Lieferantenstammsatz.
 
 > nur in diesem Profil (ohne eingerichtete Firma) nicht angezeigt werden.
 
@@ -149,6 +156,23 @@ Auf **Stücklisten** tragen Sie nur bei einer Sondererstellung ein eigenes Artik
 Komponenten und Mengen gelesen werden, inklusive **Trenner Artikel und Menge** und **Trenner
 Komponente** zur Aufteilung des Feldinhalts. Nötig ist das nur, wenn Netstock die Komponenten getrennt
 erwartet.
+
+Dazu stellen Sie unter **Reihenfolge im Feld** ein, welcher der beiden Werte zuerst steht. Bei
+`10;MSU12002` steht die Menge vorn, bei `MSU12002;10` die Artikelnummer. Passt die Einstellung nicht zu
+Ihren gepflegten Werten, kommen falsche Mengen bei Netstock an oder der Artikel wird übersprungen.
+
+> **Hinweis:** Wer die Sondererstellung schon vor dem Update genutzt hat, findet die Einstellung
+> danach auf **Menge, dann Artikelnummer**. Pflegen Sie Ihr Feld andersherum, stellen Sie einmalig um.
+
+**Einträge, die nicht gelesen werden können, halten den Versand nicht mehr auf.** Steht mitten im Feld
+ein Trenner zu viel, fehlt eine Menge, steht dort statt einer Menge etwas anderes, oder gibt es eine der
+genannten Artikelnummern in der Wawi nicht, wird dieser Artikel samt allen seinen Komponenten
+übersprungen; die übrigen Stücklisten gehen normal an Netstock. Ein Trenner am Ende (`10;MSU12002|`)
+ist dagegen unschädlich und wird einfach überlesen. Groß- und Kleinschreibung der Artikelnummer spielt
+keine Rolle. Jeder übersprungene Artikel steht mit Artikelnummer, Komponente und Feldinhalt im
+**Anwendungsprotokoll**, sodass Sie die betroffenen Stellen gezielt nacharbeiten können.
+
+> mangels laufender interaktiver Sitzung in dieser Umgebung nicht möglich.
 
 ## Automatisierung über Jobby
 

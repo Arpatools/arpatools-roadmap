@@ -570,7 +570,11 @@ Diese Aktion steht nur mit mindestens dem JTL-Tarif Advanced zur Verfügung.</p>
 <ul>
 <li><strong>Kurzbeschreibung:</strong> eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.</li>
 <li><strong>Datenbank:</strong> die JTL-Datenbank, gegen die importiert wird. Standard ist die Standarddatenbank.</li>
-<li><strong>Template:</strong> die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein).</li>
+<li><strong>Template:</strong> die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein). Angeboten
+werden die Vorlagen, die JTL zentral führt, also dieselben, die die Ameise beim Lauf sucht.
+Arbeiten Sie mit mehreren Mandanten und steht in einem älteren Job noch eine Vorlage aus der
+Mandantendatenbank, sagt der Dialog das beim Öffnen; wählen Sie die Vorlage dann einmal neu und
+speichern Sie den Job.</li>
 <li><strong>Workflows:</strong> bestimmt, ob während des Imports hinterlegte Workflows ausgeführt werden.</li>
 <li><strong>Loglevel:</strong> Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.</li>
 <li><strong>Parameter für Logs:</strong> zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: <code>--log</code> (Hauptbericht), <code>--log_errors</code>, <code>--log_warnings</code>, <code>--log_imported</code>, <code>--log_update</code>, <code>--log_other</code>. Platzhalter für den Dateinamen: <code>%y</code> (Jahr vierstellig), <code>%m</code> (Monat), <code>%d</code> (Tag), <code>%h</code> (Stunde), <code>%i</code> (Minute), <code>%s</code> (Sekunde), <code>%db</code> (Datenbankname), <code>%id</code> (Name der Importvorlage). Beispiel: <code>import_%y-%m-%d_%h-%i-%s_%id.log</code>.</li>
@@ -614,7 +618,10 @@ Aktion verarbeitet die zuvor geladenen XML-Dateien.</p>
 <p>Für regelmäßige Exporte über JTL-Ameise, z. B. einen Lagerbestandsexport für B2B-Kunden. Voraussetzung
 ist eine in JTL-Ameise angelegte Exportvorlage.</p>
 <ul>
-<li><strong>Template:</strong> die JTL-Ameise-Exportvorlage.</li>
+<li><strong>Template:</strong> die JTL-Ameise-Exportvorlage. Angeboten werden die Vorlagen, die JTL zentral führt,
+also dieselben, die die Ameise beim Lauf sucht. Arbeiten Sie mit mehreren Mandanten und steht in
+einem älteren Job noch eine Vorlage aus der Mandantendatenbank, sagt der Dialog das beim Öffnen;
+wählen Sie die Vorlage dann einmal neu und speichern Sie den Job.</li>
 <li><strong>Zielverzeichnis:</strong> wohin die Datei gespeichert wird.</li>
 <li><strong>Dateiname:</strong> mit dynamischen Platzhaltern: Jahr (%y), Monat (%m), Tag (%d), Stunde (%H), Minute (%i), Sekunde (%s), Datenbankname (%db), Exportvorlagen-ID (%id).</li>
 </ul>

@@ -533,7 +533,11 @@ Diese Aktion steht nur mit mindestens dem JTL-Tarif Advanced zur Verfügung.
 
 - **Kurzbeschreibung:** eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.
 - **Datenbank:** die JTL-Datenbank, gegen die importiert wird. Standard ist die Standarddatenbank.
-- **Template:** die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein).
+- **Template:** die zu verwendende Importvorlage (muss in JTL-Ameise eingerichtet sein). Angeboten
+  werden die Vorlagen, die JTL zentral führt, also dieselben, die die Ameise beim Lauf sucht.
+  Arbeiten Sie mit mehreren Mandanten und steht in einem älteren Job noch eine Vorlage aus der
+  Mandantendatenbank, sagt der Dialog das beim Öffnen; wählen Sie die Vorlage dann einmal neu und
+  speichern Sie den Job.
 - **Workflows:** bestimmt, ob während des Imports hinterlegte Workflows ausgeführt werden.
 - **Loglevel:** Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.
 - **Parameter für Logs:** zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: `--log` (Hauptbericht), `--log_errors`, `--log_warnings`, `--log_imported`, `--log_update`, `--log_other`. Platzhalter für den Dateinamen: `%y` (Jahr vierstellig), `%m` (Monat), `%d` (Tag), `%h` (Stunde), `%i` (Minute), `%s` (Sekunde), `%db` (Datenbankname), `%id` (Name der Importvorlage). Beispiel: `import_%y-%m-%d_%h-%i-%s_%id.log`.
@@ -581,7 +585,10 @@ Aktion verarbeitet die zuvor geladenen XML-Dateien.
 Für regelmäßige Exporte über JTL-Ameise, z. B. einen Lagerbestandsexport für B2B-Kunden. Voraussetzung
 ist eine in JTL-Ameise angelegte Exportvorlage.
 
-- **Template:** die JTL-Ameise-Exportvorlage.
+- **Template:** die JTL-Ameise-Exportvorlage. Angeboten werden die Vorlagen, die JTL zentral führt,
+  also dieselben, die die Ameise beim Lauf sucht. Arbeiten Sie mit mehreren Mandanten und steht in
+  einem älteren Job noch eine Vorlage aus der Mandantendatenbank, sagt der Dialog das beim Öffnen;
+  wählen Sie die Vorlage dann einmal neu und speichern Sie den Job.
 - **Zielverzeichnis:** wohin die Datei gespeichert wird.
 - **Dateiname:** mit dynamischen Platzhaltern: Jahr (%y), Monat (%m), Tag (%d), Stunde (%H), Minute (%i), Sekunde (%s), Datenbankname (%db), Exportvorlagen-ID (%id).
 
