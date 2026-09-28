@@ -88,7 +88,13 @@ des ursprünglichen Auftrags.
 
 ### Lieferungen abrechnen
 
-„Ja" verrechnet den Preis der Versandkosten des Ursprungsauftrags mit der Anzahl der Sendungen (Pakete).
+„Ja" rechnet die Versandkosten des Ursprungsauftrags je Lieferung ab, nicht nur einmal je Auftrag.
+Die Menge der Versandposition entspricht der Zahl der Lieferscheine mit Versand zu diesem Auftrag.
+Wurde ein Auftrag in zwei Lieferungen verschickt, stehen die Versandkosten zweimal in der
+Sammelrechnung. Maßgeblich ist die Lieferung, nicht das Paket: Eine Lieferung, die in mehreren
+Paketen verschickt wurde, zählt einmal.
+
+„Lieferungen abrechnen" lässt sich nur einschalten, wenn „Versandposition übernehmen" auf „Ja" steht.
 
 ### Retouren verarbeiten
 
@@ -131,6 +137,16 @@ CSV-Datei erscheinen.
 ### Ohne Versand abgeschlossene Aufträge
 
 Aufträge, die ohne Versand abgeschlossen sind, können optional mit abgerechnet werden.
+
+- **Nein:** Es erscheinen nur Aufträge, die versendet wurden. Ein ohne Versand abgeschlossener Auftrag
+  bleibt aus der Liste.
+- **Alle:** Ohne Versand abgeschlossene Aufträge erscheinen zusätzlich in der Liste, unabhängig vom
+  Auftragsdatum. Sie brauchen dafür keinen Versand und kein Versanddatum.
+- **Eingeschränkt:** wie „Alle", aber nur für Aufträge, die ab dem eingestellten Datum („Ab
+  einschließlich") angelegt wurden.
+
+Aufträge, die als komplett ausgeliefert gelten, aber nie versendet wurden, erscheinen bei keiner
+dieser Einstellungen.
 
 > Vorsicht: Wenn Sie bei Abrechnen „Alle" wählen, werden alle ohne Versand abgeschlossenen Aufträge aufgeführt, für die keine Rechnung erstellt wurde und die auf die Zahlungsfilter passen. Im Zweifel nur eingeschränkt abrechnen und das aktuelle Datum einstellen.
 
@@ -211,6 +227,16 @@ Kunden-ID, Sprache, Währung, Rechnungsadresse. Unterscheiden sich diese bei mar
 Kunden, werden getrennte Sammelrechnungen erstellt.
 
 > Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.
+
+Auftrags- und Rechnungsnummern vergibt die JTL-Wawi. Legt im selben Moment jemand im Haus einen Beleg
+an, ist diese Nummernvergabe kurz belegt. arpaTools versucht es dann bis zu dreimal mit kurzer Pause.
+Bleibt sie belegt, erscheint die Meldung „Die JTL-Wawi ist gerade ausgelastet"; die
+betroffene Sammelrechnung wird dann nicht angelegt, bereits angelegte bleiben bestehen. Die
+Auftragsliste wird danach geleert, ebenso nach jedem anderen Fehler während des Laufs. Laden Sie die Aufträge nach ein paar Minuten neu und starten Sie
+den Lauf noch einmal; bereits abgerechnete Aufträge erscheinen dann nicht mehr.
+Bis JTL-Wawi 1.11 vergibt die Komponente JtlWawiExtern.dll die Rechnungsnummer selbst. Ist die
+Nummernvergabe in diesem Moment belegt, bricht der Lauf dort wie bisher mit einer allgemeinen
+Fehlermeldung ab; auch dann die Aufträge später neu laden und den Lauf wiederholen.
 
 ![Sammelrechnung-Übersicht: links Konfigurationen (hier noch keine angelegt), rechts Kundenauswahl, Auftragsdatum von-bis und die Auftragsliste. Markiert ① Neu, ② Aufträge laden, ③ Alle markieren und ④ Rechnung erstellen.](bilder/sammelrechnung-auftragsliste.png)
 

@@ -72,6 +72,17 @@ Enddaten definieren. Über **Hinzufügen** wählen Sie:
 - **Benutzer:** Auswahl aus den JTL-Wawi-Benutzern. Für Benutzer wird bei der Abrechnung nur ein Journalbericht für die Buchhaltung erzeugt (Annahme: Mitarbeiter, die über die Lohnbuchhaltung Provisionen erhalten).
 - **Kunde:** über Kundennummer oder Suche. Für Kunden lässt sich zur Abrechnung eine Gutschrift in JTL-Wawi erzeugen (z. B. Influencer, Selbstständige, Affiliate-Partner).
 
+Wie viele Provisionsberechtigte Sie anlegen können, legt Ihr Tarif fest. Gezählt werden nur aktive
+Provisionsberechtigte. Ist die Zahl erreicht, sind **Hinzufügen** und **Duplizieren** gesperrt, und
+unter dem Suchfeld steht der Grund. Sobald Sie einen Provisionsberechtigten löschen oder deaktivieren,
+stehen beide wieder zur Verfügung. Haben Sie Ihren Tarif erweitert, speichern Sie Ihre Lizenz unter
+**Lizenz** einmal neu, damit arpaTools sie beim Lizenzserver prüft, oder starten Sie arpaTools neu.
+Beim nächsten Öffnen der Übersicht sind beide dann wieder frei.
+
+Sind mehr aktive Provisionsberechtigte angelegt, als Ihr Tarif zulässt, lassen sich außerdem
+Bearbeiten, die Provisionseinstellungen und das Abrechnen nicht mehr aufrufen. Löschen bleibt
+möglich: So kommen Sie wieder unter die Grenze.
+
 ### Provisionsberechtigten bearbeiten
 
 - **Gutschrift bei Abrechnung automatisch erstellen:** nur für Kunden. Legt fest, ob mit jeder Abrechnung automatisch eine Gutschrift in JTL-Wawi entsteht. Für Benutzer gibt es diese Option nicht.

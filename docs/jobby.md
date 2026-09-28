@@ -243,34 +243,101 @@ aktualisiert die Liste, falls ein Eintrag zwischenzeitlich anderswo geändert wu
 Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
 Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
 Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit **Prüfen** wird die
-Verbindung getestet.
+Verbindung getestet. Scheitert der Test, nennt die Meldung den Grund: abgelehnte Anmeldung (Benutzername
+oder Passwort prüfen), nicht erreichbare Adresse samt Port, gescheiterte Verschlüsselung oder ein
+Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die Meldung des Servers im Wortlaut.
 
 #### Registerkarte E-Mail-Konten
 
 Eine mögliche Aktion ist der Versand von E-Mails, mit reinem Text oder mit Anhängen (z. B. Ergebnisse
 aus SQL-Abfragen oder Dateien vom FTP-Server bzw. aus einem Verzeichnis).
 
-Die Einstellungen entsprechen den SMTP-Daten des Hosters. Office-365- oder Google-Mail-Authentifizierung
-werden nicht unterstützt. Einzutragen sind Server, Port, Verschlüsselung, die Absenderadresse und,
-sofern das Postfach eine Anmeldung verlangt, Benutzername und Passwort. Mit **Prüfen** lassen sich die
-Einstellungen testen.
+Die Einstellungen entsprechen den SMTP-Daten des Hosters. Einzutragen sind Server, Port,
+Verschlüsselung, die Absenderadresse und die Art der Anmeldung. Mit **Prüfen** lassen sich die
+Einstellungen testen: arpaTools schickt eine Testmail an die eingetragene Absenderadresse.
+
+- **Anmeldung:** „Kennwort", „Zugriffsschlüssel" oder „Keine".
+  - „Kennwort" ist der übliche Weg: das Postfach verlangt Benutzername und Kennwort.
+  - „Zugriffsschlüssel" ist für Postfächer bei Google und Microsoft 365, siehe unten. Es wird dabei
+    kein Kennwort gespeichert.
+  - „Keine" passt nur zu einem Postfach, das den Absender ohne Anmeldung annimmt, etwa über die
+    IP-Adresse.
 
 - **Verschlüsselung:** „Keine", „STARTTLS" oder „SSL/TLS". Zu jeder Art gehört üblicherweise ein
   eigener Port: „Keine" Port 25, „STARTTLS" Port 587, „SSL/TLS" Port 465. Ändern Sie die
   Verschlüsselung, zieht der Port automatisch auf den passenden Standardwert mit, solange dort noch
   einer der drei Standardports oder gar kein Wert steht. Haben Sie selbst einen abweichenden Port
   eingetragen, bleibt er beim Wechsel der Verschlüsselung unangetastet.
-- **Anmeldung erforderlich:** ausschalten, wenn das Postfach den Versand ohne Benutzername und
-  Passwort annimmt, etwa weil es den Absender über die IP-Adresse freigibt. Ist der Schalter aus,
-  sind Benutzername und Passwort nicht eingebbar und werden beim Speichern nicht verlangt.
-  **Benutzername und Kennwort bleiben dabei gespeichert**, wenn Sie die Anmeldung ausschalten. Schalten
-  Sie sie später wieder ein, finden Sie Ihre Zugangsdaten unverändert vor. Wollen Sie sie loswerden,
-  schalten Sie die Anmeldung zunächst wieder ein, leeren Sie die beiden Felder von Hand und schalten
-  Sie die Anmeldung danach wieder aus, bevor Sie speichern.
-- Wählen Sie „Keine" Verschlüsselung, während die Anmeldung eingeschaltet bleibt, überträgt das
-  Postfachkennwort ungeschützt über das Netz. Das ist keine verbotene Kombination, manche Postfächer
-  im eigenen Netz verlangen genau das, aber arpaTools fragt beim Speichern ausdrücklich nach, ob das
-  so gewollt ist.
+- **Benutzername und Kennwort** sind nur bei der Anmeldung „Kennwort" eingebbar und nur dann Pflicht.
+  **Sie bleiben gespeichert**, wenn Sie die Anmeldung auf „Keine" umstellen. Stellen Sie später wieder
+  auf „Kennwort", finden Sie Ihre Zugangsdaten unverändert vor. Wollen Sie sie loswerden, stellen Sie
+  die Anmeldung zunächst auf „Kennwort", leeren Sie die beiden Felder von Hand und stellen Sie die
+  Anmeldung danach wieder um, bevor Sie speichern.
+- Wählen Sie „Keine" Verschlüsselung, während sich das Konto anmeldet, gehen die Zugangsdaten
+  ungeschützt über das Netz. Das ist keine verbotene Kombination, manche Postfächer im eigenen Netz
+  verlangen genau das, aber arpaTools fragt beim Speichern ausdrücklich nach, ob das so gewollt ist.
+
+##### Postfach bei Google oder Microsoft 365 (Anmeldung „Zugriffsschlüssel")
+
+Für Postfächer bei Google und Microsoft 365 gibt es die Anmeldung „Zugriffsschlüssel": Sie erteilen
+arpaTools einmal im Browser die Freigabe, danach verschickt Jobby ohne gespeichertes Kennwort.
+Microsoft schaltet die einfache Anmeldung mit Kennwort schrittweise ab; für betroffene Postfächer ist
+das der verbleibende Weg.
+
+**Wo:** Konten mit Zugriffsschlüssel richten Sie in der neuen Oberfläche ein, unter **Verbindungen**,
+Registerkarte **E-Mail-Konten**. Arbeiten Sie noch in der bisherigen Oberfläche, wechseln Sie über den
+Eintrag **Jetzt zur neuen Ansicht wechseln (Beta)** in der Seitenleiste oder über **Jetzt wechseln**
+auf dem Dashboard; die neue Oberfläche öffnet sich beim nächsten Start von arpaTools. Öffnen Sie ein
+solches Konto in der bisherigen Oberfläche, weist ein Hinweis darauf hin. Beschreibung, Server, Port
+und Verschlüsselung lassen sich dort weiter ändern; Anmeldung, Absenderadresse und Freigabe bleiben
+beim Speichern unverändert, und **Prüfen** ist dort gesperrt.
+
+**Vorbereitung beim Anbieter:** Die Anwendung, über die arpaTools sich anmeldet, registrieren Sie
+selbst bei Ihrem Anbieter, als Desktop-Anwendung.
+
+- **Google:** Sie erhalten eine Anwendungskennung, die auf `.apps.googleusercontent.com` endet, und ein
+  Anwendungsgeheimnis. Stellen Sie die Anwendung in der Google Cloud Console auf „veröffentlicht".
+  Im Testmodus verfällt die Freigabe nach sieben Tagen, und der Versand bleibt danach stehen.
+- **Microsoft 365:** Sie erhalten eine Anwendungs-ID; ein Anwendungsgeheimnis gibt es hier nicht.
+  Zwei Dinge liegen beim Administrator Ihres Microsoft-365-Mandanten:
+  1. Je nach Einstellung des Mandanten braucht die registrierte Anwendung seine **Zustimmung**. Fehlt
+     sie, meldet arpaTools bei der Freigabe, dass die Zustimmung des Administrators nötig ist.
+  2. **SMTP AUTH** ist bei Microsoft 365 für Postfächer standardmäßig abgeschaltet, mandantenweit.
+     Der Administrator muss es freischalten, für den ganzen Mandanten oder nur für das Postfach, über
+     das Jobby verschickt. Ohne diese Freischaltung lehnt der Server die Anmeldung ab, und arpaTools
+     sagt genau das.
+
+**Einrichtung in arpaTools:**
+
+1. **Konto hinzufügen** wählen, Beschreibung und Absenderadresse eintragen.
+2. Bei **Anmeldung** „Zugriffsschlüssel" wählen. Es erscheinen die Felder für den Anbieter.
+3. Bei **Anbieter** „Google" oder „Microsoft 365" wählen. Server, Port und Verschlüsselung werden
+   dabei vorbelegt (`smtp.gmail.com` bzw. `smtp.office365.com`, Port 587, STARTTLS), solange dort
+   noch kein eigener Wert steht.
+4. Die **Anwendungskennung** eintragen, bei Google zusätzlich das **Anwendungsgeheimnis**.
+5. **Freigabe erteilen** anklicken. Ihr Browser öffnet sich auf der Anmeldeseite des Anbieters.
+   Melden Sie sich dort **mit dem Postfach an, das als Absenderadresse eingetragen ist**, und stimmen
+   Sie zu. Melden Sie sich mit einem anderen Postfach an, speichert arpaTools nichts und sagt es
+   Ihnen. Nach der Zustimmung steht am Konto „Freigabe erteilt am …".
+6. **Speichern.** Erst ein gespeichertes Konto mit erteilter Freigabe lässt sich mit **Prüfen**
+   testen.
+
+Die Freigabe lässt sich nur in der Anwendung erteilen, nicht im Dienst und nicht über die
+Befehlszeile, weil sich dafür ein Browser öffnen muss. Sie endet, wenn das Kennwort des Postfachs
+geändert oder der Zugriff beim Anbieter entzogen wird. Jobby meldet dann, dass die Freigabe für das
+Mailkonto nicht mehr gilt; öffnen Sie das Konto und erteilen Sie sie erneut. Stellen Sie die Anmeldung
+eines Kontos von „Zugriffsschlüssel" auf eine andere Art um, verwirft arpaTools die Freigabe beim
+Speichern.
+
+**Absenderadresse ändern:** Die Freigabe gilt nur für das Postfach, mit dem Sie sie erteilt haben.
+Ändern Sie die Absenderadresse eines Kontos mit erteilter Freigabe, setzt arpaTools die Freigabe
+zurück: Am Konto steht dann wieder „Noch keine Freigabe erteilt.", darunter ein Hinweis. Erteilen Sie
+die Freigabe für die neue Adresse, bevor Sie speichern, sonst verschickt das Konto nichts. Tragen Sie
+die alte Adresse wieder ein oder brechen Sie ab, gilt die bisherige Freigabe weiter.
+
+Ändern Sie an einem Konto mit Zugriffsschlüssel nur Beschreibung, Server, Port oder Verschlüsselung,
+bleibt die Freigabe beim Speichern, wie sie in der Datenbank steht, auch wenn sie inzwischen an einem
+anderen Arbeitsplatz neu erteilt oder vom Dienst erneuert wurde.
 
 Bestehende E-Mail-Konten aus einer Vorversion stehen nach der Aktualisierung auf „STARTTLS" mit
 Anmeldung, dem bisherigen Verhalten. Niemand muss deswegen etwas umstellen.
@@ -489,7 +556,8 @@ Pflichtangaben sind so lange offen, bis sie beantwortet sind; erst dann wird **I
 Eine Jobgruppe ist freiwillig, „ohne Gruppe" ist eine gültige Antwort.
 
 Fehlt ein Datensatz auf Ihrer Installation, lässt er sich für die meisten Arten direkt aus dem
-Fenster heraus anlegen. Für Datensätze der Wawi oder anderer Programme nennt die Zeile stattdessen,
+Fenster heraus anlegen. Ein fehlendes E-Mail-Konto legen Sie dabei mit denselben Feldern an wie unter
+**Verbindungen**, auch mit der Anmeldung „Zugriffsschlüssel" für Google und Microsoft 365. Für Datensätze der Wawi oder anderer Programme nennt die Zeile stattdessen,
 wo sie entstehen; über **Aktualisieren** liest das Fenster die Listen danach neu ein, ohne Ihre
 bisherigen Antworten zu verwerfen.
 
@@ -563,6 +631,8 @@ Importiert Sendungs- bzw. Trackingdaten aus einer CSV-Datei und markiert Sendung
 dass JTL-Packtisch oder JTL-WMS aktiv im Vordergrund laufen müssen. Der Import läuft im Hintergrund über
 den Windows-Dienst.
 
+Ab JTL-Wawi 2.0 ist diese Aktion nicht verfügbar: der Job bricht an dieser Stelle mit einem Hinweis ab und importiert nichts.
+
 - **Importbenutzer:** der Benutzer, der den Lieferschein von Offen auf Versendet setzt.
 - **Startzeile:** bei Überschriftszeile mindestens Zeile 2.
 - **Identifizierung:** Spalte mit Auftrags- oder Lieferscheinnummer. Bei Teillieferungen empfehlen wir die Lieferscheinnummer, sonst würden alle Teillieferungen als versendet markiert.
@@ -576,6 +646,8 @@ den Windows-Dienst.
 
 Importiert Auftragsdaten im JTL-XML-Format direkt in die JTL-Wawi, manuell oder zeitgesteuert. Die
 Aktion verarbeitet die zuvor geladenen XML-Dateien.
+
+Ab JTL-Wawi 2.0 ist diese Aktion nicht verfügbar: der Job bricht an dieser Stelle mit einem Hinweis ab und importiert nichts.
 
 - **Importbenutzer:** der Benutzer, unter dem die Aufträge angelegt werden.
 - **Verarbeitung:** nur die neueste oder alle geladenen Dateien.
@@ -602,7 +674,7 @@ Artikel, aufgeschlüsselt nach Lager, inklusive Summenzeile.
 - **Lager:** die Lager, die in die Bewertung einfließen (je Lager entsteht eine Spalte).
 - **Header ausgeben:** ob Spaltenüberschriften mitgeschrieben werden.
 - **Trennzeichen:** Semikolon oder Komma.
-- **Dateiname:** mit Datumsplatzhaltern.
+- **Dateiname:** mit Datumsplatzhaltern `##YEAR##` bis `##SECOND##`, in Ortszeit.
 - **Dateiformat:** CSV oder TXT.
 
 ### Aufträge: Lieferantenbestellung bestätigen
@@ -656,7 +728,10 @@ nicht als Namen. Eine allgemeine Ameise-Vorlage kann daraus nichts zuordnen.
 
 Trägt Artikel mit Menge aus einer geladenen Datei in die JTL-Einkaufsliste eines Benutzers ein.
 
-- **Benutzer:** für welchen Benutzer die Einkaufsliste befüllt wird.
+- **Datenbank:** optional eine hinterlegte Datenbankverbindung, sonst die Standardverbindung. Die
+  Einträge landen in der Einkaufsliste dieser Datenbank.
+- **Benutzer:** für welchen Benutzer die Einkaufsliste befüllt wird. Zur Auswahl stehen die
+  Benutzer der gewählten Datenbank; wer die Datenbank wechselt, wählt den Benutzer neu.
 - **Startzeile:** ab welcher Zeile verarbeitet wird.
 - **Identifizierungstyp:** Artikel-ID oder Artikelnummer.
 - **Spalte Identifizierung** und **Spalte Menge:** in welchen Spalten Artikel und Menge stehen.
@@ -700,6 +775,12 @@ Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerich
 - **Relativer Pfad:** das Zielverzeichnis auf dem Server.
 - **Existierende Datei:** Verhalten bei Namensgleichheit, z. B. „Überschreiben".
 
+Lässt sich auch nur eine Datei nicht hochladen, zum Beispiel weil im Zielverzeichnis das Schreibrecht
+fehlt, endet die Aktion und damit der Job mit einem Fehler. Die übrigen Dateien werden trotzdem
+übertragen, und das Protokoll nennt jede fehlgeschlagene Datei mit dem Grund. Steht bei „Existierende
+Datei" nicht „Überschreiben" und liegt die Datei schon auf dem Server, bleibt sie dort unverändert.
+Das ist kein Fehler; das Protokoll vermerkt die übersprungene Datei.
+
 ### Sonstiges: Datei aus Web laden
 
 Lädt eine Datei (z. B. eine CSV eines Lieferanten) direkt über eine URL in den Jobspeicher.
@@ -733,7 +814,7 @@ mehr finden soll.
 - **Dateiname:** wie die abgelegte Datei heißen soll. Bleibt das Feld leer, behält die Datei ihren
   bisherigen Namen. Die Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`,
   `##SECOND##` sind auch hier möglich und werden beim Speichern durch das aktuelle Datum bzw. die
-  aktuelle Uhrzeit ersetzt: aus `export_##YEAR####MONTH####DAY##.csv` wird am 28. August 2026 die
+  aktuelle Uhrzeit des Rechners (Ortszeit) ersetzt: aus `export_##YEAR####MONTH####DAY##.csv` wird am 28. August 2026 die
   Datei `export_20260828.csv`. Tragen Sie einen Namen ohne Dateiendung ein (z. B. `export_##YEAR##`),
   ergänzt arpaTools automatisch die Endung der Quelldatei, damit eine Datei entsteht, die sich öffnen
   lässt; ein Name mit eigener Endung wird unverändert übernommen.
@@ -765,7 +846,7 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 
 - **E-Mail-Konto:** das konfigurierte Konto für den Versand.
 - **Empfänger:** Adresse des Empfängers.
-- **Betreff** und **Nachricht:** Inhalt der E-Mail. Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`, `##SECOND##` sind möglich und werden beim Versand durch das aktuelle Datum bzw. die aktuelle Uhrzeit ersetzt, zum Beispiel „Bericht vom ##DAY##.##MONTH##.##YEAR##".
+- **Betreff** und **Nachricht:** Inhalt der E-Mail. Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`, `##SECOND##` sind möglich und werden beim Versand durch das aktuelle Datum bzw. die aktuelle Uhrzeit (Ortszeit) ersetzt, zum Beispiel „Bericht vom ##DAY##.##MONTH##.##YEAR##".
 
   Empfänger, Betreff und Nachricht fassen jeweils 500 Zeichen. Das Feld nimmt nicht mehr an, sobald
   die Grenze erreicht ist — so fällt sie beim Schreiben auf und nicht erst beim Speichern.
@@ -1023,7 +1104,7 @@ folgenden Aktionen.
 - **Werte der Abfrage:** siehe unten. Erscheint nur, wenn die Abfrage Variablen deklariert.
 - **Header ausgeben:** ob Spaltenüberschriften mitgeschrieben werden.
 - **Trennzeichen:** Semikolon oder Komma.
-- **Dateiname:** Platzhalter `##year##`, `##month##`, `##day##`, `##hour##`, `##minute##`, `##second##` sind möglich.
+- **Dateiname:** Platzhalter `##YEAR##`, `##MONTH##`, `##DAY##`, `##HOUR##`, `##MINUTE##`, `##SECOND##` sind möglich und werden durch Datum und Uhrzeit des Rechners (Ortszeit) ersetzt. Schreiben Sie sie in Großbuchstaben, sonst bleiben sie stehen.
 - **Dateiformat:** CSV oder TXT.
 
 #### Grenzwerte ändern, ohne die Abfrage anzufassen
