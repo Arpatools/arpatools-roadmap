@@ -666,6 +666,12 @@ ist eine in JTL-Ameise angelegte Exportvorlage.
 
 Exportvorlagen setzen mindestens den JTL-Tarif Advanced voraus.
 
+Der Export legt seine Datei nur im Zielverzeichnis ab, an die nächste Aktion gibt er sie nicht
+weiter. Soll sie per E-Mail verschickt oder auf einen FTP-Server geladen werden, folgt auf den
+Export die Aktion „Daten aus Verzeichnis laden", siehe „Die Datei eines JTL-Ameise Exports
+verschicken" bei „E-Mail senden". Dort steht auch, was „Nach dem Laden löschen" mit der Datei im
+Zielverzeichnis macht.
+
 ### Export: Lagerbewertung
 
 Erstellt eine Datei mit dem Bestand und dem Bestandswert (Menge multipliziert mit Einkaufspreis) je
@@ -841,8 +847,14 @@ gilt auch für Dateien, die vor der Umstellung entstanden sind.
 
 ### Sonstiges: E-Mail senden
 
-Versendet eine E-Mail, optional mit Anhang aus einem vorangegangenen Schritt (JTL-Ameise Export,
-lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP-Server).
+Versendet eine E-Mail, optional mit den Dateien, die bei ihr ankommen, als Anhang. Eigene Dateien
+geben zum Beispiel diese Aktionen weiter: Daten von MS-SQL Server laden, Daten aus Verzeichnis
+laden, Datei aus Web laden, Download von FTP-Server, Lagerbewertung sowie XML zu CSV, JSON zu CSV
+und Excel zu CSV. „Lieferantenbestand importieren" gibt statt der eingelesenen Dateien seine
+Ergebnisdateien weiter. Viele andere Aktionen, etwa „Upload zum FTP-Server", reichen die Dateien,
+die sie selbst bekommen haben, unverändert weiter. So auch der JTL-Ameise Export: Dateien aus
+Aktionen vor ihm kommen hinter ihm an, seine eigene Exportdatei aber **nicht**, siehe „Die Datei
+eines JTL-Ameise Exports verschicken" weiter unten.
 
 - **E-Mail-Konto:** das konfigurierte Konto für den Versand.
 - **Empfänger:** Adresse des Empfängers.
@@ -850,12 +862,46 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 
   Empfänger, Betreff und Nachricht fassen jeweils 500 Zeichen. Das Feld nimmt nicht mehr an, sobald
   die Grenze erreicht ist — so fällt sie beim Schreiben auf und nicht erst beim Speichern.
-- **Anhang:** ob ein Anhang aus einem der genannten Schritte mitgesendet wird. Bei
-  *E-Mail nur mit Anhang senden* wird nichts verschickt, solange kein Anhang zustande kommt —
-  etwa wenn der Download keine passende Datei gefunden oder die Abfrage keine Zeilen geliefert
-  hat. Der Job gilt trotzdem als erfolgreich gelaufen; im Anwendungsprotokoll steht, dass der
-  Versand mangels Anhang ausgelassen wurde. Die beiden anderen Einstellungen verschicken die
-  E-Mail wie bisher, auch ohne Anhang.
+- **Anhang:** was mit den ankommenden Dateien geschieht.
+  - *Senden:* Die Dateien gehen als Anhang mit. Kommt keine an, geht die E-Mail ohne Anhang raus.
+  - *Nicht senden:* Die E-Mail geht immer ohne Anhang raus.
+  - *E-Mail nur mit Anhang senden:* Die E-Mail geht nur raus, wenn mindestens eine Datei ankommt.
+    Sie bleibt also aus, wenn der Download keine passende Datei gefunden hat, das Verzeichnis leer
+    war oder die Abfrage keine Zeilen geliefert hat. Der Job gilt trotzdem als erfolgreich
+    gelaufen, im Anwendungsprotokoll steht, dass der Versand mangels Anhang ausgelassen wurde.
+    Geprüft wird nur, ob eine Datei ankommt, nicht was darin steht: Eine Datei, die nur eine
+    Kopfzeile enthält, zählt als Anhang.
+- **Verarbeitung:** *Alle Dateien verarbeiten* hängt jede ankommende Datei an, *Nur die neuste
+  Datei verarbeiten* nur die jüngste.
+
+#### Die Datei eines JTL-Ameise Exports verschicken
+
+Der JTL-Ameise Export legt seine Datei im Zielverzeichnis ab und gibt sie nicht an die nächste
+Aktion weiter. Steht „E-Mail senden" direkt dahinter, fehlt die Exportdatei. Hängen stattdessen nur
+die Dateien an, die schon vor dem Export im Job waren; gab es keine, geht die E-Mail mit *Senden*
+ohne Anhang raus und mit *E-Mail nur mit Anhang senden* gar nicht. Setzen Sie deshalb die Aktion
+„Daten aus Verzeichnis laden" dazwischen:
+
+1. **JTL-Ameise Export**, zum Beispiel mit dem Zielverzeichnis `C:\Exporte` und dem Dateinamen
+   `bestand_%y%m%d.csv`.
+2. **Daten aus Verzeichnis laden** mit demselben Verzeichnis als Quellverzeichnis und einem
+   Dateifilter, der zum Dateinamen passt, hier `bestand_*.csv`.
+3. **E-Mail senden** mit dem gewünschten Anhang.
+
+Stellen Sie „Daten aus Verzeichnis laden" auf „Nach dem Laden löschen", dann geht jede Exportdatei
+genau einmal raus. Die Exportdatei ist danach allerdings aus dem Zielverzeichnis verschwunden;
+brauchen Sie sie dort weiterhin, etwa als Ablage, kopieren Sie sie vor der E-Mail mit „Daten in
+Verzeichnis speichern" in ein anderes Verzeichnis.
+
+Ohne Löschen liegen die Exporte früherer Läufe weiter im Verzeichnis und hängen jedes Mal mit an.
+*Nur die neuste Datei verarbeiten* bei der E-Mail hilft dagegen nur begrenzt: Schlägt der Export
+einmal fehl, geht ohne Hinweis die Datei des vorigen Laufs noch einmal raus. Und sobald mehr als
+1.000 Dateien im Verzeichnis liegen, arbeitet „Daten aus Verzeichnis laden" sie in Blöcken zu je
+1.000 ab, die E-Mail geht dann einmal pro Block raus. Mit „Nach dem Laden löschen" und *E-Mail nur
+mit Anhang senden* vermeiden Sie beides.
+
+Derselbe Umweg gilt für jede andere Aktion, die die Exportdatei weiterverarbeiten soll, etwa
+„Upload zum FTP-Server".
 
 ### Sonstiges: E-Mail via Brevo senden
 

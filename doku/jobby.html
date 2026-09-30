@@ -697,6 +697,11 @@ wählen Sie die Vorlage dann einmal neu und speichern Sie den Job.</li>
 <li><strong>Dateiname:</strong> mit dynamischen Platzhaltern: Jahr (%y), Monat (%m), Tag (%d), Stunde (%H), Minute (%i), Sekunde (%s), Datenbankname (%db), Exportvorlagen-ID (%id).</li>
 </ul>
 <p>Exportvorlagen setzen mindestens den JTL-Tarif Advanced voraus.</p>
+<p>Der Export legt seine Datei nur im Zielverzeichnis ab, an die nächste Aktion gibt er sie nicht
+weiter. Soll sie per E-Mail verschickt oder auf einen FTP-Server geladen werden, folgt auf den
+Export die Aktion „Daten aus Verzeichnis laden", siehe „Die Datei eines JTL-Ameise Exports
+verschicken" bei „E-Mail senden". Dort steht auch, was „Nach dem Laden löschen" mit der Datei im
+Zielverzeichnis macht.</p>
 <h3 id="export-lagerbewertung">Export: Lagerbewertung</h3>
 <p>Erstellt eine Datei mit dem Bestand und dem Bestandswert (Menge multipliziert mit Einkaufspreis) je
 Artikel, aufgeschlüsselt nach Lager, inklusive Summenzeile.</p>
@@ -855,8 +860,14 @@ Meldung die Datei und das Verzeichnis. Geben Sie dann in den Windows-Eigenschaft
 Verzeichnisses unter <em>Sicherheit</em> allen Benutzern, die den Job ausführen, das Recht „Ändern". Das
 gilt auch für Dateien, die vor der Umstellung entstanden sind.</p>
 <h3 id="sonstiges-e-mail-senden">Sonstiges: E-Mail senden</h3>
-<p>Versendet eine E-Mail, optional mit Anhang aus einem vorangegangenen Schritt (JTL-Ameise Export,
-lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP-Server).</p>
+<p>Versendet eine E-Mail, optional mit den Dateien, die bei ihr ankommen, als Anhang. Eigene Dateien
+geben zum Beispiel diese Aktionen weiter: Daten von MS-SQL Server laden, Daten aus Verzeichnis
+laden, Datei aus Web laden, Download von FTP-Server, Lagerbewertung sowie XML zu CSV, JSON zu CSV
+und Excel zu CSV. „Lieferantenbestand importieren" gibt statt der eingelesenen Dateien seine
+Ergebnisdateien weiter. Viele andere Aktionen, etwa „Upload zum FTP-Server", reichen die Dateien,
+die sie selbst bekommen haben, unverändert weiter. So auch der JTL-Ameise Export: Dateien aus
+Aktionen vor ihm kommen hinter ihm an, seine eigene Exportdatei aber <strong>nicht</strong>, siehe „Die Datei
+eines JTL-Ameise Exports verschicken" weiter unten.</p>
 <ul>
 <li><p><strong>E-Mail-Konto:</strong> das konfigurierte Konto für den Versand.</p>
 </li>
@@ -866,14 +877,47 @@ lesendes SQL, Daten aus Verzeichnis laden, Datei aus Web laden, Download vom FTP
 <p>Empfänger, Betreff und Nachricht fassen jeweils 500 Zeichen. Das Feld nimmt nicht mehr an, sobald
 die Grenze erreicht ist — so fällt sie beim Schreiben auf und nicht erst beim Speichern.</p>
 </li>
-<li><p><strong>Anhang:</strong> ob ein Anhang aus einem der genannten Schritte mitgesendet wird. Bei
-<em>E-Mail nur mit Anhang senden</em> wird nichts verschickt, solange kein Anhang zustande kommt —
-etwa wenn der Download keine passende Datei gefunden oder die Abfrage keine Zeilen geliefert
-hat. Der Job gilt trotzdem als erfolgreich gelaufen; im Anwendungsprotokoll steht, dass der
-Versand mangels Anhang ausgelassen wurde. Die beiden anderen Einstellungen verschicken die
-E-Mail wie bisher, auch ohne Anhang.</p>
+<li><p><strong>Anhang:</strong> was mit den ankommenden Dateien geschieht.</p>
+<ul>
+<li><em>Senden:</em> Die Dateien gehen als Anhang mit. Kommt keine an, geht die E-Mail ohne Anhang raus.</li>
+<li><em>Nicht senden:</em> Die E-Mail geht immer ohne Anhang raus.</li>
+<li><em>E-Mail nur mit Anhang senden:</em> Die E-Mail geht nur raus, wenn mindestens eine Datei ankommt.
+Sie bleibt also aus, wenn der Download keine passende Datei gefunden hat, das Verzeichnis leer
+war oder die Abfrage keine Zeilen geliefert hat. Der Job gilt trotzdem als erfolgreich
+gelaufen, im Anwendungsprotokoll steht, dass der Versand mangels Anhang ausgelassen wurde.
+Geprüft wird nur, ob eine Datei ankommt, nicht was darin steht: Eine Datei, die nur eine
+Kopfzeile enthält, zählt als Anhang.</li>
+</ul>
+</li>
+<li><p><strong>Verarbeitung:</strong> <em>Alle Dateien verarbeiten</em> hängt jede ankommende Datei an, <em>Nur die neuste
+Datei verarbeiten</em> nur die jüngste.</p>
 </li>
 </ul>
+<h4 id="die-datei-eines-jtl-ameise-exports-verschicken">Die Datei eines JTL-Ameise Exports verschicken</h4>
+<p>Der JTL-Ameise Export legt seine Datei im Zielverzeichnis ab und gibt sie nicht an die nächste
+Aktion weiter. Steht „E-Mail senden" direkt dahinter, fehlt die Exportdatei. Hängen stattdessen nur
+die Dateien an, die schon vor dem Export im Job waren; gab es keine, geht die E-Mail mit <em>Senden</em>
+ohne Anhang raus und mit <em>E-Mail nur mit Anhang senden</em> gar nicht. Setzen Sie deshalb die Aktion
+„Daten aus Verzeichnis laden" dazwischen:</p>
+<ol>
+<li><strong>JTL-Ameise Export</strong>, zum Beispiel mit dem Zielverzeichnis <code>C:\Exporte</code> und dem Dateinamen
+<code>bestand_%y%m%d.csv</code>.</li>
+<li><strong>Daten aus Verzeichnis laden</strong> mit demselben Verzeichnis als Quellverzeichnis und einem
+Dateifilter, der zum Dateinamen passt, hier <code>bestand_*.csv</code>.</li>
+<li><strong>E-Mail senden</strong> mit dem gewünschten Anhang.</li>
+</ol>
+<p>Stellen Sie „Daten aus Verzeichnis laden" auf „Nach dem Laden löschen", dann geht jede Exportdatei
+genau einmal raus. Die Exportdatei ist danach allerdings aus dem Zielverzeichnis verschwunden;
+brauchen Sie sie dort weiterhin, etwa als Ablage, kopieren Sie sie vor der E-Mail mit „Daten in
+Verzeichnis speichern" in ein anderes Verzeichnis.</p>
+<p>Ohne Löschen liegen die Exporte früherer Läufe weiter im Verzeichnis und hängen jedes Mal mit an.
+<em>Nur die neuste Datei verarbeiten</em> bei der E-Mail hilft dagegen nur begrenzt: Schlägt der Export
+einmal fehl, geht ohne Hinweis die Datei des vorigen Laufs noch einmal raus. Und sobald mehr als
+1.000 Dateien im Verzeichnis liegen, arbeitet „Daten aus Verzeichnis laden" sie in Blöcken zu je
+1.000 ab, die E-Mail geht dann einmal pro Block raus. Mit „Nach dem Laden löschen" und <em>E-Mail nur
+mit Anhang senden</em> vermeiden Sie beides.</p>
+<p>Derselbe Umweg gilt für jede andere Aktion, die die Exportdatei weiterverarbeiten soll, etwa
+„Upload zum FTP-Server".</p>
 <h3 id="sonstiges-e-mail-via-brevo-senden">Sonstiges: E-Mail via Brevo senden</h3>
 <p>Versendet transaktionale E-Mails über Brevo (Sendinblue). Die Steuerung erfolgt über JSON-Dateien in
 einem festgelegten Verzeichnis. Jede Datei enthält Empfänger, Template, Anhänge und Variablen.</p>

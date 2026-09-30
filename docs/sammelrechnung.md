@@ -104,6 +104,15 @@ gibt, kann keine Rechnungskorrektur angelegt werden. Damit dennoch erstattet wer
 Retourenpositionen zum Ursprungsauftrag in der Sammelrechnung abgezogen. Das sorgt für einen sauberen
 buchhalterischen Prozess.
 
+**Stücklisten** werden nur als ganzes Set gutgeschrieben, zum Preis, Rabatt und Steuersatz, zu dem
+das Set verkauft wurde. Das entspricht JTL-Wawi, die einzelnen Teilen einer Stückliste keinen eigenen
+Wert gibt. Enthält eine Retoure nur einzelne Teile eines Sets, bleibt sie offen und kommt mit keiner
+ihrer Positionen in die Sammelrechnung. Das Anwendungsprotokoll nennt die Retoure und die fehlenden
+Teile. Sobald die Retoure das ganze Set enthält, wird sie beim nächsten Lauf abgerechnet. Über alle
+Retouren wird nie mehr gutgeschrieben, als verkauft wurde: Wurden das Set selbst und seine einzelnen
+Teile in verschiedenen Retouren zurückgebucht und kämen dadurch mehr Sets zurück als verkauft, bleibt
+die Retoure offen. Solche Retouren prüfen Sie von Hand.
+
 ### Retourenstatus
 
 Im Feld **Retourenstatus** legen Sie fest, in welchem Status eine Retoure sein muss, um in der nächsten
