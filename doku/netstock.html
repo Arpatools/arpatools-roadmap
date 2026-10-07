@@ -48,13 +48,22 @@
         <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
         <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
         <li class="doc-toc-level-2"><a href="#daten-senden">Daten senden</a></li>
+        <li class="doc-toc-level-3"><a href="#kennzahlen">Kennzahlen</a></li>
+        <li class="doc-toc-level-3"><a href="#die-tabelle-der-datenpakete">Die Tabelle der Datenpakete</a></li>
         <li class="doc-toc-level-3"><a href="#der-lieferant-setartikel">Der Lieferant „Setartikel&quot;</a></li>
+        <li class="doc-toc-level-3"><a href="#senden">Senden</a></li>
+        <li class="doc-toc-level-3"><a href="#verkaufszeitraum">Verkaufszeitraum</a></li>
         <li class="doc-toc-level-2"><a href="#daten-empfangen">Daten empfangen</a></li>
         <li class="doc-toc-level-3"><a href="#bestellvorschläge-zeitgesteuert-übernehmen">Bestellvorschläge zeitgesteuert übernehmen</a></li>
         <li class="doc-toc-level-3"><a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a></li>
         <li class="doc-toc-level-2"><a href="#einstellungen">Einstellungen</a></li>
+        <li class="doc-toc-level-3"><a href="#verbindung">Verbindung</a></li>
+        <li class="doc-toc-level-3"><a href="#was-übertragen-wird">Was übertragen wird</a></li>
+        <li class="doc-toc-level-3"><a href="#lagerauswahl">Lagerauswahl</a></li>
+        <li class="doc-toc-level-3"><a href="#stücklisten">Stücklisten</a></li>
         <li class="doc-toc-level-2"><a href="#automatisierung-über-jobby">Automatisierung über Jobby</a></li>
         <li class="doc-toc-level-3"><a href="#job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</a></li>
+        <li class="doc-toc-level-3"><a href="#bitte-prüfen-die-angelegten-jobs-sind-beispiele">Bitte prüfen: Die angelegten Jobs sind Beispiele</a></li>
       </ul>
     </details>
     <div class="prose">
@@ -67,214 +76,444 @@ Richtungen:</p>
 <li><strong>Senden:</strong> arpaTools exportiert Artikel-, Bestands-, Verkaufs- und weitere Daten aus JTL-Wawi und
 lädt sie per FTP zu Netstock hoch.</li>
 <li><strong>Empfangen:</strong> arpaTools lädt die von Netstock berechneten Bestellvorschläge per FTP herunter und
-kann sie wahlweise in die JTL-Einkaufsliste oder direkt als Lieferantenbestellung importieren.</li>
+übernimmt sie wahlweise in die JTL-Einkaufsliste oder direkt als Lieferantenbestellung.</li>
 </ul>
-<p>Der Datenaustausch lässt sich manuell über die Netstock-Ansicht anstoßen oder automatisiert über eine
-Jobby-Aktion (siehe <a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Netstock"). Für automatisierte Abläufe
-empfehlen wir die Jobby-Aktion. Die Ansicht gliedert sich in <strong>Datenlieferungen</strong> (Tabelle und Versand)
-und <strong>Einstellungen</strong>.</p>
-<p><img src="../docs/bilder/netstock-uebersicht.png" alt="Netstock-Ansicht: Tabelle der Datenpakete, gruppiert nach Stammdaten, Bestände und Bewegungsdaten, mit Bedarf, Zustand und letztem Sendezeitpunkt je Paket. Markiert ① Herunterladen, ② Alles senden, ③ Auswahl senden, ④ Stammdaten senden und ⑤ Verkauf &amp; Verbrauch senden." /></p>
-<p>① Herunterladen — ruft Bestellvorschläge von Netstock ab (siehe „Daten empfangen"). ② Alles senden —
-überträgt sämtliche Datenpakete der Tabelle. ③ Auswahl senden — überträgt nur die markierten Zeilen.
-④ Stammdaten senden — Schnellzugriff für die Gruppe Stammdaten. ⑤ Verkauf &amp; Verbrauch senden —
-Schnellzugriff für die Bewegungsdaten.</p>
+<p>Der Datenaustausch lässt sich manuell in der Netstock-Ansicht anstoßen oder automatisiert über Jobby
+(siehe <a href="#automatisierung-%C3%BCber-jobby">Automatisierung über Jobby</a>). Für regelmäßige Abläufe empfehlen
+wir Jobby. Die Ansicht hat zwei Reiter: <strong>Datenlieferungen</strong> mit der Tabelle und den Schaltflächen zum
+Senden und Empfangen, und <strong>Einstellungen</strong>.</p>
+<p><img src="../docs/bilder/netstock-uebersicht.png" alt="Netstock-Ansicht, Reiter Datenlieferungen: oben die Schaltflächen zum Abholen und Senden, darunter drei Kennzahlen und die Tabelle der Datenpakete, gruppiert nach Stammdaten, Bestände und Bewegungsdaten. Markiert sind die Schaltflächen 1 bis 4 oben und 5 bis 8 in der Fußleiste." /></p>
+<p>① <strong>Herunterladen:</strong> holt die Bestellvorschläge von Netstock und legt die Datei in einem Ordner ab.
+② <strong>Auf Einkaufsliste:</strong> übernimmt die Bestellvorschläge in die JTL-Einkaufsliste.
+③ <strong>Als Lieferantenbestellung:</strong> legt aus den Bestellvorschlägen Lieferantenbestellungen an.
+④ <strong>Alles senden:</strong> überträgt sämtliche Datenpakete der Tabelle.
+⑤ <strong>Auswahl senden:</strong> überträgt nur die markierten Zeilen. Die Schaltfläche wird aktiv, sobald Sie
+mindestens eine Zeile markiert haben.
+⑥ <strong>Stammdaten senden:</strong> Schnellzugriff für die Grunddaten, die Netstock zuerst braucht.
+⑦ <strong>Verkaufszeitraum in Monaten:</strong> wie weit die übertragenen Verkäufe zurückreichen.
+⑧ <strong>Verkauf &amp; Verbrauch senden:</strong> Schnellzugriff für Verkäufe und Bestände.</p>
+<p>Die einzelnen Punkte sind in den folgenden Abschnitten beschrieben.</p>
 <h2 id="voraussetzungen">Voraussetzungen</h2>
-<ul>
-<li>Eine FTP-Verbindung zu Netstock, eingerichtet unter Verbindungen (siehe
-<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Verbindungen", Registerkarte FTP-Server). Die
-Zugangsdaten erhalten Sie von Netstock.</li>
-<li>Eine gültige Netstock-Lizenz in arpaTools.</li>
-</ul>
+<p>Bevor die ersten Daten zu Netstock gehen, braucht es ein paar Dinge. Die ersten beiden klären Sie mit
+Netstock, die übrigen richten Sie in arpaTools ein. Gehen Sie die Liste am besten der Reihe nach
+durch, dann greift ein Schritt in den nächsten.</p>
+<p><strong>Bei Netstock</strong></p>
+<ol>
+<li><strong>Ein eigenes Netstock-Abonnement bei Netstock.</strong> arpaTools ist die Schnittstelle und liefert die
+Daten, gerechnet und geplant wird bei Netstock selbst. Dafür brauchen Sie ein aktives Abonnement
+direkt bei Netstock. Unsere arpaTools-Lizenz für das Modul Netstock ersetzt es nicht, Sie brauchen
+beides. Informationen und Kontakt finden Sie auf der Website von Netstock:
+<a href="https://www.netstock.com/de/">www.netstock.com/de</a>.</li>
+<li><strong>FTP-Zugangsdaten von Netstock.</strong> Über diesen Zugang tauschen arpaTools und Netstock die Dateien
+aus. Die Zugangsdaten bekommen Sie von Netstock. Für arpaTools brauchen Sie daraus den Server, den
+Port, den Benutzernamen, das Passwort und die Angabe, ob FTP oder SFTP verwendet wird. Fehlt Ihnen
+davon etwas, fragen Sie bei Netstock am besten gleich nach.</li>
+</ol>
+<p><strong>In arpaTools</strong></p>
+<ol>
+<li><strong>Den FTP-Zugang anlegen.</strong> Tragen Sie die Zugangsdaten von Netstock einmal unter <strong>Verbindungen</strong>
+ein. Wie das geht, steht Schritt für Schritt unter
+<a href="arpatools.html#ftp-zugang-anlegen">FTP-Zugang anlegen</a>. Testen Sie den Zugang dort gleich mit
+<strong>Prüfen</strong>, dann wissen Sie sicher, dass die Verbindung steht.</li>
+<li><strong>Den Zugang mit Netstock verknüpfen.</strong> Ein angelegter Zugang allein reicht noch nicht: Erst in den
+Netstock-Einstellungen legen Sie fest, dass Netstock genau diesen Zugang verwendet. Wählen Sie auf
+der Registerkarte <a href="#verbindung">Verbindung</a> unter <strong>FTP-Server</strong> den eben angelegten Zugang aus,
+dazu <strong>Firma</strong> und <strong>Benutzer</strong>. Auf der Registerkarte <a href="#lagerauswahl">Lagerauswahl</a> stellen Sie
+mindestens ein Lager auf etwas anderes als <strong>Ignorieren</strong>, denn ohne Lager hätte Netstock keinen
+Bestand zum Rechnen. Danach <strong>Speichern</strong>.</li>
+<li><strong>Eine gültige arpaTools-Lizenz für das Modul Netstock.</strong> Sie schaltet die Schnittstelle in
+arpaTools frei und kommt von uns, zusätzlich zu Ihrem Abonnement bei Netstock (siehe Punkt 1).</li>
+</ol>
+<p>Solange FTP-Server, Firma oder Benutzer fehlen, zeigt <strong>Datenlieferungen</strong> den Hinweis „Netstock ist
+noch nicht eingerichtet. Hinterlegen Sie in den Moduleinstellungen einen FTP-Server, eine Firma und
+einen Benutzer.", und alle Schaltflächen zum Senden und Empfangen bleiben inaktiv. Ist alles
+eingerichtet, stehen unter der Überschrift die gewählte Firma und der FTP-Server.</p>
+<p>Danach empfehlen wir, jeden Weg, den Sie nutzen möchten, einmal in der Netstock-Ansicht von Hand
+auszuprobieren. arpaTools bietet Ihnen anschließend an, daraus einen Job anzulegen (siehe
+<a href="#job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</a>).</p>
 <h2 id="daten-senden">Daten senden</h2>
-<p>Die Tabelle in <strong>Datenlieferungen</strong> listet alle Datenpakete, gruppiert nach Stammdaten, Bestände und
-Bewegungsdaten. Je Paket zeigt sie, ob es benötigt, gewünscht oder optional ist, den aktuellen Zustand
-und wann es zuletzt gesendet wurde. Folgende Datenpakete stehen zur Verfügung:</p>
+<h3 id="kennzahlen">Kennzahlen</h3>
+<p>Über der Tabelle stehen drei Kennzahlen:</p>
+<ul>
+<li><strong>Letzte Übertragung:</strong> wie lange die jüngste Übertragung zurückliegt, darunter Datum und Uhrzeit.</li>
+<li><strong>Veraltet:</strong> wie viele Datenpakete älter als 7 Tage sind, gemessen an allen Paketen der Tabelle.</li>
+<li><strong>Nie gesendet:</strong> wie viele Datenpakete noch nie übertragen wurden.</li>
+</ul>
+<h3 id="die-tabelle-der-datenpakete">Die Tabelle der Datenpakete</h3>
+<p>Die Tabelle listet alle Datenpakete, gruppiert nach Stammdaten, Bestände und Bewegungsdaten. Je Paket
+zeigt sie:</p>
+<ul>
+<li><strong>Bedarf:</strong> wie dringend Netstock das Paket braucht. <strong>Benötigt</strong> heißt, ohne das Paket kann Netstock
+nicht rechnen. <strong>Erwünscht</strong> heißt, Netstock rechnet damit genauer. <strong>Optional</strong> betrifft Daten, die
+nicht jede Installation hat.</li>
+<li><strong>Zustand:</strong> <strong>Aktuell</strong>, <strong>Veraltet</strong> (älter als 7 Tage) oder <strong>Nie gesendet</strong>.</li>
+<li><strong>Alter in Tagen</strong> und <strong>Zuletzt gesendet</strong> mit Datum und Uhrzeit.</li>
+</ul>
+<p>Über das Filtersymbol im Spaltenkopf grenzen Sie die Tabelle ein, etwa auf alle veralteten Pakete.</p>
 <table>
 <thead>
 <tr>
+<th>Gruppe</th>
 <th>Datenpaket</th>
+<th>Bedarf</th>
 <th>Beschreibung</th>
 </tr>
 </thead>
 <tbody><tr>
+<td>Stammdaten</td>
 <td>Lager/Filialen</td>
+<td>Benötigt</td>
 <td>Stammdaten Ihrer Lager.</td>
 </tr>
 <tr>
+<td>Stammdaten</td>
 <td>Lieferanten</td>
+<td>Benötigt</td>
 <td>Ihre Lieferantenstammdaten, dazu der Sammeleintrag <strong>Setartikel</strong>.</td>
 </tr>
 <tr>
+<td>Stammdaten</td>
 <td>Artikelstamm</td>
+<td>Benötigt</td>
 <td>Artikel-Stammdaten.</td>
 </tr>
 <tr>
-<td>Bestand je Lagerort</td>
-<td>Aktueller Lagerbestand, aufgeschlüsselt je Lager.</td>
-</tr>
-<tr>
-<td>Chargen</td>
-<td>Chargeninformationen.</td>
-</tr>
-<tr>
+<td>Stammdaten</td>
 <td>Artikelgruppen</td>
+<td>Benötigt</td>
 <td>Ihre Warengruppen.</td>
 </tr>
 <tr>
+<td>Stammdaten</td>
+<td>Meta Daten ('Trigger'-File)</td>
+<td>Benötigt</td>
+<td>Steuerdatei, die Netstock signalisiert, dass ein Übertragungslauf abgeschlossen ist. Ist sie dabei, geht sie immer als letzte Datei hinaus.</td>
+</tr>
+<tr>
+<td>Stammdaten</td>
+<td>Stücklisten</td>
+<td>Optional</td>
+<td>Stücklisteninformationen.</td>
+</tr>
+<tr>
+<td>Bestände</td>
+<td>Bestand je Lagerort</td>
+<td>Benötigt</td>
+<td>Aktueller Lagerbestand, aufgeschlüsselt je Lager.</td>
+</tr>
+<tr>
+<td>Bestände</td>
+<td>Chargen</td>
+<td>Optional</td>
+<td>Chargeninformationen.</td>
+</tr>
+<tr>
+<td>Bewegungsdaten</td>
 <td>Verkauf &amp; Verbrauch</td>
+<td>Benötigt</td>
 <td>Verkaufs- und Verbrauchsdaten als Grundlage der Bedarfsplanung.</td>
 </tr>
 <tr>
+<td>Bewegungsdaten</td>
 <td>Offene Lieferanten- oder Produktionsbestellungen</td>
+<td>Benötigt</td>
 <td>Noch nicht abgeschlossene Bestellungen.</td>
 </tr>
 <tr>
+<td>Bewegungsdaten</td>
 <td>Offene Kundenbestellungen</td>
+<td>Erwünscht</td>
 <td>Noch nicht abgeschlossene Kundenaufträge.</td>
 </tr>
 <tr>
+<td>Bewegungsdaten</td>
 <td>Offene Artikeltransfers</td>
+<td>Optional</td>
 <td>Umlagerungen zwischen Lagern, die noch nicht abgeschlossen sind.</td>
 </tr>
 <tr>
+<td>Bewegungsdaten</td>
 <td>Abgeschlossene Einkaufsbestellungen</td>
+<td>Erwünscht</td>
 <td>Historische Einkaufsbestellungen.</td>
 </tr>
-<tr>
-<td>Meta Daten ('Trigger'-File)</td>
-<td>Steuerdatei, die Netstock signalisiert, dass ein Übertragungslauf abgeschlossen ist. Wird immer zuletzt gesendet.</td>
-</tr>
-<tr>
-<td>Stücklisten</td>
-<td>Stücklisteninformationen.</td>
-</tr>
 </tbody></table>
-<p>Die Tabelle zeigt aktuell 13 Datenpakete (siehe Zähler „Nie gesendet" im Screenshot). Zwei zuvor
-dokumentierte Pakete, Nachfolgeartikel und Zusätzliche Daten/Optionale Felder, erscheinen darin nicht
-mehr.</p>
 <h3 id="der-lieferant-setartikel">Der Lieferant „Setartikel"</h3>
 <p>Stücklistenartikel haben in JTL-Wawi keinen Lieferanten. Damit sie sich in Netstock trotzdem
 auswerten lassen, sendet arpaTools sie gesammelt unter dem Lieferanten <strong>Setartikel</strong> mit. Artikel,
 die keine Stückliste sind und für die kein Standardlieferant hinterlegt ist, werden diesem
 Lieferanten <strong>nicht</strong> zugeordnet und erscheinen in Netstock ohne Lieferantenstammsatz.</p>
-<blockquote>
-<p>nur in diesem Profil (ohne eingerichtete Firma) nicht angezeigt werden.</p>
-</blockquote>
-<p>Markieren Sie eine oder mehrere Zeilen und klicken Sie auf <strong>Auswahl senden</strong>, um genau diese Pakete zu
-übertragen. Für die üblichen Fälle stehen zusätzlich Schnellzugriffe bereit, die eine ganze Gruppe in
-einem Schritt senden: <strong>Stammdaten senden</strong> für die Gruppe Stammdaten und <strong>Verkauf &amp; Verbrauch
-senden</strong> für die Bewegungsdaten. <strong>Alles senden</strong> überträgt sämtliche Pakete der Tabelle.</p>
-<p>Das Feld <strong>Verkaufszeitraum in Monaten</strong> neben <strong>Verkauf &amp; Verbrauch senden</strong> legt fest, wie weit die
-übertragenen Verkäufe zurückreichen. Gezählt wird ab dem Ersten des laufenden Monats: Der Wert 2
-überträgt die beiden abgeschlossenen Vormonate und den laufenden Monat. Maßgeblich ist dabei das
-Rechnungs- beziehungsweise Versanddatum, nicht das Datum der Auftragserfassung — genau danach ordnet
-Netstock die Mengen den Monaten zu. Ein Auftrag, der im Januar erfasst und im März ausgeliefert wurde,
-zählt also zum März.</p>
+<h3 id="senden">Senden</h3>
+<p>Sie haben vier Wege, Daten zu übertragen:</p>
+<ul>
+<li><strong>Auswahl senden</strong> ⑤ überträgt genau die Zeilen, die Sie in der Tabelle markiert haben. Mehrere
+Zeilen markieren Sie mit gedrückter Strg- oder Umschalttaste.</li>
+<li><strong>Stammdaten senden</strong> ⑥ überträgt Lager/Filialen, Lieferanten, Artikelstamm und Meta Daten.
+Artikelgruppen und Stücklisten gehören nicht dazu, obwohl sie in der Gruppe Stammdaten stehen.</li>
+<li><strong>Verkauf &amp; Verbrauch senden</strong> ⑧ überträgt Verkauf &amp; Verbrauch, Bestand je Lagerort und Meta Daten.</li>
+<li><strong>Alles senden</strong> ④ überträgt alle 13 Datenpakete.</li>
+</ul>
+<p>Nach dem Senden liest die Ansicht die Tabelle neu ein, Zustand und Zeitpunkt zeigen also sofort, was
+gerade übertragen wurde.</p>
+<h3 id="verkaufszeitraum">Verkaufszeitraum</h3>
+<p>Das Feld <strong>Verkaufszeitraum in Monaten</strong> ⑦ legt fest, wie weit die übertragenen Verkäufe
+zurückreichen. Es gilt nur für <strong>Verkauf &amp; Verbrauch senden</strong>. Erlaubt sind 1 bis 60 Monate. Bleibt
+das Feld leer, sendet arpaTools den Standardzeitraum von 2 Monaten, ebenso bei allen anderen Wegen.</p>
+<p>Gezählt wird ab dem Ersten des laufenden Monats: Der Wert 2 überträgt die beiden abgeschlossenen
+Vormonate und den laufenden Monat. Maßgeblich ist dabei das Rechnungs- beziehungsweise Versanddatum,
+nicht das Datum der Auftragserfassung, denn genau danach ordnet Netstock die Mengen den Monaten zu.
+Ein Auftrag, der im Januar erfasst und im März ausgeliefert wurde, zählt also zum März.</p>
 <h2 id="daten-empfangen">Daten empfangen</h2>
-<p>Am oberen Rand von <strong>Datenlieferungen</strong> stehen drei Schaltflächen für die von Netstock berechneten
+<p>Oben rechts in <strong>Datenlieferungen</strong> stehen drei Schaltflächen für die von Netstock berechneten
 Bestellvorschläge:</p>
 <ul>
-<li><strong>Herunterladen:</strong> lädt die Datei nur in ein Zielverzeichnis herunter, ohne sie weiter zu verarbeiten.</li>
-<li><strong>Auf Einkaufsliste:</strong> importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.</li>
-<li><strong>Als Lieferantenbestellung:</strong> importiert die Bestellvorschläge über JTL-Ameise direkt als Lieferantenbestellung.</li>
+<li><strong>Herunterladen</strong> ①: arpaTools fragt nach einem Zielordner und legt die Datei dort ab, ohne sie
+weiter zu verarbeiten.</li>
+<li><strong>Auf Einkaufsliste</strong> ②: importiert die Bestellvorschläge direkt in die JTL-Einkaufsliste.</li>
+<li><strong>Als Lieferantenbestellung</strong> ③: importiert die Bestellvorschläge über JTL-Ameise direkt als
+Lieferantenbestellung.</li>
 </ul>
 <h3 id="bestellvorschläge-zeitgesteuert-übernehmen">Bestellvorschläge zeitgesteuert übernehmen</h3>
-<p>Beide Wege lassen sich auch als Job einrichten, damit sie ohne Zutun laufen:</p>
-<ul>
-<li><strong>Auf Einkaufsliste:</strong> nach einem Lauf über die Schaltfläche bietet arpaTools an, den passenden
-Job selbst anzulegen.</li>
-<li><strong>Als Lieferantenbestellung:</strong> in Jobby eine Aktion <strong>Netstock: Lieferantenbestellung</strong>
-hinzufügen. Sie holt die Bestellvorschläge selbst ab und legt sie an; einzustellen ist nichts,
-denn Zugang und Zuordnung stehen in den Netstock-Einstellungen.</li>
-</ul>
-<p>Für den zweiten Weg ist die eigene Aktion nötig. Netstock schreibt Lieferant und Lager als
-Schlüssel in die Datei, nicht als Namen. Wer die Datei stattdessen über eine allgemeine
-Ameise-Vorlage einliest, bekommt dort keine Zuordnung zustande.</p>
+<p>Alle drei Wege lassen sich als Job einrichten, damit sie ohne Zutun laufen. Nach einem erfolgreichen
+Lauf über die Schaltfläche bietet arpaTools an, den passenden Job selbst anzulegen (siehe
+<a href="#job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</a>).</p>
+<p>Von Hand fügen Sie für den Weg <strong>Als Lieferantenbestellung</strong> in Jobby die Aktion
+<strong>Netstock: Lieferantenbestellung</strong> hinzu. Sie holt die Bestellvorschläge selbst ab und legt sie an.
+Einzustellen ist nichts, denn Zugang und Zuordnung stehen in den Netstock-Einstellungen.</p>
+<p>Für diesen Weg ist die eigene Aktion nötig. Netstock schreibt Lieferant und Lager als Schlüssel in die
+Datei, nicht als Namen. Wer die Datei stattdessen über eine allgemeine Ameise-Vorlage einliest,
+bekommt dort keine Zuordnung zustande.</p>
 <h3 id="wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</h3>
 <p>Eine abgeholte Datei bleibt auf dem Server liegen und kommt beim nächsten Abholen erneut mit. Wer
 zweimal übernimmt, hat die Bestellung zweimal in der Wawi.</p>
-<p>Dagegen gibt es in den Netstock-Einstellungen den Schalter <strong>Bestelldatei nach dem Übernehmen vom
-Server entfernen</strong>. Er ist zunächst aus, damit sich am gewohnten Verhalten nichts ändert.</p>
+<p>Dagegen gibt es in den Netstock-Einstellungen auf der Registerkarte <strong>Verbindung</strong> den Schalter
+<strong>Bestelldatei nach dem Übernehmen vom Server entfernen</strong>. Er ist zunächst aus, damit sich am
+gewohnten Verhalten nichts ändert.</p>
 <p>Eingeschaltet wird die Datei entfernt, sobald die Einkaufsliste oder die Lieferantenbestellung
-geschrieben ist. Sie bleibt liegen, wenn dabei etwas schiefgeht <strong>und auch dann, wenn die Datei
-keine verwertbare Zeile enthielt</strong> — sonst wäre die Bestellung weg, ohne dass etwas in der Wawi
+geschrieben ist. Sie bleibt liegen, wenn dabei etwas schiefgeht, <strong>und auch dann, wenn die Datei
+keine verwertbare Zeile enthielt</strong>. Sonst wäre die Bestellung weg, ohne dass etwas in der Wawi
 angekommen ist.</p>
-<p>Beim reinen <strong>Herunterladen</strong> greift der Schalter nicht: dort ist die abgelegte Datei das Ergebnis,
+<p>Beim reinen <strong>Herunterladen</strong> greift der Schalter nicht: Dort ist die abgelegte Datei das Ergebnis,
 und sie soll nicht verschwinden.</p>
+<p>Der Schalter wirkt für die Schaltflächen <strong>Auf Einkaufsliste</strong> und <strong>Als Lieferantenbestellung</strong> und
+für die Jobby-Aktion <strong>Netstock: Lieferantenbestellung</strong>. Für einen Job aus <strong>Download von
+FTP-Server</strong> und <strong>Einkaufsliste schreiben</strong> gilt er nicht; dort entscheidet die Download-Aktion,
+ob die Datei auf dem Server bleibt (siehe
+<a href="#bitte-pr%C3%BCfen-die-angelegten-jobs-sind-beispiele">Bitte prüfen: Die angelegten Jobs sind Beispiele</a>).</p>
 <h2 id="einstellungen">Einstellungen</h2>
-<p>Die Netstock-Einstellungen gliedern sich in vier Registerkarten: <strong>Verbindung</strong>, <strong>Was übertragen
-wird</strong>, <strong>Lagerauswahl</strong> und <strong>Stücklisten</strong>.</p>
-<p><img src="../docs/bilder/netstock-einstellungen.png" alt="Netstock-Einstellungen, Registerkarte Verbindung: FTP-Server, Firma und Benutzer für den Datenaustausch." /></p>
-<blockquote>
-<p>„Zeitlimit für Übertragungen (Sekunden)", das im obigen Bild noch fehlt. Aufnahme mangels laufender
-interaktiver Sitzung in dieser Umgebung nicht möglich, bei der Abnahme nachholen.</p>
-</blockquote>
-<p>Auf <strong>Verbindung</strong> legen Sie fest, welcher FTP-Server (siehe <a href="jobby.html">Jobby-Dokumentation</a>,
-Abschnitt „Verbindungen"), welche Firma und welcher Benutzer für den Datenaustausch verwendet werden.</p>
-<ul>
-<li><strong>Zeitlimit für Übertragungen (Sekunden):</strong> wie lange arpaTools auf die Antwort einer einzelnen
+<p>Die Netstock-Einstellungen öffnen Sie über den Reiter <strong>Einstellungen</strong> oben in der Ansicht. Sie
+gliedern sich in vier Registerkarten: <strong>Verbindung</strong>, <strong>Was übertragen wird</strong>, <strong>Lagerauswahl</strong> und
+<strong>Stücklisten</strong>. Änderungen auf allen vier Registerkarten übernimmt erst <strong>Speichern</strong>. <strong>Abbrechen</strong>
+verwirft sie und zeigt wieder den gespeicherten Stand.</p>
+<h3 id="verbindung">Verbindung</h3>
+<p><img src="../docs/bilder/netstock-einstellungen.png" alt="Netstock-Einstellungen, Registerkarte Verbindung: Auswahlfelder für FTP-Server, Firma und Benutzer, darunter das Zeitlimit für Übertragungen und der Schalter zum Entfernen der Bestelldatei, markiert mit 1 bis 5." /></p>
+<p>① <strong>FTP-Server:</strong> der Zugang zu Netstock, also die Verknüpfung zwischen Netstock und dem FTP-Zugang,
+den Sie unter <strong>Verbindungen</strong> angelegt haben. Die Liste zeigt alle dort angelegten Zugänge. Fehlt
+Ihr Netstock-Zugang, legen Sie ihn zuerst an (siehe <a href="arpatools.html#ftp-zugang-anlegen">FTP-Zugang anlegen</a>)
+und öffnen die Einstellungen danach erneut.
+② <strong>Firma:</strong> die Firma, zu der die Lieferantenbestellungen angelegt werden.
+③ <strong>Benutzer:</strong> der Wawi-Benutzer, der in den von arpaTools angelegten Daten eingetragen wird.
+④ <strong>Zeitlimit für Übertragungen (Sekunden):</strong> wie lange arpaTools auf die Antwort einer einzelnen
 Übertragungsabfrage wartet, bevor sie abgebrochen wird. Erlaubt sind Werte von 0 bis 3600 Sekunden,
 Vorgabe ist 90. <strong>0 bedeutet unbegrenzt.</strong> Erhöhen Sie den Wert, wenn Übertragungen bei großen
-Datenmengen mit einer Zeitüberschreitung abbrechen. Wer den Wert nie verändert hat, wird beim
-Update von den früheren 30 Sekunden auf die 90 gehoben; ein selbst eingetragener Wert bleibt stehen.</li>
-</ul>
-<p><img src="../docs/bilder/netstock-einstellungen-uebertragen.png" alt="Netstock-Einstellungen, Registerkarte „Was übertragen wird&quot;: vier Schalter (Retouren senden, Lieferantenartikelnummer/HAN/Warengruppe als Gruppe senden) sowie die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung." /></p>
-<p>Auf <strong>Was übertragen wird</strong>:</p>
+Datenmengen mit einer Zeitüberschreitung abbrechen. Wer den Wert nie verändert hat, wird beim Update
+von den früheren 30 Sekunden auf die 90 gehoben; ein selbst eingetragener Wert bleibt stehen.
+⑤ <strong>Bestelldatei nach dem Übernehmen vom Server entfernen:</strong> verhindert, dass dieselbe Bestellung
+zweimal angelegt wird (siehe <a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a>).</p>
+<h3 id="was-übertragen-wird">Was übertragen wird</h3>
+<p>Diese Einstellungen gelten für jede Übertragung an Netstock.</p>
+<p><img src="../docs/bilder/netstock-einstellungen-uebertragen.png" alt="Netstock-Einstellungen, Registerkarte „Was übertragen wird&quot;: vier Schalter für Retouren und die Gruppierung nach Lieferantenartikelnummer, HAN und Warengruppe, darunter die Auswahlfelder Verkaufsermittlung und Stücklistenverarbeitung, markiert mit 1 bis 6." /></p>
+<p>① <strong>Retouren senden:</strong> retournierte Mengen fließen in die Bedarfsrechnung ein.
+② <strong>Lieferantenartikelnummer als Gruppe senden:</strong> gruppiert Artikel nach der Nummer des Lieferanten.
+③ <strong>HAN als Gruppe senden:</strong> gruppiert nach der Herstellerartikelnummer.
+④ <strong>Warengruppe als Gruppe senden:</strong> gruppiert nach der JTL-Warengruppe.
+⑤ <strong>Verkaufsermittlung:</strong> ab wann ein Auftrag als Verkauf zählt.</p>
 <ul>
-<li><strong>Retouren senden:</strong> retournierte Mengen fließen in die Bedarfsrechnung ein.</li>
-<li><strong>Lieferantenartikelnummer als Gruppe senden:</strong> gruppiert Artikel nach der Nummer des Lieferanten.</li>
-<li><strong>HAN als Gruppe senden:</strong> gruppiert nach der Herstellerartikelnummer.</li>
-<li><strong>Warengruppe als Gruppe senden:</strong> gruppiert nach der JTL-Warengruppe.</li>
-<li><strong>Verkaufsermittlung:</strong> ab wann ein Verkauf berücksichtigt wird, z. B. <strong>Alle Aufträge</strong>.</li>
-<li><strong>Stücklistenverarbeitung:</strong> z. B. <strong>Komponenten senden</strong> (die einzelnen Bestandteile werden übertragen) statt die Stückliste als einen Artikel zu behandeln.</li>
+<li><strong>Alle Aufträge:</strong> jeder Auftrag.</li>
+<li><strong>Bezahlte Aufträge:</strong> nur bezahlte Aufträge, dazu Aufträge mit einer Zahlungsart, die das
+Ausliefern vor der Zahlung erlaubt.</li>
+<li><strong>Gelieferte Aufträge:</strong> nur ausgelieferte Aufträge.</li>
 </ul>
-<p>Auf <strong>Lagerauswahl</strong> wählen Sie je Lager, welchem Warenlager es zugeordnet ist, ob es Bestellvorschläge
-erhält und in welcher Gruppe es steht, dazu optional eigene Warenlager für FBA EU und FBA GB.</p>
-<p><img src="../docs/bilder/netstock-einstellungen-stuecklisten.png" alt="Netstock-Einstellungen, Registerkarte Stücklisten: Sondererstellung für Stücklisten mit eigenem Feld sowie den Trennern für Artikel/Menge und Komponente." /></p>
-<p>Auf <strong>Stücklisten</strong> tragen Sie nur bei einer Sondererstellung ein eigenes Artikel-Feld ein, aus dem
-Komponenten und Mengen gelesen werden, inklusive <strong>Trenner Artikel und Menge</strong> und <strong>Trenner
-Komponente</strong> zur Aufteilung des Feldinhalts. Nötig ist das nur, wenn Netstock die Komponenten getrennt
-erwartet.</p>
-<p>Dazu stellen Sie unter <strong>Reihenfolge im Feld</strong> ein, welcher der beiden Werte zuerst steht. Bei
-<code>10;MSU12002</code> steht die Menge vorn, bei <code>MSU12002;10</code> die Artikelnummer. Passt die Einstellung nicht zu
-Ihren gepflegten Werten, kommen falsche Mengen bei Netstock an oder der Artikel wird übersprungen.</p>
+<p>⑥ <strong>Stücklistenverarbeitung:</strong> wie ein verkaufter Stücklistenartikel in die Verkaufsdaten eingeht.</p>
+<ul>
+<li><strong>Komponenten senden:</strong> der Verkauf zählt für die einzelnen Bestandteile.</li>
+<li><strong>Stücklistenvater senden:</strong> der Verkauf zählt für den Stücklistenartikel selbst.</li>
+</ul>
+<h3 id="lagerauswahl">Lagerauswahl</h3>
+<p>Hier legen Sie je Lager fest, ob und wie es an Netstock geht. Die Zeile über der Tabelle zeigt, wie
+viele Lager es gibt und wie viele davon übertragen werden. Ein grüner Punkt vor dem Namen markiert
+ein Lager, das übertragen wird.</p>
+<p><img src="../docs/bilder/netstock-einstellungen-lagerauswahl.png" alt="Netstock-Einstellungen, Registerkarte Lagerauswahl: Tabelle mit einer Zeile je Lager und den Spalten Zugeordnetes Warenlager, Keine Bestellvorschläge, Gruppe und Warenlagertyp, darunter die Auswahlfelder Warenlager FBA EU und FBA GB, markiert mit 1 bis 6." /></p>
+<p>① <strong>Zugeordnetes Warenlager:</strong> was mit dem Lager geschieht.</p>
+<ul>
+<li><strong>Ignorieren:</strong> das Lager wird nicht übertragen. Das ist die Vorgabe für jedes Lager, das Sie hier
+noch nicht eingestellt haben.</li>
+<li><strong>Keine:</strong> das Lager geht als eigenes Lager an Netstock.</li>
+<li><strong>Ein anderes Lager:</strong> Bestände, Chargen, Verkäufe, Bestellungen und Umlagerungen dieses Lagers
+werden dem gewählten Lager zugerechnet und dort zusammengefasst.</li>
+</ul>
+<p>② <strong>Keine Bestellvorschläge:</strong> ein Eigenes Feld aus der Feldgruppe <strong>Netstock</strong> in JTL-Wawi. Artikel,
+bei denen dieses Feld angehakt ist, meldet arpaTools für dieses Lager als nicht zu bestellen. Mit
+<strong>Nicht ausgewählt</strong> gilt keine solche Einschränkung.
+③ <strong>Gruppe:</strong> der Gruppenname, unter dem Netstock das Lager führt. Vorbelegt ist das Kürzel des Lagers
+aus der Wawi.
+④ <strong>Warenlagertyp:</strong> <strong>Laden/Filiale</strong>, <strong>Lager</strong> (Vorgabe) oder <strong>Zentrallager</strong>.
+⑤ <strong>Warenlager FBA EU</strong> und ⑥ <strong>Warenlager FBA GB:</strong> die Lager, denen Verkäufe über Amazon FBA
+zugerechnet werden. Nach Großbritannien versandte FBA-Verkäufe zählen für das Lager FBA GB, alle
+übrigen für das Lager FBA EU. Zur Auswahl stehen nur FBA-Lager. FBA-Verkäufe werden nur übertragen,
+wenn ein Warenlager FBA EU gewählt ist.</p>
+<h3 id="stücklisten">Stücklisten</h3>
+<p><img src="../docs/bilder/netstock-einstellungen-stuecklisten.png" alt="Netstock-Einstellungen, Registerkarte Stücklisten: Eigenes Feld, Trenner Artikel und Menge, Trenner Komponente und Reihenfolge im Feld, markiert mit 1 bis 4." /></p>
+<p>Diese Registerkarte brauchen Sie nur für eine Sondererstellung, wenn Netstock die Komponenten einer
+Stückliste getrennt erwartet.</p>
+<p>① <strong>Eigenes Feld:</strong> das Artikel-Feld, aus dem Komponenten und Mengen gelesen werden.
+② <strong>Trenner Artikel und Menge:</strong> das Zeichen zwischen Artikelnummer und Menge.
+③ <strong>Trenner Komponente:</strong> das Zeichen zwischen zwei Komponenten.
+④ <strong>Reihenfolge im Feld:</strong> welcher der beiden Werte zuerst steht. Bei <code>10;MSU12002</code> steht die Menge
+vorn (<strong>Menge, dann Artikelnummer</strong>), bei <code>MSU12002;10</code> die Artikelnummer (<strong>Artikelnummer, dann
+Menge</strong>). Passt die Einstellung nicht zu Ihren gepflegten Werten, kommen falsche Mengen bei Netstock an
+oder der Artikel wird übersprungen.</p>
 <blockquote>
 <p><strong>Hinweis:</strong> Wer die Sondererstellung schon vor dem Update genutzt hat, findet die Einstellung
 danach auf <strong>Menge, dann Artikelnummer</strong>. Pflegen Sie Ihr Feld andersherum, stellen Sie einmalig um.</p>
 </blockquote>
-<p><strong>Einträge, die nicht gelesen werden können, halten den Versand nicht mehr auf.</strong> Steht mitten im Feld
-ein Trenner zu viel, fehlt eine Menge, steht dort statt einer Menge etwas anderes, oder gibt es eine der
+<p><strong>Einträge, die nicht gelesen werden können, halten den Versand nicht auf.</strong> Steht mitten im Feld ein
+Trenner zu viel, fehlt eine Menge, steht dort statt einer Menge etwas anderes, oder gibt es eine der
 genannten Artikelnummern in der Wawi nicht, wird dieser Artikel samt allen seinen Komponenten
 übersprungen; die übrigen Stücklisten gehen normal an Netstock. Ein Trenner am Ende (<code>10;MSU12002|</code>)
 ist dagegen unschädlich und wird einfach überlesen. Groß- und Kleinschreibung der Artikelnummer spielt
 keine Rolle. Jeder übersprungene Artikel steht mit Artikelnummer, Komponente und Feldinhalt im
 <strong>Anwendungsprotokoll</strong>, sodass Sie die betroffenen Stellen gezielt nacharbeiten können.</p>
-<blockquote>
-<p>mangels laufender interaktiver Sitzung in dieser Umgebung nicht möglich.</p>
-</blockquote>
 <h2 id="automatisierung-über-jobby">Automatisierung über Jobby</h2>
-<p>Für einen regelmäßigen, automatischen Datenaustausch richten Sie in Jobby einen Job mit der Aktion
-<strong>Netstock</strong> ein. Die Aktion sendet die konfigurierten Datenpakete automatisch, zeitgesteuert über den
-arpaTools Worker. Details zur Jobby-Aktion und zu den Grundlagen von Jobby in der
-<a href="jobby.html">Jobby-Dokumentation</a>.</p>
-<p>Für den Download-Weg richten Sie stattdessen einen Job mit den Aktionen <strong>Download vom FTP-Server</strong> und
-<strong>Auf Einkaufsliste schreiben</strong> ein.</p>
+<p>Für einen regelmäßigen, automatischen Datenaustausch richten Sie in Jobby einen Job ein. Die Jobs
+laufen zeitgesteuert über den arpaTools Worker. Details zu den Aktionen und zu den Grundlagen von
+Jobby stehen in der <a href="jobby.html">Jobby-Dokumentation</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Zweck</th>
+<th>Aktionen im Job</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Daten an Netstock senden</td>
+<td><strong>Netstock</strong></td>
+</tr>
+<tr>
+<td>Bestellvorschläge als Lieferantenbestellung übernehmen</td>
+<td><strong>Netstock: Lieferantenbestellung</strong></td>
+</tr>
+<tr>
+<td>Bestellvorschläge auf die Einkaufsliste übernehmen</td>
+<td><strong>Download von FTP-Server</strong>, dann <strong>Einkaufsliste schreiben</strong></td>
+</tr>
+<tr>
+<td>Bestellvorschläge nur in einem Ordner ablegen</td>
+<td><strong>Download von FTP-Server</strong>, dann <strong>Daten in Verzeichnis speichern</strong></td>
+</tr>
+</tbody></table>
 <h3 id="job-auf-wunsch-automatisch-anlegen-lassen">Job auf Wunsch automatisch anlegen lassen</h3>
-<p>Sie müssen diese Jobs nicht von Hand erstellen. Nach einem manuellen Lauf in der Netstock-Ansicht fragt
-arpaTools jeweils, ob der passende Jobby-Job automatisch angelegt werden soll, in <strong>beide Richtungen</strong>:</p>
-<ul>
-<li><strong>Nach dem Senden:</strong> Sie werden gefragt, ob ein Sende-Job angelegt werden soll. Bei „Ja" entsteht ein
-Job mit der gebündelten Aktion <strong>Netstock</strong>, der Ihre Datenpakete künftig automatisch überträgt.</li>
-<li><strong>Nach dem Herunterladen:</strong> Sie werden gefragt, ob ein Download-Job angelegt werden soll. Bei „Ja"
-entsteht ein Job mit den Aktionen <strong>Download vom FTP-Server</strong> und <strong>Auf Einkaufsliste schreiben</strong>.</li>
-</ul>
-<p>Bestätigen Sie die Abfrage mit „Ja", legt arpaTools den Job an. Sie können ihn danach in Jobby prüfen und
-den Zeitplan anpassen.</p>
+<p>Sie müssen diese Jobs nicht von Hand erstellen. Am einfachsten geht es so: Probieren Sie den
+gewünschten Weg zuerst einmal in der Netstock-Ansicht aus, zum Beispiel mit <strong>Alles senden</strong> oder mit
+<strong>Auf Einkaufsliste</strong>. War der Lauf erfolgreich, fragt arpaTools im Fenster „Interaktion notwendig":</p>
 <blockquote>
-<p><strong>Hinweis:</strong> Die automatische Anlage des Download-Jobs erstellt nur den Weg <strong>auf die Einkaufsliste</strong>.
-Möchten Sie die Bestellvorschläge stattdessen direkt <strong>als Lieferantenbestellung</strong> importieren, richten
-Sie diesen Job derzeit von Hand in Jobby ein.</p>
+<p>Die Aktion können Sie mit Jobby auch automatisieren? Soll ein Beispieljob angelegt werden?</p>
 </blockquote>
+<p>Mit <strong>Ja</strong> legt arpaTools den passenden Job in Jobby an, je nach Schaltfläche einen dieser Jobs:</p>
+<table>
+<thead>
+<tr>
+<th>Schaltfläche</th>
+<th>Angelegter Job</th>
+<th>Aktionen</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>eine der vier Senden-Schaltflächen</td>
+<td>Netstock Upload-Job (automatisch angelegt)</td>
+<td><strong>Netstock</strong></td>
+</tr>
+<tr>
+<td><strong>Herunterladen</strong></td>
+<td>Netstock Download-Job (automatisch angelegt)</td>
+<td><strong>Download von FTP-Server</strong>, dann <strong>Daten in Verzeichnis speichern</strong> in den gewählten Ordner</td>
+</tr>
+<tr>
+<td><strong>Auf Einkaufsliste</strong></td>
+<td>Netstock Einkaufsliste-Job (automatisch angelegt)</td>
+<td><strong>Download von FTP-Server</strong>, dann <strong>Einkaufsliste schreiben</strong></td>
+</tr>
+<tr>
+<td><strong>Als Lieferantenbestellung</strong></td>
+<td>Netstock Lieferantenbestellung-Job (automatisch angelegt)</td>
+<td><strong>Netstock: Lieferantenbestellung</strong></td>
+</tr>
+</tbody></table>
+<p>Eine Bestätigung erscheint danach nicht. Den neuen Job finden Sie in Jobby unter <strong>Jobs</strong>, erkennbar
+am Zusatz „(automatisch angelegt)" im Namen.</p>
+<p>Gibt es den passenden Job schon, fragt arpaTools nicht erneut. Nach einem fehlgeschlagenen Lauf
+fragt es ebenfalls nicht.</p>
+<p>Mit <strong>Nicht erneut fragen</strong> im Fragefenster blenden Sie die Frage dauerhaft aus. Das gilt getrennt für
+das Senden und für das Abholen, beim Abholen aber für alle drei Schaltflächen gemeinsam.</p>
+<h3 id="bitte-prüfen-die-angelegten-jobs-sind-beispiele">Bitte prüfen: Die angelegten Jobs sind Beispiele</h3>
+<p>Ein Job, den arpaTools auf diese Weise anlegt, ist ein Beispiel. Er ist ein guter Startpunkt, aber
+noch nicht Ihr fertiger Ablauf: Er bildet den Weg in seiner einfachsten Form ab und kennt die
+Besonderheiten Ihres Betriebs nicht. Es ist deshalb nicht sichergestellt, dass er von Anfang an genau
+so läuft, wie Sie es brauchen.</p>
+<p>Nehmen Sie sich nach dem Anlegen bitte ein paar Minuten Zeit:</p>
+<ol>
+<li><strong>Ansehen:</strong> Öffnen Sie den Job in Jobby und gehen Sie seine Aktionen durch. Worauf es je Job
+ankommt, steht in der Liste unten.</li>
+<li><strong>Anpassen:</strong> Stellen Sie Aktionen und Zeitplan auf Ihre Bedürfnisse ein.</li>
+<li><strong>Einmal zur Probe ausführen:</strong> Starten Sie den Job in Jobby mit <strong>Starten</strong> und sehen Sie sich das
+Ergebnis an, im <strong>Verlauf</strong> und dort, wo die Daten ankommen sollen: bei Netstock, auf der
+Einkaufsliste oder bei den Lieferantenbestellungen.</li>
+</ol>
+<p>Diesen Probelauf empfehlen wir jedem Kunden einmal, auch wenn der Lauf über die Schaltfläche geklappt
+hat. Der Job arbeitet mit eigenen Einstellungen, nicht mit denen der Schaltfläche.</p>
+<p><strong>Gut zu wissen:</strong> Der Job ist gleich nach dem Anlegen aktiv und auf einen täglichen Lauf in der
+Nacht eingestellt. Ist der arpaTools Worker eingerichtet, folgt der erste Lauf meist schon kurz nach
+dem Anlegen. Sehen Sie sich den Job deshalb am besten direkt im Anschluss an.</p>
+<p>Upload-, Einkaufsliste- und Download-Job übernehmen den FTP-Zugang beim Anlegen fest aus den
+Netstock-Einstellungen. Wählen Sie dort später einen anderen Zugang, stellen Sie ihn auch in den
+Aktionen dieser Jobs um.</p>
+<p>Worauf es je Job ankommt:</p>
+<ul>
+<li><strong>Netstock Upload-Job:</strong> Er bringt eigene, feste Einstellungen mit. Was Sie auf den Registerkarten
+<strong>Lagerauswahl</strong> und <strong>Was übertragen wird</strong> eingestellt haben, gilt für ihn nicht; nur die Felder
+<strong>Warenlager FBA EU</strong> und <strong>Warenlager FBA GB</strong> übernimmt er. Er überträgt nur das erste Lager Ihrer
+Wawi, die Verkäufe der letzten zwei Monate samt laufendem Monat und nur einen Teil der
+Datenpakete: Chargen, offene Kundenbestellungen, offene Artikeltransfers und abgeschlossene
+Einkaufsbestellungen fehlen. Stücklisten gehen mit dem Artikelstamm mit, sobald Ihre Wawi aktive
+Stücklisten hat, und folgen dabei der Registerkarte <strong>Stücklisten</strong>. Dazu stehen Retouren auf aus,
+die Verkaufsermittlung auf <strong>Alle Aufträge</strong>, die Stücklistenverarbeitung auf <strong>Komponenten senden</strong>
+und alle Gruppierungen auf aus. Öffnen Sie im Job die Aktion <strong>Netstock</strong> und stellen Sie
+Datenpakete, Lager und Optionen so ein, wie Sie es für Netstock brauchen.</li>
+<li><strong>Netstock Einkaufsliste-Job:</strong> Hier sind zwei Punkte besonders wichtig.<ul>
+<li><em>Aufbau der Datei:</em> Die Aktion <strong>Einkaufsliste schreiben</strong> muss zum Aufbau der Datei von Netstock
+passen. Die Schaltfläche <strong>Auf Einkaufsliste</strong> liest sie so: <strong>Startzeile</strong> 2, denn die erste Zeile
+ist eine Kopfzeile, <strong>Identifizierungsart</strong> <strong>Artikelnummer</strong>, <strong>Identifizierung</strong> Spalte 7 und
+<strong>Menge</strong> Spalte 9. Vergleichen Sie diese Werte mit der Aktion im Job und tragen Sie sie dort ein,
+wo sie abweichen.</li>
+<li><em>Doppelte Einträge:</em> Die Aktion <strong>Download von FTP-Server</strong> lässt die Dateien auf dem Server
+liegen, und der Schalter <strong>Bestelldatei nach dem Übernehmen vom Server entfernen</strong> gilt für diesen
+Job nicht. Jeder Lauf liest deshalb alle Bestelldateien, die noch auf dem Server liegen, und trägt
+sie erneut in die Einkaufsliste ein. Legen Sie in der Download-Aktion unter <strong>Verarbeitung</strong> fest,
+dass die Dateien nach dem Download gelöscht werden, oder sorgen Sie auf andere Weise dafür, dass
+jede Datei nur einmal übernommen wird. Beachten Sie beim Löschen: Die Datei ist dann schon vom
+Server entfernt, bevor die Einkaufsliste geschrieben ist.</li>
+</ul>
+</li>
+<li><strong>Netstock Download-Job:</strong> Er legt die Dateien in dem Ordner ab, den Sie beim Herunterladen gewählt
+haben, und überschreibt dort Dateien gleichen Namens. Auch hier bleiben die Dateien auf dem Server,
+jeder Lauf holt sie also erneut. Prüfen Sie, ob Ordner und Verhalten zu Ihrem Ablauf passen.</li>
+<li><strong>Netstock Lieferantenbestellung-Job:</strong> Er nutzt Zugang, Firma und Benutzer aus den
+Netstock-Einstellungen. Prüfen Sie gleich nach dem Anlegen den Schalter <strong>Bestelldatei nach dem
+Übernehmen vom Server entfernen</strong>. Ist er aus, legt der Job bei jedem Lauf auch die Bestellungen
+erneut an, deren Datei noch auf dem Server liegt, beim ersten Lauf also womöglich genau die, die Sie
+eben von Hand übernommen haben (siehe
+<a href="#wenn-dieselbe-bestellung-zweimal-ankommt">Wenn dieselbe Bestellung zweimal ankommt</a>).</li>
+</ul>
 
     </div>
     </div>

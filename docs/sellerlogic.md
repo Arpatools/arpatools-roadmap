@@ -38,37 +38,28 @@ gewählte Optimierungsvorlage.
 
 ## Mindest- und Höchstpreis festlegen
 
-Der **Mindestpreis** ist die Untergrenze, die SellerLogic nie unterschreitet, er muss Ihre Kosten
-decken. Sie legen fest, wie arpaTools ihn je Artikel bestimmt:
+Der **Mindestpreis** ist die Untergrenze, die SellerLogic nie unterschreitet, der **Höchstpreis**
+die Obergrenze. Wie arpaTools die beiden bestimmt, legen Sie in den Einstellungen auf der
+Registerkarte „Kosten & Preise" mit dem **Preismodus** fest. Es gibt zwei Modi:
 
-1. **Eigenes Feld direkt:** Sie pflegen den Mindestpreis selbst in ein eigenes Feld am Artikel.
-   arpaTools übernimmt ihn unverändert.
-2. **Aus dem Einkaufspreis:** arpaTools rechnet den Einkaufspreis des Artikels plus Zusatzkosten
-   plus Ihren Aufschlag (Marge).
-3. **Aus dem Standardlieferanten:** wie 2., aber auf Basis des Einkaufspreises Ihres
-   Standardlieferanten.
-4. **Kombiniert:** zuerst das eigene Feld, sonst der Artikel-Einkaufspreis, sonst der
-   Standardlieferant. So bleibt der Mindestpreis auch bei lückenhafter Pflege belastbar.
+**Fixpreis (Eigenes Feld):** Sie pflegen Mindest- und Höchstpreis selbst je Artikel in zwei eigenen
+Feldern in JTL-Wawi und wählen diese Felder unter „Eigenes Feld Min-Preis" und „Eigenes Feld
+Max-Preis" aus. arpaTools übergibt die Werte unverändert an SellerLogic. Sie gelten als fertige
+Preise, so wie sie auf Amazon stehen sollen: arpaTools rechnet nichts auf und überträgt keinen
+Einkaufspreis.
 
-Der **Höchstpreis** kann aus einem eigenen Feld, aus dem UVP oder als Mindestpreis plus festem
-Abstand bestimmt werden. Der Höchstpreis wird nie kleiner als der Mindestpreis.
+**Automatisch (Prozent von Marge):** SellerLogic errechnet Mindest- und Höchstpreis selbst. Dafür
+überträgt arpaTools je Artikel den Einkaufspreis, den Steuersatz aus der Steuerklasse des Artikels
+und Ihre Preisgrenzen. Die Preisgrenzen stellen Sie im Bereich „Preisgrenzen (Automatik)" getrennt
+für Mindest- und Höchstpreis ein:
 
-**Brutto:** SellerLogic arbeitet mit Bruttopreisen. Bei den EK-basierten Strategien rechnet
-arpaTools deshalb die Umsatzsteuer auf. Der Steuersatz wird **je Artikel aus der JTL-Steuerklasse**
-gezogen, sodass auch ermäßigt besteuerte Artikel (7%) korrekt behandelt werden. Der in den
-Einstellungen hinterlegte Satz (Standard 19%) dient nur als Rückfallwert, falls für einen Artikel
-kein Steuersatz ermittelt werden kann. Preise, die Sie selbst in eigenen Feldern pflegen, und der
-UVP gelten als bereits brutto und werden nicht erneut besteuert.
+- **Automatik-Typ:** „Prozent auf Einkaufspreis" oder „Euro-Betrag auf Einkaufspreis".
+- **Automatik-Wert:** entweder ein fester Wert, der für alle Artikel gilt, oder ein eigenes Feld,
+  in dem Sie den Wert je Artikel pflegen.
 
-**Globaler Fallback (optional):** Sie können einen Fallback-Faktor hinterlegen (zum Beispiel
-1,5). Wenn die gewählte Strategie für ein Produkt keinen Mindestpreis liefert, aber ein
-Einkaufspreis vorhanden ist, berechnet arpaTools den Mindestpreis als Einkaufspreis × Faktor
-(brutto). So fällt kein Produkt unbeabsichtigt durchs Raster.
+Die Zusatzkosten (siehe unten) gehen in beiden Modi mit.
 
 ![SellerLogic-Einstellungen, Registerkarte Kosten & Preise: Preismodus, eigene Felder für Mindest- und Höchstpreis, Schalter „Artikel ohne Mindest- und Höchstpreis mitsenden" sowie die Kosten je Artikel (Versandkosten, Pick, Pack, Kartonage, Sonstige Kosten), je wählbar zwischen eigenem Feld und festem Betrag.](bilder/sellerlogic-einstellungen-kosten.png)
-
-> Hinweis „Automatik lässt SellerLogic beide aus dem Einkaufspreis errechnen". Ob dahinter weiterhin
-> die vier Strategien oben stehen oder der Modus vereinfacht wurde, ist nicht bestätigt.
 
 ## Produkte ein- oder ausschließen
 
@@ -78,8 +69,8 @@ Standardmäßig exportiert arpaTools nur Produkte, die sauber kalkulierbar sind:
 - **Produkte ohne gepflegten Mindest-/Höchstpreis** werden standardmäßig ausgeschlossen.
 
 Beides können Sie in den Einstellungen bewusst einschalten, wenn Sie diese Produkte trotzdem
-übertragen möchten (idealerweise zusammen mit dem globalen Fallback, damit sie einen Preis
-bekommen).
+übertragen möchten. Der Einkaufspreis spielt nur im Modus „Automatisch" eine Rolle, die eigenen
+Felder für Mindest- und Höchstpreis nur im Modus „Fixpreis".
 
 ## Zusatzkosten je Produkt
 

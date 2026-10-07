@@ -331,12 +331,13 @@ kein Modul und kein Job ihn mehr verwendet.</p>
 wechselt je Registerkarte) — legt einen neuen Eintrag der gerade gewählten Art an. ③ Laden —
 aktualisiert die Liste, falls ein Eintrag zwischenzeitlich anderswo geändert wurde.</p>
 <h4 id="registerkarte-ftp-server">Registerkarte FTP-Server</h4>
-<p>Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
-Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
-Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit <strong>Prüfen</strong> wird die
-Verbindung getestet. Scheitert der Test, nennt die Meldung den Grund: abgelehnte Anmeldung (Benutzername
-oder Passwort prüfen), nicht erreichbare Adresse samt Port, gescheiterte Verschlüsselung oder ein
-Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die Meldung des Servers im Wortlaut.</p>
+<p>Für Download oder Upload wird eine FTP-Verbindung hinterlegt: Bezeichnung, Protokoll (FTP oder SFTP),
+Server, Port, Benutzername und Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben
+werden. Mit <strong>Prüfen</strong> wird die Verbindung getestet. Scheitert der Test, nennt die Meldung den Grund:
+abgelehnte Anmeldung (Benutzername oder Passwort prüfen), nicht erreichbare Adresse samt Port,
+gescheiterte Verschlüsselung oder ein Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die
+Meldung des Servers im Wortlaut. Wie Sie einen Zugang Schritt für Schritt anlegen, steht unter
+<a href="arpatools.html#ftp-zugang-anlegen">FTP-Zugang anlegen</a>.</p>
 <h4 id="registerkarte-e-mail-konten">Registerkarte E-Mail-Konten</h4>
 <p>Eine mögliche Aktion ist der Versand von E-Mails, mit reinem Text oder mit Anhängen (z. B. Ergebnisse
 aus SQL-Abfragen oder Dateien vom FTP-Server bzw. aus einem Verzeichnis).</p>
@@ -783,7 +784,7 @@ Warnung mit dem verwendeten Trennzeichen — das ist die erste Stelle zum Nachse
 <h3 id="dateitransfer-download-von-ftp-server">Dateitransfer: Download von FTP-Server</h3>
 <p>Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
 Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
-<a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „Verbindungen").</p>
+<a href="arpatools.html#ftp-zugang-anlegen">FTP-Zugang anlegen</a>).</p>
 <p><img src="../docs/bilder/jobby-aktion-ftp-download.png" alt="Dialog der Aktion „Download von FTP-Server&quot;: Kurzbeschreibung, FTP-Server, Relativer Pfad, Schaltfläche Prüfen, Dateifilter und Verarbeitung." /></p>
 <ul>
 <li><strong>Kurzbeschreibung:</strong> eigener Name der Aktion, erscheint in der Aktionsliste des Jobs.</li>
@@ -795,7 +796,8 @@ Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein
 </ul>
 <h3 id="dateitransfer-upload-zum-ftp-server">Dateitransfer: Upload zum FTP-Server</h3>
 <p>Überträgt Dateien aus dem Jobspeicher automatisch auf einen FTP-Server, z. B. Sendungsdaten für einen
-Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.</p>
+Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
+<a href="arpatools.html#ftp-zugang-anlegen">FTP-Zugang anlegen</a>).</p>
 <ul>
 <li><strong>FTP-Server:</strong> die konfigurierte Verbindung.</li>
 <li><strong>Relativer Pfad:</strong> das Zielverzeichnis auf dem Server.</li>

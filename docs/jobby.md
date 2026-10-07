@@ -240,12 +240,13 @@ aktualisiert die Liste, falls ein Eintrag zwischenzeitlich anderswo geändert wu
 
 #### Registerkarte FTP-Server
 
-Für Download oder Upload wird eine FTP-Verbindung hinterlegt. Jede Verbindung braucht einen eindeutigen
-Namen. Als Protokoll stehen FTP oder SFTP zur Verfügung, dazu FTP-Server-URL, Port, Benutzername und
-Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben werden. Mit **Prüfen** wird die
-Verbindung getestet. Scheitert der Test, nennt die Meldung den Grund: abgelehnte Anmeldung (Benutzername
-oder Passwort prüfen), nicht erreichbare Adresse samt Port, gescheiterte Verschlüsselung oder ein
-Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die Meldung des Servers im Wortlaut.
+Für Download oder Upload wird eine FTP-Verbindung hinterlegt: Bezeichnung, Protokoll (FTP oder SFTP),
+Server, Port, Benutzername und Passwort. Der relative Pfad kann zusätzlich pro Aktion im Job angegeben
+werden. Mit **Prüfen** wird die Verbindung getestet. Scheitert der Test, nennt die Meldung den Grund:
+abgelehnte Anmeldung (Benutzername oder Passwort prüfen), nicht erreichbare Adresse samt Port,
+gescheiterte Verschlüsselung oder ein Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die
+Meldung des Servers im Wortlaut. Wie Sie einen Zugang Schritt für Schritt anlegen, steht unter
+[FTP-Zugang anlegen](/doku/arpatools#ftp-zugang-anlegen).
 
 #### Registerkarte E-Mail-Konten
 
@@ -761,7 +762,7 @@ Warnung mit dem verwendeten Trennzeichen — das ist die erste Stelle zum Nachse
 
 Lädt regelmäßig bereitgestellte Dateien von einem FTP-Server herunter, z. B. eine Bestands-CSV des
 Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
-[Jobby-Dokumentation](/doku/jobby), Abschnitt „Verbindungen").
+[FTP-Zugang anlegen](/doku/arpatools#ftp-zugang-anlegen)).
 
 ![Dialog der Aktion „Download von FTP-Server": Kurzbeschreibung, FTP-Server, Relativer Pfad, Schaltfläche Prüfen, Dateifilter und Verarbeitung.](bilder/jobby-aktion-ftp-download.png)
 
@@ -775,7 +776,8 @@ Lieferanten. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein
 ### Dateitransfer: Upload zum FTP-Server
 
 Überträgt Dateien aus dem Jobspeicher automatisch auf einen FTP-Server, z. B. Sendungsdaten für einen
-Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein.
+Dropshipping-Kunden. Für Download und Upload muss eine FTP-Verbindung eingerichtet sein (siehe
+[FTP-Zugang anlegen](/doku/arpatools#ftp-zugang-anlegen)).
 
 - **FTP-Server:** die konfigurierte Verbindung.
 - **Relativer Pfad:** das Zielverzeichnis auf dem Server.

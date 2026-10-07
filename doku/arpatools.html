@@ -54,7 +54,7 @@
         <li class="doc-toc-level-2"><a href="#lizenz">Lizenz</a></li>
         <li class="doc-toc-level-2"><a href="#nutzungskennzahlen">Nutzungskennzahlen</a></li>
         <li class="doc-toc-level-2"><a href="#einstellungen-und-anwendungsprotokoll">Einstellungen und Anwendungsprotokoll</a></li>
-        <li class="doc-toc-level-2"><a href="#ftp-server">FTP-Server</a></li>
+        <li class="doc-toc-level-2"><a href="#ftp-zugang-anlegen">FTP-Zugang anlegen</a></li>
         <li class="doc-toc-level-2"><a href="#änderungsverlauf-und-download">Änderungsverlauf und Download</a></li>
       </ul>
     </details>
@@ -136,10 +136,56 @@ Sie den Verlauf der Programmereignisse, hilfreich bei der Fehlersuche gemeinsam 
 Betriebsdetails im Klartext enthalten. Vor einer Aufnahme den Inhalt prüfen, nicht ungesehen
 übernehmen.</p>
 </blockquote>
-<h2 id="ftp-server">FTP-Server</h2>
-<p>FTP-Verbindungen (z. B. zu Netstock, SellerLogic oder einem Dropshipping-Lieferanten) richten Sie
-zentral über <strong>FTP-Server</strong> in der Seitenleiste ein, unabhängig davon, welche App sie später nutzt.
-Details dazu in der <a href="jobby.html">Jobby-Dokumentation</a>, Abschnitt „FTP-Server".</p>
+<h2 id="ftp-zugang-anlegen">FTP-Zugang anlegen</h2>
+<p>Einige Apps tauschen Dateien über einen FTP-Server aus, zum Beispiel Netstock, das Retourenportal oder
+ein Jobby-Job, der die Bestandsliste eines Lieferanten abholt. Den Zugang dazu legen Sie einmal
+zentral unter <strong>Verbindungen</strong> an. Danach steht er jeder App und jedem Job zur Auswahl, und Sie wählen
+ihn dort nur noch aus.</p>
+<p>Halten Sie dafür die Zugangsdaten bereit, die Sie vom Betreiber des Servers bekommen haben: Server,
+Port, Benutzername, Passwort und die Angabe, ob FTP oder SFTP verwendet wird. Für Netstock erhalten
+Sie diese Daten von Netstock.</p>
+<p><img src="../docs/bilder/jobby-verbindungen.png" alt="Bildschirm Verbindungen mit den Registerkarten FTP-Server, E-Mail-Konten, Drittanbieter-Konten und Datenbanken. Die Registerkarte FTP-Server ist gewählt, oben rechts steht die Schaltfläche Server hinzufügen. Markiert ① Registerkarte FTP-Server, ② Server hinzufügen und ③ Laden." /></p>
+<ol>
+<li>Klicken Sie unten in der Seitenleiste auf <strong>Verbindungen</strong>. Der Bildschirm öffnet sich mit der
+Registerkarte <strong>FTP-Server</strong> ①.</li>
+<li>Klicken Sie oben rechts auf <strong>Server hinzufügen</strong> ②. Rechts öffnet sich der Bereich
+<strong>Serverdaten</strong>.</li>
+<li>Füllen Sie die Felder aus:<ul>
+<li><strong>Bezeichnung:</strong> ein Name, an dem Sie den Zugang später wiedererkennen, etwa „Netstock". Unter
+diesem Namen erscheint er in den Auswahllisten der Apps und Jobs. Vergeben Sie jeden Namen nur
+einmal, sonst lassen sich zwei Zugänge in der Auswahl nicht auseinanderhalten.</li>
+<li><strong>Protokoll:</strong> <strong>FTP - File Transfer Protocol</strong> oder <strong>SFTP - SSH File Transfer Protocol</strong>, so wie
+es Ihnen der Betreiber genannt hat. Ein neuer Zugang steht auf FTP.</li>
+<li><strong>Server:</strong> nur der Name oder die Adresse des Servers, zum Beispiel <code>ftp.example.com</code>, ohne
+vorangestelltes <code>ftp://</code> oder <code>sftp://</code>.</li>
+<li><strong>Port:</strong> der Port aus Ihren Zugangsdaten. Das Feld steht bei einem neuen Zugang auf 0 und passt
+sich nicht von selbst an das Protokoll an. Üblich sind 21 für FTP und 22 für SFTP.</li>
+<li><strong>Benutzername</strong> und <strong>Passwort:</strong> aus Ihren Zugangsdaten.</li>
+<li><strong>Relativer Pfad:</strong> optional ein Unterverzeichnis auf dem Server. Meist bleibt das Feld leer,
+denn ein Job kann den Pfad je Aktion selbst angeben.</li>
+</ul>
+</li>
+<li>Klicken Sie auf <strong>Prüfen</strong>. arpaTools meldet sich mit den eingetragenen Werten am Server an, auch
+wenn sie noch nicht gespeichert sind. Klappt es, erscheint „Verbindung zum FTP-Server erfolgreich."
+Andernfalls nennt die Meldung den Grund, etwa eine abgelehnte Anmeldung (dann Benutzername und
+Passwort prüfen), einen Server, der über den angegebenen Port nicht erreichbar ist, oder ein
+Verzeichnis, das es auf dem Server nicht gibt. Darunter steht die Meldung des Servers im Wortlaut,
+die hilft, falls Sie beim Betreiber nachfragen.</li>
+<li>Klicken Sie auf <strong>Speichern</strong>. Der Bereich schließt sich, und der neue Zugang steht markiert in der
+Liste.</li>
+</ol>
+<p><strong>Prüfen</strong> und <strong>Speichern</strong> lassen sich erst anklicken, wenn Bezeichnung, Server, Benutzername und
+Passwort ausgefüllt sind. <strong>Abbrechen</strong> verwirft die Eingaben.</p>
+<blockquote>
+<p>Aufnahmeskript öffnet bisher nur eigene Fenster, keinen Bereich innerhalb des Bildschirms.</p>
+</blockquote>
+<p>Die Liste zeigt je Zugang <strong>Bezeichnung</strong>, <strong>Adresse</strong> und unter <strong>Verwendet von</strong>, welche Jobs und
+Apps ihn nutzen. Über den Stift am Zeilenende bearbeiten Sie einen Zugang, <strong>Laden</strong> ③ liest die Liste
+neu ein. Löschen lässt sich ein Zugang erst, wenn kein Modul und kein Job ihn mehr verwendet.</p>
+<p><strong>Den Zugang verwenden.</strong> Mit dem Speichern ist der Zugang angelegt, aber noch mit nichts verknüpft.
+Wählen Sie ihn anschließend dort aus, wo er gebraucht wird, zum Beispiel in den Netstock-Einstellungen
+unter <strong>FTP-Server</strong> (siehe <a href="netstock.html#voraussetzungen">Netstock-Dokumentation</a>) oder in einer
+Jobby-Aktion wie <strong>Download von FTP-Server</strong> (siehe <a href="jobby.html">Jobby-Dokumentation</a>).</p>
 <h2 id="änderungsverlauf-und-download">Änderungsverlauf und Download</h2>
 <p>Über die Links <strong>Änderungsverlauf</strong> und <strong>Download</strong> am unteren Rand der Seitenleiste öffnen Sie in
 Ihrem Browser die Übersicht der ausgelieferten Versionen bzw. den Download der aktuellen
