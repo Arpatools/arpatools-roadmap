@@ -22,6 +22,13 @@ x64. Die daneben angebotene „.NET Runtime" allein genügt nicht.
 
 Sie brauchen die Runtime einmal je Rechner, nicht bei jedem Update von arpaTools.
 
+arpaTools legt Profile und Einstellungen für alle Windows-Benutzer des Rechners gemeinsam im Ordner
+`C:\ProgramData\arpaTools` ab. Damit jeder von ihnen, etwa auf einem Terminalserver, die
+Nutzungsbedingungen bestätigen und Einstellungen speichern kann, gibt das Setup allen Benutzern das
+Recht, die Dateien in diesem Ordner zu überschreiben. Löschen dürfen sie dort weiterhin nur, was sie
+selbst angelegt haben. Das geschieht bei jeder Installation und bei jedem Update, Sie müssen dafür
+nichts einrichten.
+
 ## Erstmaliger Start
 
 Beim ersten Start zeigt arpaTools die Endbenutzer-Lizenzvereinbarung (EULA). Erst wenn Sie die
