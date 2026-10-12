@@ -440,32 +440,55 @@ einer Jobby-Installation. Die Verbindung zur Haupt-JTL-Wawi-Datenbank liegt nich
 „Einstellungen" — die zusätzlichen Datenbanken auf dieser Registerkarte sind die, die ein Job daneben
 noch lesen oder beschreiben soll.</p>
 <h3 id="vault">Vault</h3>
-<p>Der Vault ist ein Tresor für Zugangsdaten, die Sie in einem Job an ein externes Programm übergeben
-möchten, zum Beispiel ein Passwort für ein Skript, das über die Aktion „Prozess starten" aufgerufen
-wird. Sie legen dazu einen Schlüssel mit einem Wert an. Im Job selbst taucht nur der Schlüsselname auf,
-nie der Wert.</p>
+<p>Der Vault ist ein Tresor für Zugangsdaten, die ein Job an ein externes Programm oder Skript übergibt,
+zum Beispiel ein Passwort oder einen API-Schlüssel. Die Werte liegen verschlüsselt in der Datenbank. Im
+Job selbst steht nur der Name des Schlüssels, nie der Wert: Wer einen Job ansieht, ausgibt oder
+weitergibt, bekommt das Passwort nicht zu sehen, und ändert sich ein Passwort, tragen Sie es an einer
+einzigen Stelle neu ein statt in jedem Job.</p>
+<h4 id="einträge-verwalten">Einträge verwalten</h4>
 <ul>
+<li><strong>Anlegen:</strong> über <strong>Schlüssel anlegen</strong>. Es öffnet sich <strong>Neuer Schlüssel</strong> mit drei Feldern:<ul>
 <li><strong>Schlüssel:</strong> wird zum Namen einer Umgebungsvariable des gestarteten Programms. Erlaubt sind
 Großbuchstaben, Ziffern und Unterstrich, das erste Zeichen muss ein Buchstabe sein. Kleinbuchstaben
 wandelt arpaTools beim Speichern automatisch in Großbuchstaben um.</li>
 <li><strong>Kurzbeschreibung:</strong> optionaler Hinweistext, wofür der Eintrag gedacht ist.</li>
-<li><strong>Wert:</strong> wird verschlüsselt gespeichert und lässt sich nach dem Speichern nicht mehr anzeigen. Wer
-den Wert vergessen hat, trägt einen neuen ein; einen bestehenden Wert wieder einsehen können Sie
-nicht.</li>
+<li><strong>Wert:</strong> wird verschlüsselt gespeichert und lässt sich danach nicht mehr anzeigen. Mit <strong>Wert
+während der Eingabe anzeigen</strong> sehen Sie beim Tippen, was Sie eintragen.</li>
 </ul>
-<p>Ein Schlüssel lässt sich nicht umbenennen. Möchten Sie einen Eintrag unter einem anderen Namen führen,
-legen Sie einen neuen Schlüssel an und löschen den alten.</p>
-<p>Die Spalte <strong>Anzahl Verwendungen</strong> soll zeigen, in wie vielen Jobs der Schlüssel eingesetzt wird. Solange
-es noch keine Aktion gibt, die Vault-Werte tatsächlich benutzt, steht hier immer 0, selbst wenn Sie den
-Schlüssel längst in einer Aktion eingetragen haben. Aus demselben Grund warnt arpaTools beim Löschen
-heute noch nicht vor betroffenen Jobs: Löschen Sie einen Schlüssel, der in einer Aktion eingetragen ist,
-gibt es dafür aktuell keine Rückfrage, und die Aktion schlägt beim nächsten Lauf ohne Vorwarnung fehl,
-weil ihr die Zugangsdaten fehlen. Prüfen Sie vor dem Löschen deshalb selbst, ob und wo Sie den Schlüssel
-noch verwenden. Sobald es eine Aktion gibt, die Vault-Schlüssel benutzen kann, zählt diese Spalte korrekt
-mit, und das Löschen eines benutzten Schlüssels fragt dann vorher nach und nennt die betroffenen Jobs.</p>
+</li>
+<li><strong>Wert ändern:</strong> Eintrag wählen und <strong>Bearbeiten</strong> (oder den Stift in seiner Zeile), neuen Wert
+eintragen, <strong>Speichern</strong>. Den bisherigen
+Wert können Sie nicht einsehen; wer ihn vergessen hat, trägt einen neuen ein. Lassen Sie das Feld
+<strong>Wert</strong> beim Ändern leer, bleibt der bisherige Wert erhalten, so lässt sich auch nur die
+Kurzbeschreibung ändern.</li>
+<li><strong>Umbenennen</strong> geht nicht. Möchten Sie einen Eintrag unter einem anderen Namen führen, legen Sie einen
+neuen Schlüssel an, stellen die Aktionen auf ihn um und löschen den alten.</li>
+<li><strong>Löschen:</strong> Eintrag wählen, <strong>Löschen</strong>. Benutzen noch Jobs den Schlüssel, fragt arpaTools vorher nach
+und nennt diese Jobs: Sie würden beim nächsten Lauf scheitern, weil ihnen die Zugangsdaten fehlen. Ein
+gelöschter Wert lässt sich nicht wiederherstellen.</li>
+</ul>
+<p>Die Spalte <strong>Verwendung</strong> zeigt, wie viele Benutzerdefinierte Aktionen den Schlüssel benutzen, ob
+angehakt oder als Platzhalter im Parameterfeld. Aktionen in gelöschten Jobs zählen nicht mit. Benutzt
+keine Aktion den Schlüssel, steht dort „Nirgends verwendet".</p>
 <p><strong>Wichtig:</strong> Geht in der Datenbank die Zeile mit dem Vault-Schlüssel verloren, mit dem alle Werte
 verschlüsselt sind, sind sämtliche Vault-Einträge unbrauchbar. Sie lassen sich nicht wiederherstellen
 und müssen komplett neu eingegeben werden.</p>
+<h4 id="einträge-verwenden">Einträge verwenden</h4>
+<p>Die Einträge benutzt die <a href="#sonstiges-benutzerdefinierte-aktion">Benutzerdefinierte Aktion</a>. Sie bekommt
+einen Wert auf einem von zwei Wegen:</p>
+<ul>
+<li><strong>Schlüssel anhaken (empfohlen):</strong> In der Aktion unter <strong>Vault-Schlüssel</strong> den Schlüssel anhaken. Das
+Programm bekommt den Wert als Umgebungsvariable mit dem Schlüsselnamen als Namen. Ein
+PowerShell-Skript liest ihn über <code>$env:API_KEY</code>, ein Python-Skript über <code>os.environ["API_KEY"]</code>, eine
+Batch-Datei über <code>%API_KEY%</code>.</li>
+<li><strong>Platzhalter im Parameterfeld:</strong> <code>##VAULT:API_KEY##</code> wird beim Start durch den Wert ersetzt. Der Wert
+steht dann in der Kommandozeile des gestarteten Programms, und die ist für jeden Benutzer des
+Rechners einsehbar, zum Beispiel über die Prozessliste. Eine Umgebungsvariable ist das nicht. Nehmen
+Sie den Platzhalter deshalb nur für Programme, die den Wert allein als Parameter annehmen.</li>
+</ul>
+<p>Gibt ein Programm einen Vault-Wert in seiner Ausgabe aus, steht im arpaTools-Log an seiner Stelle <code>***</code>.
+Fertige, geprüfte Skripte, die einen Vault-Wert benutzen, finden Sie bei der Aktion unter
+<a href="#beispielskripte">Beispielskripte</a>.</p>
 <h3 id="dienst">Dienst</h3>
 <p>Der Bereich <strong>Dienst</strong> legt fest, ob der arpaTools Worker verwendet wird und in welchem Intervall er
 Jobs ausführt. Wir empfehlen mindestens fünf Minuten.</p>
@@ -1030,7 +1053,10 @@ Verzeichnis aufgelöst, das Sie nicht kennen, und der Job würde nachts scheiter
 <li><strong>Ausgabeverzeichnis:</strong> optional. Bleibt es leer, hat die Aktion nur einen Nebeneffekt und reicht die
 eingehenden Dateien unverändert weiter.</li>
 <li><strong>Ausgabeverzeichnis vorher leeren:</strong> standardmäßig an, damit Dateien eines früheren Laufs nicht als
-Ergebnis des aktuellen Laufs gelten.</li>
+Ergebnis des aktuellen Laufs gelten. Liegt das Programm selbst im Ausgabeverzeichnis, bleibt es stehen
+und wird auch nicht als Ergebnis weitergereicht. Andere Dateien daneben, etwa Hilfsskripte oder
+Einstellungen, werden dagegen mitgeleert. Legen Sie das Ausgabeverzeichnis deshalb am besten in einen
+eigenen Unterordner, zum Beispiel <code>C:\Skripte\Ausgabe</code> für ein Skript in <code>C:\Skripte</code>.</li>
 <li><strong>Zeitlimit in Sekunden:</strong> ein Häkchen und daneben ein Zahlenfeld. <strong>Ohne Häkchen wartet arpaTools
 unbegrenzt</strong> auf das Ende des Programms; das Zahlenfeld ist dann ausgegraut und sein Inhalt wird nicht
 gespeichert. Mit Häkchen gilt die eingetragene Zahl: läuft die Zeit ab, wird der Prozess beendet und
@@ -1093,49 +1119,9 @@ passenden Interpreter und zeigt das Ergebnis direkt darunter an:</p>
 </tbody></table>
 <p><code>##FILE##</code> und <code>##INPUTFOLDER##</code> lassen sich nicht kombinieren.</p>
 <p><strong>Zugangsdaten.</strong> Angehakte Vault-Schlüssel bekommt das Programm als Umgebungsvariable mit dem
-Schlüsselnamen als Namen. Ein PowerShell-Skript liest sie über <code>$env:NAME</code>, ein Python-Skript über
-<code>os.environ["NAME"]</code>, eine Batch-Datei über <code>%NAME%</code>.</p>
-<p><strong>Beispiel PowerShell</strong></p>
-<p>Das Skript liest einen API-Schlüssel aus dem Vault, holt Daten von einer Schnittstelle und schreibt das
-Ergebnis in das Ausgabeverzeichnis.</p>
-<p>Einstellungen: Programm <code>C:\Skripte\export.ps1</code>, Parameter <code>-Ausgabe "##OUTPUTFOLDER##"</code>,
-Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
-<pre><code class="language-powershell">param(
-    [string]$Ausgabe
-)
-
-$apiKey = $env:API_KEY
-$antwort = Invoke-RestMethod -Uri "https://beispiel-lieferant.de/api/bestand" -Headers @{ Authorization = "Bearer $apiKey" }
-$antwort | ConvertTo-Json | Out-File -FilePath (Join-Path $Ausgabe "bestand.json") -Encoding utf8
-</code></pre>
-<p><strong>Beispiel Python</strong></p>
-<p>Dasselbe Beispiel als Python-Skript, der Ausgabepfad kommt hier als Kommandozeilenargument statt als
-benannter Parameter.</p>
-<p>Einstellungen: Programm <code>C:\Skripte\export.py</code>, Parameter <code>"##OUTPUTFOLDER##"</code>,
-Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
-<pre><code class="language-python">import json
-import os
-import sys
-import urllib.request
-
-api_key = os.environ["API_KEY"]
-ausgabe = sys.argv[1]
-
-request = urllib.request.Request(
-    "https://beispiel-lieferant.de/api/bestand",
-    headers={"Authorization": f"Bearer {api_key}"},
-)
-with urllib.request.urlopen(request) as response:
-    daten = json.load(response)
-
-with open(os.path.join(ausgabe, "bestand.json"), "w", encoding="utf-8") as datei:
-    json.dump(daten, datei)
-</code></pre>
-<p><strong>Achtung bei <code>##VAULT:...##</code> im Parameterfeld.</strong> Ein Vault-Wert, der als <code>##VAULT:SCHLUESSEL##</code> direkt
-im Parameterstring steht, landet in der Kommandozeile des gestarteten Programms und ist dort für jeden
-lokalen Benutzer ohne besondere Rechte einsehbar, zum Beispiel über die Prozessliste. Über die
-Umgebungsvariable (angehakte Vault-Schlüssel) ist er das nicht. Setzen Sie <code>##VAULT:...##</code> deshalb nur
-ein, wenn das Programm keine Umgebungsvariablen lesen kann.</p>
+Schlüsselnamen als Namen. Wie ein Skript sie liest und warum der Platzhalter <code>##VAULT:...##</code> nur die
+zweite Wahl ist, steht beim Vault unter <a href="#eintr%C3%A4ge-verwenden">Einträge verwenden</a>; fertige Skripte
+finden Sie unten unter <a href="#beispielskripte">Beispielskripte</a>.</p>
 <p><strong>Empfehlung für Jobs im Dienstbetrieb: absoluten Interpreterpfad eintragen.</strong> Läuft ein Job über den
 arpaTools Worker, führt ihn das Dienstkonto aus, nicht Ihr angemeldeter Benutzer. Das Dienstkonto sieht
 einen anderen <code>PATH</code> als Sie: Eine Python- oder PowerShell-Installation „nur für mich" ist für den
@@ -1166,6 +1152,88 @@ schreibt sein Ergebnis dort hinein, die Aktion sammelt die Dateien ein.</li>
 <li><strong>Job ausführen:</strong> übergibt genau diese Dateien an einen Sub-Job, der mit „Daten aus Verzeichnis
 laden" beginnt und sie weiterverarbeitet.</li>
 </ol>
+<h4 id="beispielskripte">Beispielskripte</h4>
+<p>Die folgenden Skripte laufen so, wie sie hier stehen, mit der Windows PowerShell, die auf jedem
+Windows-Rechner vorhanden ist. Speichern Sie ein Skript als Datei, zum Beispiel unter <code>C:\Skripte</code>, und
+tragen Sie in der Aktion die Einstellungen ein, die darüber stehen. Den Vault-Schlüssel <code>API_KEY</code> legen
+Sie vorher im <a href="#eintr%C3%A4ge-verwalten">Vault</a> an. Die Beispiele werden bei der Entwicklung von arpaTools
+automatisch ausgeführt; was hier steht, ist also geprüft.</p>
+
+<p><strong>Kommt der Vault-Wert an?</strong></p>
+<p>Ein Prüfskript für die Einrichtung. Es meldet, ob der Wert angekommen ist, und bricht mit einer klaren
+Meldung ab, wenn nicht, etwa weil der Schlüssel in der Aktion nicht angehakt ist. Den Wert selbst gibt
+es nie aus. Mit <strong>Ausgabe protokollieren</strong> steht die Meldung im arpaTools-Log.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\vault-pruefen.ps1</code>, Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
+<pre><code class="language-powershell">if ([string]::IsNullOrEmpty($env:API_KEY)) {
+    Write-Error "Der Vault-Wert API_KEY fehlt. Ist der Schluessel in der Aktion angehakt?"
+    exit 1
+}
+
+Write-Output "Der Vault-Wert API_KEY ist angekommen."
+</code></pre>
+
+<p><strong>Jede eingehende Datei bearbeiten</strong></p>
+<p>Stellt jede CSV-Datei, die eine vorherige Aktion liefert, von Semikolon auf Komma um und gibt sie an die
+nächste Aktion weiter. <code>##FILE##</code> startet das Skript einmal je Datei, <code>##OUTPUTFOLDER##</code> sagt ihm, wohin
+das Ergebnis gehört.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\csv-komma.ps1</code>,
+Parameter <code>-Datei "##FILE##" -Ausgabe "##OUTPUTFOLDER##"</code>, Ausgabeverzeichnis <code>C:\Skripte\Ausgabe</code>.</p>
+<pre><code class="language-powershell">param(
+    [string]$Datei,
+    [string]$Ausgabe
+)
+
+$ziel = Join-Path $Ausgabe ([System.IO.Path]::GetFileName($Datei))
+
+Import-Csv -Path $Datei -Delimiter ';' -Encoding UTF8 |
+    Export-Csv -Path $ziel -Delimiter ',' -NoTypeInformation -Encoding UTF8
+</code></pre>
+<p>Ist die eingehende Datei nicht in UTF-8, sondern in ANSI gespeichert, ersetzen Sie bei <code>Import-Csv</code> das
+<code>UTF8</code> durch <code>Default</code>, sonst kommen Umlaute verstümmelt an.</p>
+
+<p><strong>Zugangsdaten an eine Schnittstelle schicken</strong></p>
+<p>Holt mit einem API-Schlüssel aus dem Vault Daten von einer Schnittstelle und legt die Antwort im
+Ausgabeverzeichnis ab, von wo sie an die nächste Aktion geht. Die Adresse steht im Parameterfeld, so
+passen Sie sie an, ohne das Skript zu ändern.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\bestand.ps1</code>,
+Parameter <code>-Adresse "https://beispiel-lieferant.de/api/bestand" -Ausgabe "##OUTPUTFOLDER##"</code>,
+Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
+<pre><code class="language-powershell">param(
+    [string]$Adresse,
+    [string]$Ausgabe
+)
+
+# Windows PowerShell 5.1 bietet TLS 1.2 nicht auf jedem Rechner von sich aus an.
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+
+$antwort = Invoke-RestMethod -Uri $Adresse -Headers @{ Authorization = "Bearer $env:API_KEY" }
+$antwort | ConvertTo-Json -Depth 10 | Out-File -FilePath (Join-Path $Ausgabe "bestand.json") -Encoding utf8
+</code></pre>
+
+<p><strong>Dasselbe in Python</strong></p>
+<p>Braucht ein installiertes Python auf dem Rechner, auf dem der Job läuft. Adresse und Ausgabepfad kommen
+hier als Kommandozeilenargumente statt als benannte Parameter.</p>
+<p>Einstellungen: Programm <code>C:\Skripte\bestand.py</code>,
+Parameter <code>"https://beispiel-lieferant.de/api/bestand" "##OUTPUTFOLDER##"</code>,
+Vault-Schlüssel <code>API_KEY</code> angehakt.</p>
+<pre><code class="language-python">import json
+import os
+import sys
+import urllib.request
+
+adresse = sys.argv[1]
+ausgabe = sys.argv[2]
+
+anfrage = urllib.request.Request(
+    adresse,
+    headers={"Authorization": "Bearer " + os.environ["API_KEY"]},
+)
+with urllib.request.urlopen(anfrage) as antwort:
+    daten = json.load(antwort)
+
+with open(os.path.join(ausgabe, "bestand.json"), "w", encoding="utf-8") as datei:
+    json.dump(daten, datei)
+</code></pre>
 <h3 id="sonstiges-manuellen-jtl-wawi-workflow-ausführen">Sonstiges: Manuellen JTL-Wawi Workflow ausführen</h3>
 <p>Stößt manuelle Workflows in JTL-Wawi an. Die Aktion kann nur laufen, wenn zuvor eine Datei geladen
 wurde, die die interne ID des gewählten Bereichs enthält.</p>

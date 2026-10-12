@@ -54,6 +54,7 @@
         <li class="doc-toc-level-3"><a href="#benutzer">Benutzer</a></li>
         <li class="doc-toc-level-3"><a href="#firma">Firma</a></li>
         <li class="doc-toc-level-3"><a href="#positionsnamen-bearbeiten">Positionsnamen bearbeiten</a></li>
+        <li class="doc-toc-level-3"><a href="#abrechnungsgrundlage">Abrechnungsgrundlage</a></li>
         <li class="doc-toc-level-3"><a href="#versandposition-übernehmen">Versandposition übernehmen</a></li>
         <li class="doc-toc-level-3"><a href="#lieferungen-abrechnen">Lieferungen abrechnen</a></li>
         <li class="doc-toc-level-3"><a href="#retouren-verarbeiten">Retouren verarbeiten</a></li>
@@ -138,6 +139,52 @@ Auftrag</strong> wird die Firma aus den Ursprungsaufträgen übernommen.</p>
 <p>Die Inhalte beziehen sich auf den Ursprungsauftrag. Für die Bezeichnung stehen zur Verfügung:
 Auftragsnummer, Auftragsdatum, Positionsnummer, Artikelnummer, Positionsname, alle eigenen Felder des
 Auftrags, Freitext. Ein Doppelklick auf das jeweilige Feld fügt die Variable an der Cursorposition ein.</p>
+<h3 id="abrechnungsgrundlage">Abrechnungsgrundlage</h3>
+<p>Unter <strong>Konfiguration</strong>, Registerkarte <strong>Rechnungsaufbau</strong>, legen Sie mit <strong>Abrechnungsgrundlage</strong>
+fest, was in die Sammelrechnung kommt:</p>
+<ul>
+<li><strong>Aufträge</strong> (Standard): Ein Auftrag kommt in die Sammelrechnung, sobald er versendet ist, und wird
+mit ihr vollständig abgerechnet. So arbeitet die Sammelrechnung, wenn Sie nichts umstellen.</li>
+<li><strong>Lieferscheine:</strong> Jeder versendete Lieferschein kommt einzeln in die Sammelrechnung, mit den
+Mengen, die tatsächlich geliefert wurden. Liefern Sie einen Auftrag in mehreren Teilen, rechnet
+jeder Lauf die Teile ab, die bis dahin versendet sind. Sie müssen also nicht warten, bis der ganze
+Auftrag geliefert ist.</li>
+</ul>
+<p><strong>Der Umschalttag.</strong> Wenn Sie auf Lieferscheine umstellen, merkt sich arpaTools den Tag. Abgerechnet
+werden danach nur Aufträge, deren erster Lieferschein ab diesem Tag entstanden ist. So holt der erste
+Lauf nicht auf einmal jeden älteren Lieferschein nach. Aufträge, deren erster Lieferschein vor dem
+Umschalttag entstand, rechnet diese Konfiguration nicht mehr ab. Stellen Sie deshalb am besten um,
+wenn die älteren Aufträge abgerechnet sind. Ein erneutes Speichern verschiebt den Umschalttag nicht.
+Stellen Sie zurück auf Aufträge, wird er gelöscht.</p>
+<p><strong>Was im Ursprungsauftrag geschieht.</strong> Mit jeder Teilabrechnung bucht arpaTools den abgerechneten
+Betrag im Ursprungsauftrag als Ausgleich gegen, damit dort kein falscher offener Betrag stehen bleibt.
+Im eigenen Feld <code>arpa_lieferscheine_zu_auftrag</code> sehen Sie, welche Lieferung auf welcher
+Sammelrechnung steht. Die Rechnungsnummer in <code>arpa_rechnungsnummer</code> und die Zahlung bekommt der
+Auftrag erst, wenn er vollständig abgerechnet ist.</p>
+<p><strong>Wann ein Auftrag als vollständig abgerechnet gilt.</strong> Wenn beides zutrifft:</p>
+<ul>
+<li>Er ist in JTL-Wawi komplett ausgeliefert oder ohne Versand abgeschlossen.</li>
+<li>Kein Lieferschein des Auftrags steht mehr aus, auch keiner, der erst noch versendet wird.</li>
+</ul>
+<p>Bis dahin bleibt er teilabgerechnet, und weitere Lieferungen kommen mit späteren Läufen in die
+Sammelrechnung. Wird ein Auftrag fertig, ohne dass noch eine Lieferung kommt, schließt arpaTools ihn
+beim nächsten Lauf ab, auch wenn dieser Lauf für den Kunden nichts abrechnet. Das passiert zum
+Beispiel, wenn Sie eine Restmenge streichen, den Auftrag ohne Versand abschließen oder die letzte
+Lieferung gutschreiben.</p>
+<ul>
+<li><strong>Gutgeschriebene Lieferungen:</strong> Ist die Ware eines Lieferscheins vollständig gutgeschrieben, kommt
+er nicht in die Sammelrechnung und hält den Auftrag auch nicht offen.</li>
+<li><strong>Rechnung aus JTL-Wawi:</strong> Hat JTL-Wawi selbst eine Rechnung zu einem Auftrag erstellt, schließt
+arpaTools ihn nicht ab. Solche Aufträge prüfen Sie bitte von Hand.</li>
+<li><strong>Geänderte Zahlungsart:</strong> Kommt eine versendete Lieferung nicht mehr in die Auswahl, weil Sie nach
+einer Teilabrechnung die Zahlungsart des Auftrags oder die Filter-Zahlungsarten geändert haben,
+schließt arpaTools den Auftrag nicht ab. Er bleibt teilabgerechnet, damit keine Zahlung über Ware
+gebucht wird, die nie berechnet wurde. Solche Aufträge prüfen Sie bitte ebenfalls von Hand.</li>
+<li><strong>Abgebrochener Lauf:</strong> Bricht ein Lauf ab, bevor die Sammelrechnung angelegt ist, kommen seine
+Lieferscheine beim nächsten Lauf wieder in die Auswahl. Gelingt auch dieses Freigeben nicht, nennt
+das Anwendungsprotokoll die betroffenen Lieferscheine. Sie erscheinen dann erst wieder, wenn ihre
+Reservierung von Hand entfernt ist; wenden Sie sich dafür an den Support.</li>
+</ul>
 <h3 id="versandposition-übernehmen">Versandposition übernehmen</h3>
 <p>„Nein" überträgt die Versandkostenposition nicht in die Sammelrechnung. „Ja" übernimmt die Versandkosten
 des ursprünglichen Auftrags.</p>
@@ -148,6 +195,15 @@ Wurde ein Auftrag in zwei Lieferungen verschickt, stehen die Versandkosten zweim
 Sammelrechnung. Maßgeblich ist die Lieferung, nicht das Paket: Eine Lieferung, die in mehreren
 Paketen verschickt wurde, zählt einmal.</p>
 <p>„Lieferungen abrechnen" lässt sich nur einschalten, wenn „Versandposition übernehmen" auf „Ja" steht.</p>
+<p>Steht die <a href="#abrechnungsgrundlage">Abrechnungsgrundlage</a> auf <strong>Lieferscheine</strong>, gilt:</p>
+<ul>
+<li><strong>Ja:</strong> Jede Sammelrechnung trägt die Versandkosten für die Lieferungen, die sie abrechnet.</li>
+<li><strong>Nein:</strong> Die Versandkosten kommen einmal je Auftrag, mit der Sammelrechnung, die seine erste
+Lieferung abrechnet.</li>
+</ul>
+<p>Ein Beispiel: Versandkosten 4,90 €, Lieferungen am 1. und am 5., Läufe am 3. und am 7. Bei „Ja“
+enthält jede der beiden Sammelrechnungen einmal 4,90 €. Bei „Nein“ enthält die vom 3. die 4,90 €, die
+vom 7. keine Versandkosten.</p>
 <h3 id="retouren-verarbeiten">Retouren verarbeiten</h3>
 <p>Aufträge, die nach Erstellung einer Sammelrechnung retourniert wurden, werden bei der nächsten
 Sammelrechnung berücksichtigt und zum Abzug gebracht. Da es für einen Ursprungsauftrag keine Rechnung
@@ -262,6 +318,11 @@ Klicken Sie auf <strong>Aufträge laden</strong>.</p>
 <p>In der Liste erscheinen alle Aufträge, die infrage kommen. Bedingungen: die konfigurierte Zahlungsart,
 der Status <strong>Verpackt und Versendet</strong>, und das leere Feld <code>arpa_rechnungsnummer</code>. Andere Lieferstatus
 (Teilgeliefert, Ausstehend, Lieferschein erstellt) werden nicht berücksichtigt.</p>
+<p>Steht die <a href="#abrechnungsgrundlage">Abrechnungsgrundlage</a> auf <strong>Lieferscheine</strong>, zeigt die Liste
+stattdessen die versendeten Lieferscheine, die noch nicht abgerechnet sind, auch die von teilweise
+gelieferten Aufträgen. Schritt 1 ermittelt dann die gelieferten Positionen dieser Lieferscheine statt
+aller Auftragspositionen. Die Schritte 6 und 7 unten führt arpaTools erst aus, wenn der Auftrag
+vollständig abgerechnet ist.</p>
 <p>Beim Erzeugen werden mehrere Schritte ausgeführt:</p>
 <ol>
 <li>Alle Auftragspositionen der infrage kommenden Aufträge werden ermittelt.</li>

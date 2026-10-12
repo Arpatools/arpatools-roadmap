@@ -51,6 +51,7 @@
         <li class="doc-toc-level-3"><a href="#allgemeine-übersicht">Allgemeine Übersicht</a></li>
         <li class="doc-toc-level-3"><a href="#provisionsberechtigten-anlegen">Provisionsberechtigten anlegen</a></li>
         <li class="doc-toc-level-3"><a href="#provisionsberechtigten-bearbeiten">Provisionsberechtigten bearbeiten</a></li>
+        <li class="doc-toc-level-3"><a href="#provisionsberechtigten-duplizieren">Provisionsberechtigten duplizieren</a></li>
         <li class="doc-toc-level-3"><a href="#allgemeine-sidebar">Allgemeine Sidebar</a></li>
         <li class="doc-toc-level-3"><a href="#provisionseinstellungen">Provisionseinstellungen</a></li>
         <li class="doc-toc-level-3"><a href="#journalintervall">Journalintervall</a></li>
@@ -122,12 +123,13 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 <li><strong>Hinzufügen:</strong> neuen Provisionsberechtigten anlegen (Kunde oder Benutzer der JTL-Wawi).</li>
 <li><strong>Bearbeiten:</strong> vorhandenen Eintrag ändern.</li>
 <li><strong>Provisionseinstellungen:</strong> individuelle Provisionssätze festlegen (siehe unten).</li>
+<li><strong>Löschen:</strong> setzt den ausgewählten Provisionsberechtigten nach einer Rückfrage inaktiv. Er verschwindet aus der Liste, seine Journale und Abrechnungen bleiben erhalten.</li>
 <li><strong>Moduleinstellungen:</strong> öffnet die globalen ProviMate-Einstellungen (siehe „Programmeinstellungen").</li>
 <li><strong>Alle abrechnen:</strong> rechnet für alle Provisionsberechtigten ab.</li>
 </ul>
-<blockquote>
-<p>möglicherweise in einem Kontextmenü der Zeile; nicht geprüft.</p>
-</blockquote>
+<p>Ein Klick mit der rechten Maustaste auf eine Zeile öffnet ein Menü mit <strong>Bearbeiten</strong>,
+<strong>Provisionseinstellungen</strong>, <strong>Duplizieren</strong> (siehe „Provisionsberechtigten duplizieren"), <strong>Löschen</strong>
+und <strong>Kundennummer kopieren</strong>.</p>
 <p><img src="../docs/bilder/provimate-uebersicht.png" alt="Übersicht der Provisionsberechtigten in ProviMate. Oben Suchfeld und Hinzufügen, darunter die Liste mit ID, Name, Bezugstyp, offenem Betrag und nächster Abrechnung. Rechts die Detailspalte zum ausgewählten Eintrag mit den Kacheln Abrechenbar/Wartend/Abgerechnet/Auszahlungsschwelle, Journalverlauf-Diagramm und Stammdaten. Markiert ① Moduleinstellungen, ② Alle abrechnen, ③ Hinzufügen, ④ Bearbeiten und ⑤ Provisionseinstellungen." /></p>
 <p>① Moduleinstellungen — öffnet die globalen Einstellungen. ② Alle abrechnen — rechnet alle
 Provisionsberechtigten ab. ③ Hinzufügen — legt einen neuen Provisionsberechtigten an. ④ Bearbeiten
@@ -150,10 +152,36 @@ Bearbeiten, die Provisionseinstellungen und das Abrechnen nicht mehr aufrufen. L
 möglich: So kommen Sie wieder unter die Grenze.</p>
 <h3 id="provisionsberechtigten-bearbeiten">Provisionsberechtigten bearbeiten</h3>
 <ul>
-<li><strong>Gutschrift bei Abrechnung automatisch erstellen:</strong> nur für Kunden. Legt fest, ob mit jeder Abrechnung automatisch eine Gutschrift in JTL-Wawi entsteht. Für Benutzer gibt es diese Option nicht.</li>
+<li><strong>Gutschrift bei Abrechnungsanlage automatisch erstellen:</strong> nur für Kunden. Legt fest, ob mit jeder Abrechnung automatisch eine Gutschrift in JTL-Wawi entsteht. Für Benutzer gibt es diese Option nicht.</li>
 <li><strong>Abrechnen ab:</strong> ab wann der Provisionsberechtigte Provision erhält (Datum kann in der Vergangenheit liegen; Standard ist das aktuelle Datum).</li>
 <li><strong>Abrechnen bis:</strong> bis zu welchem Datum Rechnungspositionen berücksichtigt werden, unabhängig vom Intervall.</li>
 </ul>
+<h3 id="provisionsberechtigten-duplizieren">Provisionsberechtigten duplizieren</h3>
+<p>Soll eine weitere Person nach denselben Provisionsregeln Provision erhalten wie ein vorhandener
+Provisionsberechtigter, duplizieren Sie diesen, statt die Regeln neu anzulegen:</p>
+<ol>
+<li>Klicken Sie in der Liste der Provisionsberechtigten mit der rechten Maustaste auf den Eintrag, der als Vorlage dienen soll.</li>
+<li>Wählen Sie <strong>Duplizieren</strong> und dann <strong>Als Kunde</strong> oder <strong>Als Benutzer</strong>. Damit legen Sie fest, ob der neue Provisionsberechtigte ein Kunde oder ein Benutzer der JTL-Wawi ist. Das darf vom Original abweichen.</li>
+<li>Es öffnet sich derselbe Dialog wie beim Hinzufügen, bereits mit den Angaben des Originals ausgefüllt. Tragen Sie die Person ein, für die der neue Provisionsberechtigte gelten soll: bei <strong>Als Kunde</strong> die <strong>Kundennummer</strong> (direkt oder über <strong>Suchen</strong>), bei <strong>Als Benutzer</strong> den <strong>Benutzernamen</strong>. Bei Benutzern ist wie beim Hinzufügen zunächst der erste Benutzer der Liste ausgewählt, prüfen Sie die Auswahl deshalb.</li>
+<li>Prüfen Sie die übrigen Angaben und klicken Sie auf <strong>Speichern</strong>.</li>
+</ol>
+<p>Der neue Provisionsberechtigte entsteht erst beim Speichern. Mit <strong>Abbrechen</strong> bleibt alles, wie es war.</p>
+<p><strong>Das wird übernommen:</strong></p>
+<ul>
+<li><strong>Provisionsregeln:</strong> alle Regeln des Originals mit ihren Einstellungen. Sie gehören danach zum neuen Provisionsberechtigten und lassen sich unter <strong>Provisionseinstellungen</strong> ändern, ohne dass sich das Original ändert.</li>
+<li><strong>Währung</strong></li>
+<li><strong>Zeitraum:</strong> <strong>Abrechnen ab</strong> und <strong>Abrechnen bis</strong> wie beim Original. Liegt <strong>Abrechnen ab</strong> in der Vergangenheit, erstellt arpaTools die Journale des neuen Provisionsberechtigten rückwirkend ab diesem Datum (siehe „Journalintervall"). Soll er erst ab heute Provision erhalten, ändern Sie das Datum vor dem Speichern.</li>
+<li><strong>Gutschrift bei Abrechnungsanlage automatisch erstellen:</strong> nur bei <strong>Als Kunde</strong>, eingestellt wie beim Original. Für Benutzer gibt es diese Einstellung nicht. Duplizieren Sie einen Benutzer als Kunden, ist sie deshalb zunächst aus.</li>
+</ul>
+<p><strong>Das wird nicht übernommen:</strong></p>
+<ul>
+<li><strong>Die Person.</strong> Kunde oder Benutzer wählen Sie selbst, denn jede Person kann nur einmal Provisionsberechtigter sein. Wählen Sie jemanden, der schon als Provisionsberechtigter erfasst ist, meldet arpaTools „Der Provisionsberechtigte ist bereits erfasst!", und der Dialog bleibt offen.</li>
+<li><strong>Journale und Abrechnungen.</strong> Sie bleiben beim Original. Für den neuen Provisionsberechtigten berechnet arpaTools eigene Journale nach den übernommenen Provisionsregeln.</li>
+<li><strong>Die Werte unter Provisionseinstellungen:</strong> Journalintervall, initialer Journalwert, pauschaler Abzugsbetrag, minimaler und maximaler Journalwert, Auszahlungsschwelle und Negative Journale. Hier beginnt der neue Provisionsberechtigte wie ein neu angelegter. Sollen die Werte dem Original entsprechen, öffnen Sie nach dem Duplizieren die <strong>Provisionseinstellungen</strong> des neuen Provisionsberechtigten, klicken auf <strong>Übernehmen</strong>, wählen unter <strong>Quelle</strong> das Original und schalten <strong>Journal</strong> und <strong>Abrechnung</strong> ein. Den Schalter <strong>Provisionseinstellungen</strong> brauchen Sie dafür nicht, die Regeln sind bereits übernommen. Bestätigen Sie mit <strong>Speichern</strong> und speichern Sie anschließend auch die Provisionseinstellungen. Tun Sie das am besten gleich nach dem Duplizieren: Sind inzwischen schon Journale entstanden, etwa durch einen Jobby-Job, fragt arpaTools beim Speichern, ob sie mit dem übernommenen Journalintervall neu erstellt werden sollen. Beantworten Sie die Frage mit <strong>Ja</strong>, damit die Journale zum Original passen.</li>
+</ul>
+<p>Duplizieren legt einen weiteren Provisionsberechtigten an und zählt für Ihren Tarif deshalb wie
+<strong>Hinzufügen</strong>: Ist die Zahl erreicht, sind unter <strong>Duplizieren</strong> die Einträge <strong>Als Kunde</strong> und
+<strong>Als Benutzer</strong> gesperrt (siehe „Provisionsberechtigten anlegen").</p>
 <h3 id="allgemeine-sidebar">Allgemeine Sidebar</h3>
 <p>Teil der Menüs „Provisionsberechtigte" und „Journal". Zeigt je Provisionsberechtigtem:</p>
 <ul>

@@ -53,10 +53,13 @@ Lohnbuchhaltung erstellen. Erstellte Provisionsgutschriften können über JTL2Da
 - **Hinzufügen:** neuen Provisionsberechtigten anlegen (Kunde oder Benutzer der JTL-Wawi).
 - **Bearbeiten:** vorhandenen Eintrag ändern.
 - **Provisionseinstellungen:** individuelle Provisionssätze festlegen (siehe unten).
+- **Löschen:** setzt den ausgewählten Provisionsberechtigten nach einer Rückfrage inaktiv. Er verschwindet aus der Liste, seine Journale und Abrechnungen bleiben erhalten.
 - **Moduleinstellungen:** öffnet die globalen ProviMate-Einstellungen (siehe „Programmeinstellungen").
 - **Alle abrechnen:** rechnet für alle Provisionsberechtigten ab.
 
-> möglicherweise in einem Kontextmenü der Zeile; nicht geprüft.
+Ein Klick mit der rechten Maustaste auf eine Zeile öffnet ein Menü mit **Bearbeiten**,
+**Provisionseinstellungen**, **Duplizieren** (siehe „Provisionsberechtigten duplizieren"), **Löschen**
+und **Kundennummer kopieren**.
 
 ![Übersicht der Provisionsberechtigten in ProviMate. Oben Suchfeld und Hinzufügen, darunter die Liste mit ID, Name, Bezugstyp, offenem Betrag und nächster Abrechnung. Rechts die Detailspalte zum ausgewählten Eintrag mit den Kacheln Abrechenbar/Wartend/Abgerechnet/Auszahlungsschwelle, Journalverlauf-Diagramm und Stammdaten. Markiert ① Moduleinstellungen, ② Alle abrechnen, ③ Hinzufügen, ④ Bearbeiten und ⑤ Provisionseinstellungen.](bilder/provimate-uebersicht.png)
 
@@ -85,9 +88,38 @@ möglich: So kommen Sie wieder unter die Grenze.
 
 ### Provisionsberechtigten bearbeiten
 
-- **Gutschrift bei Abrechnung automatisch erstellen:** nur für Kunden. Legt fest, ob mit jeder Abrechnung automatisch eine Gutschrift in JTL-Wawi entsteht. Für Benutzer gibt es diese Option nicht.
+- **Gutschrift bei Abrechnungsanlage automatisch erstellen:** nur für Kunden. Legt fest, ob mit jeder Abrechnung automatisch eine Gutschrift in JTL-Wawi entsteht. Für Benutzer gibt es diese Option nicht.
 - **Abrechnen ab:** ab wann der Provisionsberechtigte Provision erhält (Datum kann in der Vergangenheit liegen; Standard ist das aktuelle Datum).
 - **Abrechnen bis:** bis zu welchem Datum Rechnungspositionen berücksichtigt werden, unabhängig vom Intervall.
+
+### Provisionsberechtigten duplizieren
+
+Soll eine weitere Person nach denselben Provisionsregeln Provision erhalten wie ein vorhandener
+Provisionsberechtigter, duplizieren Sie diesen, statt die Regeln neu anzulegen:
+
+1. Klicken Sie in der Liste der Provisionsberechtigten mit der rechten Maustaste auf den Eintrag, der als Vorlage dienen soll.
+2. Wählen Sie **Duplizieren** und dann **Als Kunde** oder **Als Benutzer**. Damit legen Sie fest, ob der neue Provisionsberechtigte ein Kunde oder ein Benutzer der JTL-Wawi ist. Das darf vom Original abweichen.
+3. Es öffnet sich derselbe Dialog wie beim Hinzufügen, bereits mit den Angaben des Originals ausgefüllt. Tragen Sie die Person ein, für die der neue Provisionsberechtigte gelten soll: bei **Als Kunde** die **Kundennummer** (direkt oder über **Suchen**), bei **Als Benutzer** den **Benutzernamen**. Bei Benutzern ist wie beim Hinzufügen zunächst der erste Benutzer der Liste ausgewählt, prüfen Sie die Auswahl deshalb.
+4. Prüfen Sie die übrigen Angaben und klicken Sie auf **Speichern**.
+
+Der neue Provisionsberechtigte entsteht erst beim Speichern. Mit **Abbrechen** bleibt alles, wie es war.
+
+**Das wird übernommen:**
+
+- **Provisionsregeln:** alle Regeln des Originals mit ihren Einstellungen. Sie gehören danach zum neuen Provisionsberechtigten und lassen sich unter **Provisionseinstellungen** ändern, ohne dass sich das Original ändert.
+- **Währung**
+- **Zeitraum:** **Abrechnen ab** und **Abrechnen bis** wie beim Original. Liegt **Abrechnen ab** in der Vergangenheit, erstellt arpaTools die Journale des neuen Provisionsberechtigten rückwirkend ab diesem Datum (siehe „Journalintervall"). Soll er erst ab heute Provision erhalten, ändern Sie das Datum vor dem Speichern.
+- **Gutschrift bei Abrechnungsanlage automatisch erstellen:** nur bei **Als Kunde**, eingestellt wie beim Original. Für Benutzer gibt es diese Einstellung nicht. Duplizieren Sie einen Benutzer als Kunden, ist sie deshalb zunächst aus.
+
+**Das wird nicht übernommen:**
+
+- **Die Person.** Kunde oder Benutzer wählen Sie selbst, denn jede Person kann nur einmal Provisionsberechtigter sein. Wählen Sie jemanden, der schon als Provisionsberechtigter erfasst ist, meldet arpaTools „Der Provisionsberechtigte ist bereits erfasst!", und der Dialog bleibt offen.
+- **Journale und Abrechnungen.** Sie bleiben beim Original. Für den neuen Provisionsberechtigten berechnet arpaTools eigene Journale nach den übernommenen Provisionsregeln.
+- **Die Werte unter Provisionseinstellungen:** Journalintervall, initialer Journalwert, pauschaler Abzugsbetrag, minimaler und maximaler Journalwert, Auszahlungsschwelle und Negative Journale. Hier beginnt der neue Provisionsberechtigte wie ein neu angelegter. Sollen die Werte dem Original entsprechen, öffnen Sie nach dem Duplizieren die **Provisionseinstellungen** des neuen Provisionsberechtigten, klicken auf **Übernehmen**, wählen unter **Quelle** das Original und schalten **Journal** und **Abrechnung** ein. Den Schalter **Provisionseinstellungen** brauchen Sie dafür nicht, die Regeln sind bereits übernommen. Bestätigen Sie mit **Speichern** und speichern Sie anschließend auch die Provisionseinstellungen. Tun Sie das am besten gleich nach dem Duplizieren: Sind inzwischen schon Journale entstanden, etwa durch einen Jobby-Job, fragt arpaTools beim Speichern, ob sie mit dem übernommenen Journalintervall neu erstellt werden sollen. Beantworten Sie die Frage mit **Ja**, damit die Journale zum Original passen.
+
+Duplizieren legt einen weiteren Provisionsberechtigten an und zählt für Ihren Tarif deshalb wie
+**Hinzufügen**: Ist die Zahl erreicht, sind unter **Duplizieren** die Einträge **Als Kunde** und
+**Als Benutzer** gesperrt (siehe „Provisionsberechtigten anlegen").
 
 ### Allgemeine Sidebar
 
