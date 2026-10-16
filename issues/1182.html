@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ein hängender Job hält die übrigen jetzt nicht mehr unbemerkt auf – ArpaTools</title>
-<meta name="description" content="Wartete eine Aktion endlos auf ein Programm oder einen SFTP Server, startete der Dienst keinen weiteren geplanten Job mehr, und das Protokoll schwieg dazu. Jetzt meldet der Dienst…">
+<title>Ein hängender Job hält die übrigen geplanten Jobs nicht mehr unbemerkt auf – ArpaTools</title>
+<meta name="description" content="Der arpaTools Dienst arbeitet die geplanten Jobs von Jobby nacheinander ab. Wartete eine Aktion endlos, etwa auf einen Dialog der Ameise (des Import und Exportwerkzeugs der JTL Waw…">
 <link rel="canonical" href="https://arpatools.github.io/arpatools-roadmap/issues/1182.html">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0a0a0a">
@@ -39,7 +39,7 @@
 
   <article class="issue-detail rise">
     <a class="breadcrumb" href="../index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Roadmap</a>
-    <h1>Ein hängender Job hält die übrigen jetzt nicht mehr unbemerkt auf</h1>
+    <h1>Ein hängender Job hält die übrigen geplanten Jobs nicht mehr unbemerkt auf</h1>
     <p class="badges">
       <span class="badge "><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16h.01"/></svg>Fehler</span>
       <span class="badge status-open">Offen</span>
@@ -49,7 +49,7 @@
     </p>
     <p class="issue-date">Erstellt am 15. Oktober 2026</p>
     <div class="prose">
-      <p>Wartete eine Aktion endlos auf ein Programm oder einen SFTP-Server, startete der Dienst keinen weiteren geplanten Job mehr, und das Protokoll schwieg dazu. Jetzt meldet der Dienst einen Job, der ihn länger als eine Stunde belegt, SFTP-Übertragungen geben eine Gegenstelle auf, die nicht mehr antwortet, und für Ameise-Export und -Import, den Import von Sendungsdaten und Aufträgen sowie „Prozess starten“ lässt sich ein Zeitlimit einstellen.</p>
+      <p>Der arpaTools-Dienst arbeitet die geplanten Jobs von Jobby nacheinander ab. Wartete eine Aktion endlos, etwa auf einen Dialog der Ameise (des Import- und Exportwerkzeugs der JTL-Wawi), auf ein Programm aus „Prozess starten“ oder auf einen SFTP-Server, der nicht mehr antwortete, startete danach kein geplanter Job mehr. Im Protokoll von arpaTools stand nichts dazu. Jetzt schreibt der Dienst dort eine Meldung, sobald ein Job ihn länger als eine Stunde belegt. SFTP-Übertragungen brechen ab, wenn die Gegenstelle nicht mehr antwortet. Für Ameise-Export und -Import, den Import von Sendungsdaten und Aufträgen sowie „Prozess starten“ lässt sich in der Aktion ein Zeitlimit einstellen. Ohne Zeitlimit wartet die Aktion weiter und hält die übrigen Jobs auf. Die Meldung im Protokoll zeigt dann, welcher Job hängt.</p>
 
     </div>
   </article>
