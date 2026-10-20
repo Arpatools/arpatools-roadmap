@@ -349,6 +349,9 @@ Bei der Journalerstellung werden alle enthaltenen Aufträge mit bezahlter Rechnu
 der Provisionsberechtigte die Regel Auftragsliste hat. Da nur bezahlte Rechnungen zählen, werden noch
 unbezahlte Aufträge erst im Journalintervall der Zahlung berücksichtigt. So lässt sich eine
 Auftragsliste über mehrere Intervalle nutzen.</p>
+<p>In der neuen Oberfläche zeigt eine Auftragsliste beim Öffnen nur Aufträge mit einem Auftragsdatum ab
+dem Monatsersten vor drei Monaten; löschen Sie das Datum im Feld „Ab", sehen Sie wieder alle Aufträge
+der Liste. Fügen Sie einen älteren Auftrag hinzu, rückt „Ab" so weit zurück, dass er sichtbar wird.</p>
 <h3 id="anwendungsbeispiel-shopify-coupon">Anwendungsbeispiel: Shopify-Coupon</h3>
 <p>Coupons aus Shopify werden in JTL-Wawi direkt in der Auftragsposition abgezogen, anders als beim
 JTL-Shop, der den Coupon als eigene Position ausweist. Um alle Aufträge mit dem Coupon-Code
@@ -386,6 +389,9 @@ einer Abrechnung zusammengeführt.</p>
 <li><strong>Provisionsberechtigte:</strong> Filter auf bestimmte Provisionsberechtigte.</li>
 <li><strong>Alle einblenden (Journalfilter):</strong> leere, bereits abgerechnete oder nicht abrechenbare Journale ein- oder ausblenden.</li>
 </ul>
+<p>In der neuen Oberfläche steht „Ab" beim Öffnen auf dem Monatsersten vor drei Monaten, sodass ältere
+abgerechnete und nicht abrechenbare Journale ausgeblendet sind, während Journale, die noch auf ihre
+Abrechnung warten, immer sichtbar bleiben.</p>
 <p>Die Spalten Firma, Vorname, Name bieten zusätzliche Filter; andere Spalten sind sortierbar. Über das
 Kontextmenü lässt sich bei Kunden die Kundennummer kopieren.</p>
 <h3 id="journalpositionen">Journalpositionen</h3>
@@ -475,6 +481,9 @@ abrechenbaren Journale werden zu einer Abrechnung zusammengefasst. Die Abrechnun
 <li>Für <strong>Kunden:</strong> über „Verarbeiten" wird eine Rechnungskorrektur bzw. Provisionsgutschrift in JTL-Wawi erzeugt.</li>
 <li><strong>Manuell abschließen:</strong> weder Rechnungskorrektur noch Export; die Abrechnung gilt als abgeschlossen.</li>
 </ul>
+<p>In der neuen Oberfläche zeigt die Liste beim Öffnen nur Abrechnungen, die ab dem Monatsersten vor drei
+Monaten erstellt wurden; offene Abrechnungen bleiben immer sichtbar, und über die Felder „Ab" und
+„Bis" wählen Sie einen anderen Zeitraum.</p>
 <h3 id="abrechnungen-löschen">Abrechnungen löschen</h3>
 <p>Eine Abrechnung kann jederzeit gelöscht werden, außer verarbeitete Abrechnungen für Kunden. Um eine
 verarbeitete Kundenabrechnung zu löschen, muss die zugehörige Gutschrift in JTL-Wawi storniert werden.

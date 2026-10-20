@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zugriffsschutz – Dokumentation – ArpaTools</title>
+<meta name="description" content="Mit dem Zugriffsschutz legen Sie fest, wer an einem Arbeitsplatz welche Bereiche von arpaTools öffnen darf.">
+<link rel="canonical" href="https://arpatools.github.io/arpatools-roadmap/doku/zugriffsschutz.html">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="preload" href="../assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css">
+<script>
+  // Vor dem ersten Zeichnen setzen, sonst blitzt das dunkle Standardthema auf.
+  try {
+    var stored = localStorage.getItem('theme');
+    if (stored) document.documentElement.dataset.theme = stored;
+  } catch (e) {}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html">
+      <span class="brand-name">ArpaTools</span>
+      <span class="brand-tagline">Roadmap und Änderungsverlauf</span>
+    </a>
+    <nav class="nav">
+      <a class="nav-link" href="../index.html">Roadmap</a>
+      <a class="nav-link" href="../changelog.html">Änderungen</a>
+      <a class="nav-link is-active" href="../doku/index.html">Dokumentation</a>
+      <a class="nav-link" href="https://arpatools.com">Website</a>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Helle Darstellung einschalten"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.9 19.1 1.4-1.4"/><path d="m17.7 6.3 1.4-1.4"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="button button-primary button-download" href="https://upload.arpatools.com/arpatools_.x.x.x.msi"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span>Aktuelle Version herunterladen</span></a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+
+  <article class="doc-page rise">
+    <a class="breadcrumb" href="../doku/index.html"><svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Dokumentation</a>
+    <h1>Zugriffsschutz</h1>
+    <p class="badges"><span class="badge">ArpaTools Kern</span></p>
+    <div class="doc-body">
+    <details class="doc-toc" data-doc-toc open>
+      <summary class="doc-toc-title">Auf dieser Seite<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></summary>
+      <ul>
+        <li class="doc-toc-level-2"><a href="#einleitung">Einleitung</a></li>
+        <li class="doc-toc-level-2"><a href="#was-der-zugriffsschutz-leistet-und-was-nicht">Was der Zugriffsschutz leistet und was nicht</a></li>
+        <li class="doc-toc-level-2"><a href="#voraussetzungen">Voraussetzungen</a></li>
+        <li class="doc-toc-level-2"><a href="#zugriffsschutz-einschalten">Zugriffsschutz einschalten</a></li>
+        <li class="doc-toc-level-2"><a href="#freigaben-festlegen">Freigaben festlegen</a></li>
+        <li class="doc-toc-level-2"><a href="#schlösser-in-der-seitenleiste">Schlösser in der Seitenleiste</a></li>
+        <li class="doc-toc-level-2"><a href="#einen-geschützten-bereich-öffnen">Einen geschützten Bereich öffnen</a></li>
+        <li class="doc-toc-level-2"><a href="#zugriffsschutz-ausschalten">Zugriffsschutz ausschalten</a></li>
+        <li class="doc-toc-level-2"><a href="#was-der-zugriffsschutz-nicht-berührt">Was der Zugriffsschutz nicht berührt</a></li>
+        <li class="doc-toc-level-2"><a href="#gut-zu-wissen">Gut zu wissen</a></li>
+      </ul>
+    </details>
+    <div class="prose">
+      <h2 id="einleitung">Einleitung</h2>
+<p>Mit dem Zugriffsschutz legen Sie fest, wer an einem Arbeitsplatz welche Bereiche von arpaTools öffnen
+darf. Ein geschützter Bereich, etwa ProviMate oder die Einstellungen, öffnet sich erst nach einer
+Anmeldung mit den Zugangsdaten aus Ihrer JTL-Wawi. Welche Wawi-Benutzer in welchen Bereich dürfen,
+bestimmt ein JTL-Wawi-Administrator in einer Tabelle, in der alle Benutzer und alle Bereiche auf einen
+Blick stehen.</p>
+<p>Die Einstellung gilt für die JTL-Wawi-Datenbank, nicht für einen einzelnen Rechner: Sie richten den
+Schutz einmal ein, und er greift an jedem Arbeitsplatz, der mit derselben Wawi-Datenbank arbeitet.</p>
+<h2 id="was-der-zugriffsschutz-leistet-und-was-nicht">Was der Zugriffsschutz leistet und was nicht</h2>
+<p>Der Zugriffsschutz regelt, wer in der Oberfläche von arpaTools welche Bereiche öffnet. Er hält
+Mitarbeiter aus Bereichen heraus, die nicht zu ihrer Arbeit gehören, zum Beispiel aus der
+Provisionsabrechnung oder aus den Einstellungen mit der Datenbankverbindung. Ein Schutz Ihrer Daten
+gegen jemanden, der ihn gezielt umgehen will, ist er nicht:</p>
+<ul>
+<li><strong>Arbeitsplätze mit einer älteren arpaTools-Version</strong> kennen den Zugriffsschutz nicht und öffnen jeden
+Bereich ohne Anmeldung. Bringen Sie deshalb alle Arbeitsplätze auf den aktuellen Stand, bevor Sie
+sich auf den Schutz verlassen.</li>
+<li><strong>Wer Zugang zur Datenbank selbst hat</strong>, etwa über die SQL-Zugangsdaten, liest und ändert die Daten
+ohne arpaTools.</li>
+<li><strong>Wer Jobby öffnen darf</strong>, kann dort Aktionen aller Module anlegen und ausführen, auch von Modulen,
+die für ihn geschützt sind. Geben Sie Jobby deshalb nur Benutzern frei, denen Sie auch die übrigen
+Module anvertrauen.</li>
+<li><strong>Ist die Datenbank beim Start nicht erreichbar</strong>, greift der Schutz nicht, damit sich die
+Verbindung in den Einstellungen reparieren lässt (siehe <a href="#gut-zu-wissen">Gut zu wissen</a>).</li>
+</ul>
+<h2 id="voraussetzungen">Voraussetzungen</h2>
+<ul>
+<li><strong>Die neue Oberfläche von arpaTools.</strong> Den Zugriffsschutz gibt es nur dort. Arbeiten Sie noch in der
+bisherigen Oberfläche, wechseln Sie über den Eintrag <strong>Jetzt zur neuen Ansicht wechseln (Beta)</strong> in
+der Seitenleiste oder über <strong>Jetzt wechseln</strong> auf dem Dashboard; die neue Oberfläche öffnet sich beim
+nächsten Start von arpaTools.</li>
+<li><strong>Ein Benutzerkonto in JTL-Wawi mit Administratorrechten</strong>, um den Schutz ein- und auszuschalten und
+die Freigaben zu pflegen. Als Administrator gilt, wer in JTL-Wawi einer Benutzergruppe mit
+Administratorrechten angehört oder das Recht <strong>Benutzer / Rechte</strong> hat.</li>
+<li><strong>Eine Datenbankverbindung zu Ihrer JTL-Wawi</strong> im Profil (siehe
+<a href="arpatools.html#datenbankverbindung">Datenbankverbindung</a>). Die Benutzer und Kennwörter kommen aus
+dieser Wawi, und dort speichert arpaTools auch, was geschützt ist.</li>
+</ul>
+<p>Für den Zugriffsschutz brauchen Sie keine eigene arpaTools-Lizenz. Der Reiter steht in jedem Profil
+zur Verfügung.</p>
+<h2 id="zugriffsschutz-einschalten">Zugriffsschutz einschalten</h2>
+<p><img src="../docs/bilder/zugriffsschutz-schalter.png" alt="Bildschirm Einstellungen mit den Reitern Profil, Datenbank, Lizenz und Zugriffsschutz. Der Reiter Zugriffsschutz ist gewählt, darunter der eingeschaltete Schalter Module mit Anmeldung schützen mit dem Hinweis, dass gesperrte Bereiche sich erst nach einer Anmeldung mit JTL-Wawi-Zugangsdaten öffnen, das Ein- und Ausschalten ein JTL-Wawi-Administrator bestätigt und Arbeitsplätze mit einer älteren Version ungeschützt bleiben." /></p>
+<ol>
+<li>Klicken Sie unten in der Seitenleiste auf <strong>Einstellungen</strong> und wählen Sie den Reiter
+<strong>Zugriffsschutz</strong>.</li>
+<li>Schalten Sie <strong>Module mit Anmeldung schützen</strong> ein.</li>
+<li>Es öffnet sich das Fenster <strong>JTL-Wawi - Anmeldung</strong> mit dem Hinweis „Diese Aktion setzt ein
+JTL-Wawi-Benutzerkonto mit Administrationsrechten voraus." Geben Sie <strong>Benutzername</strong> und
+<strong>Passwort</strong> eines Wawi-Administrators ein und klicken Sie auf <strong>Anmelden</strong>.</li>
+</ol>
+<p>Danach ist der Schutz eingeschaltet, und unter dem Schalter erscheint die Tabelle mit den Freigaben.
+Beim ersten Einschalten ist nur der Bereich <strong>Einstellungen</strong> geschützt, alle anderen Bereiche öffnen
+sich weiter für jeden. So sperren Sie mit dem Einschalten niemanden aus, und Sie entscheiden in Ruhe,
+was Sie schützen möchten. Die Schlösser in der Seitenleiste erscheinen sofort, ein Neustart ist nicht
+nötig.</p>
+<p>Der Administrator, der das Einschalten bestätigt hat, ist damit angemeldet und kann die Freigaben gleich
+bearbeiten.</p>
+<p>Gehört das Konto keinem Administrator, meldet arpaTools „Der angemeldete Benutzer ist kein
+JTL-Wawi-Adminbenutzer!", und das Anmeldefenster bleibt offen, damit Sie es mit einem
+Administratorkonto erneut versuchen. Brechen Sie die Anmeldung ab, springt der Schalter zurück, und es
+ändert sich nichts.</p>
+<p>Jedes Ein- und Ausschalten fragt die Administrator-Anmeldung neu ab, auch wenn Sie schon angemeldet
+sind.</p>
+<h2 id="freigaben-festlegen">Freigaben festlegen</h2>
+<p>In der Tabelle unter dem Schalter steht für jeden Benutzer eine Zeile und für jeden Bereich eine Spalte.</p>
+<p><img src="../docs/bilder/zugriffsschutz-freigaben.png" alt="Freigabetabelle im Reiter Zugriffsschutz. Oben das Suchfeld Benutzer suchen, darunter die Spalten Jobby, Netstock, ProviMate, Sammelrechnung, SmartSupply und Retourenportal. In der Zeile Anmeldung nötig ist nur ProviMate angehakt. Es folgen die Zeile Alle Benutzer und die Benutzer Admin mit immer in jeder Spalte, Bürokraft 1 und Lagermitarbeiter 1 mit je einem Kästchen am Zeilenanfang. Markiert ① Benutzer suchen, ② Anmeldung nötig und ③ Alle Benutzer." /></p>
+<p>Die Tabelle läuft nach rechts weiter, bis alle Bereiche zu sehen sind. Den Ausschnitt verschieben Sie mit
+der Bildlaufleiste unter der Tabelle; die Spalte mit den Benutzern bleibt dabei stehen.</p>
+<p><strong>Die Spalten</strong> sind die Module, die Ihre Lizenz an diesem Arbeitsplatz in der Seitenleiste zeigt, dazu
+die drei Einträge unten in der Seitenleiste: <strong>Verbindungen</strong>, <strong>Einstellungen</strong> und
+<strong>Anwendungsprotokoll</strong>. <strong>Entdecken</strong> fehlt: arpaTools öffnet es nach jedem Start von selbst, deshalb
+lässt es sich nicht schützen. Die Bereiche innerhalb eines Moduls, etwa die Abschnitte von ProviMate,
+folgen ihrem Modul.</p>
+<p><strong>Die Zeilen</strong> sind die aktiven Benutzer Ihrer JTL-Wawi, mit Namen und darunter dem Anmeldenamen.
+Benutzer, die in der Wawi deaktiviert sind, stehen nicht in der Tabelle und können sich auch nicht
+anmelden.</p>
+<p>So setzen Sie die Häkchen:</p>
+<ul>
+<li><strong>Anmeldung nötig</strong> ② (erste Zeile): Ein Häkchen schützt den Bereich dieser Spalte. Ohne Häkchen
+öffnet er sich für jeden ohne Anmeldung. Die Häkchen der Benutzer in dieser Spalte stehen dann
+ausgegraut da, bleiben aber erhalten; setzen Sie <strong>Anmeldung nötig</strong> später wieder, gelten sie wie
+vorher.</li>
+<li><strong>Alle Benutzer</strong> ③ (zweite Zeile): setzt oder entfernt das Häkchen aller Benutzer in dieser Spalte.
+Das wirkt auf die Benutzer, die die Tabelle gerade zeigt. Haben Sie über die Suche eingegrenzt, also
+nur auf die gefundenen.</li>
+<li><strong>Ein Häkchen in einer Benutzerzeile</strong> gibt diesem Benutzer den Bereich frei. Er öffnet ihn nach
+seiner Anmeldung.</li>
+<li><strong>Das Kästchen am Zeilenanfang</strong> wählt für diesen Benutzer alle geschützten Bereiche auf einmal an
+oder ab.</li>
+<li><strong>Benutzer suchen</strong> ① grenzt die Tabelle auf Benutzer ein, deren Name oder Anmeldename den Suchtext
+enthält.</li>
+</ul>
+<p><strong>Administratoren</strong> stehen mit „immer" in jeder Spalte. Sie kommen in jeden Bereich, und das lässt sich
+nicht abwählen. Wer Administrator ist, entscheidet Ihre JTL-Wawi bei jeder Anmeldung. Solange die Wawi
+einen Administrator hat, kann sich also niemand aus arpaTools aussperren.</p>
+<p>Klicken Sie zum Schluss unten auf <strong>Speichern</strong>. arpaTools bestätigt mit „Die Freigaben sind
+gespeichert." Gespeichert werden nur die Häkchen, die Sie geändert haben, auch die von Benutzern, die die
+Suche gerade ausblendet. Pflegen zwei Administratoren an verschiedenen Arbeitsplätzen gleichzeitig die
+Tabelle, überschreiben sie sich deshalb nicht gegenseitig, solange sie verschiedene Häkchen ändern.
+<strong>Verwerfen</strong> lädt den gespeicherten Stand neu und nimmt Ihre ungespeicherten Änderungen zurück.</p>
+<p><strong>Nur ein angemeldeter Administrator kann die Freigaben ändern.</strong> Ist ein anderer Benutzer angemeldet,
+der die Einstellungen öffnen darf, sieht er die Tabelle nur lesend mit dem Hinweis „Nur ein angemeldeter
+JTL-Wawi-Administrator kann die Freigaben ändern." Als Administrator angemeldet sind Sie, nachdem Sie den
+Schutz eingeschaltet oder sich beim Öffnen eines geschützten Bereichs, etwa der Einstellungen, mit einem
+Administratorkonto angemeldet haben.</p>
+<h2 id="schlösser-in-der-seitenleiste">Schlösser in der Seitenleiste</h2>
+<p>Hinter dem Namen jedes geschützten Bereichs steht in der Seitenleiste ein Schloss. Es zeigt, ob Sie den
+Bereich gerade öffnen können. Die Einträge <strong>Verbindungen</strong>, <strong>Einstellungen</strong> und
+<strong>Anwendungsprotokoll</strong> unten in der Seitenleiste zeigen dasselbe Schloss.</p>
+<p><img src="../docs/bilder/zugriffsschutz-schloesser.png" alt="Ausschnitt der Seitenleiste unter Meine Module mit den Einträgen Entdecken, Jobby, Netstock, ProviMate, Sammelrechnung, SmartSupply und Retourenportal. Entdecken ist gewählt. Hinter ProviMate steht ein graues, geschlossenes Schloss, die übrigen Einträge haben keins." /></p>
+<table>
+<thead>
+<tr>
+<th>Anzeige</th>
+<th>Bedeutung</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kein Schloss</td>
+<td>Der Bereich ist frei und öffnet sich für jeden ohne Anmeldung.</td>
+</tr>
+<tr>
+<td>graues, geschlossenes Schloss</td>
+<td>Der Bereich ist geschützt, und es ist noch niemand angemeldet. Beim Öffnen fragt arpaTools nach der Anmeldung. Die Kurzinfo lautet „Geschützt, Anmeldung nötig".</td>
+</tr>
+<tr>
+<td>grünes, offenes Schloss</td>
+<td>Sie sind angemeldet und dürfen den Bereich öffnen. Die Kurzinfo lautet „Freigeschaltet".</td>
+</tr>
+<tr>
+<td>rotes, geschlossenes Schloss</td>
+<td>Sie sind angemeldet, für diesen Bereich aber nicht freigegeben. Die Kurzinfo lautet „Kein Zugriff".</td>
+</tr>
+</tbody></table>
+<p>Ein Administrator sieht nach seiner Anmeldung bei jedem geschützten Bereich das grüne Schloss.</p>
+<h2 id="einen-geschützten-bereich-öffnen">Einen geschützten Bereich öffnen</h2>
+<p>Klicken Sie auf einen Bereich mit grauem Schloss, öffnet sich das Fenster <strong>JTL-Wawi - Anmeldung</strong> mit
+dem Hinweis „Dieser Bereich ist geschützt. Melden Sie sich mit Ihrem JTL-Wawi-Benutzerkonto an." Hier
+genügt ein gewöhnliches Wawi-Benutzerkonto, Administratorrechte sind nicht nötig.</p>
+<p><img src="../docs/bilder/zugriffsschutz-anmeldung.png" alt="Fenster JTL-Wawi - Anmeldung mit dem Hinweis „Dieser Bereich ist geschützt. Melden Sie sich mit Ihrem JTL-Wawi-Benutzerkonto an.&quot;, den leeren Feldern Benutzername und Passwort und den Schaltflächen Anmelden und Abbrechen." /></p>
+<ol>
+<li>Geben Sie Ihren <strong>Benutzernamen</strong> und Ihr <strong>Passwort</strong> aus der JTL-Wawi ein.</li>
+<li>Klicken Sie auf <strong>Anmelden</strong>.</li>
+</ol>
+<p>Sind Sie für den Bereich freigegeben, öffnet er sich. Die Anmeldung gilt danach für alle geschützten
+Bereiche, bis Sie arpaTools schließen, und alle Schlösser zeigen ihren neuen Stand. Sie melden sich also
+nur einmal an, nicht bei jedem Bereich.</p>
+<p>Sind Sie für den Bereich nicht freigegeben, steht an seiner Stelle der Hinweis „Kein Zugriff. Ein
+JTL-Wawi-Administrator kann Sie für diesen Bereich freigeben." Von dem Modul selbst wird dann nichts
+geladen. Wenden Sie sich an Ihren Wawi-Administrator, wenn Sie den Bereich für Ihre Arbeit brauchen.</p>
+<p>Stimmen Benutzername oder Passwort nicht oder ist das Konto in der Wawi deaktiviert, meldet arpaTools
+„Der JTL-Wawi-Benutzer konnte nicht angemeldet werden!" Mit <strong>Abbrechen</strong> schließen Sie das Fenster,
+und arpaTools zeigt weiter den Bereich, in dem Sie vorher waren.</p>
+<p><strong>Abmelden</strong> gibt es nicht. Die Anmeldung endet, wenn Sie arpaTools schließen. Möchten Sie als anderer
+Benutzer weiterarbeiten, schließen Sie arpaTools und starten Sie es neu. Auch ein Wechsel des Profils
+startet arpaTools neu und beendet damit die Anmeldung.</p>
+<p>Muss sich arpaTools neu anmelden, während ein geschützter Bereich offen ist, zum Beispiel nachdem Sie
+in den Einstellungen eine andere Datenbankverbindung gespeichert haben, öffnet sich kein Fenster von
+selbst. An der Stelle des Bereichs steht dann „Dieser Bereich ist geschützt. Melden Sie sich mit Ihrem
+JTL-Wawi-Benutzerkonto an." mit der Schaltfläche <strong>Anmelden</strong>, die das Anmeldefenster öffnet.</p>
+<h2 id="zugriffsschutz-ausschalten">Zugriffsschutz ausschalten</h2>
+<p>Schalten Sie in den Einstellungen im Reiter <strong>Zugriffsschutz</strong> den Schalter <strong>Module mit Anmeldung
+schützen</strong> aus und bestätigen Sie mit einem Administratorkonto, wie beim Einschalten. Danach öffnen sich
+alle Bereiche wieder ohne Anmeldung, und die Schlösser verschwinden.</p>
+<p>Ihre Einstellungen gehen dabei nicht verloren. arpaTools behält, welche Bereiche geschützt sind und wer
+freigegeben ist. Schalten Sie den Schutz wieder ein, ist die Tabelle so da, wie Sie sie verlassen haben.</p>
+<h2 id="was-der-zugriffsschutz-nicht-berührt">Was der Zugriffsschutz nicht berührt</h2>
+<p>Der Zugriffsschutz gilt für das, was Sie in arpaTools anklicken. Was ohne die Oberfläche läuft, fragt
+nicht nach einer Anmeldung:</p>
+<ul>
+<li><strong>Jobs, die der arpaTools-Dienst nach Zeitplan ausführt</strong>, laufen weiter, auch mit Aktionen von
+Modulen, die geschützt sind.</li>
+<li><strong>Aufrufe von arpaTools aus einem anderen Programm</strong>, etwa ein Job über die Kommandozeile oder die
+Metrifier-Maske von einer Packstation aus, öffnen sich ohne Anmeldung.</li>
+</ul>
+<p>Das ist gewollt: Ein Job, der heute nachts läuft, soll nach dem Einschalten des Schutzes genauso
+weiterlaufen wie vorher.</p>
+<h2 id="gut-zu-wissen">Gut zu wissen</h2>
+<ul>
+<li><strong>Die bisherige Oberfläche öffnet sich nicht mehr.</strong> Solange der Zugriffsschutz eingeschaltet ist,
+startet arpaTools in diesem Profil immer mit der neuen Oberfläche, denn nur sie kennt die Schlösser.
+Das gilt auch, wenn <strong>Neues Design verwenden</strong> ausgeschaltet oder auf dem Rechner die bisherige
+Oberfläche fest eingestellt ist. Schalten Sie den Schutz aus, öffnet arpaTools beim nächsten Start
+wieder die Oberfläche, die Sie gewählt haben.</li>
+<li><strong>Änderungen wirken an allen Arbeitsplätzen beim nächsten Klick.</strong> arpaTools liest den Schutz bei
+jedem Wechsel des Bereichs neu aus der Datenbank. Ein Bildschirm, der an einem anderen Arbeitsplatz
+gerade offen ist, bleibt offen, bis dort jemand den Bereich wechselt.</li>
+<li><strong>Ein neues Modul ist zunächst geschützt.</strong> Kommt nach dem Einschalten ein Modul in die Seitenleiste,
+etwa durch ein Update oder eine neu gebuchte Lizenz, verlangt es eine Anmeldung, und nur
+Administratoren kommen hinein. Soll es für alle frei sein, entfernen Sie in seiner Spalte das Häkchen
+bei <strong>Anmeldung nötig</strong> und speichern. Sonst geben Sie es den Benutzern frei, die es brauchen.</li>
+<li><strong>Jede Wawi-Datenbank hat ihren eigenen Zugriffsschutz.</strong> Arbeiten Sie mit mehreren Profilen für
+verschiedene Mandanten, richten Sie den Schutz in jedem Profil eigens ein. Speichern Sie in den
+Einstellungen eine andere Datenbankverbindung, endet die Anmeldung, denn sie gehörte zur bisherigen
+Datenbank.</li>
+<li><strong>Wenn die Datenbank nicht erreichbar ist.</strong> Ohne Datenbank kann sich niemand anmelden, und die
+Verbindung muss sich in den Einstellungen reparieren lassen. Findet arpaTools die Datenbank schon beim
+Start nicht, greift der Schutz deshalb nicht; die Module selbst arbeiten ohne Datenbank ohnehin nicht.
+Fällt die Verbindung erst später aus, bleibt der zuletzt gelesene Stand bestehen, ein kurzer Aussetzer
+öffnet also nichts. Sind dabei die Einstellungen gesperrt, kommen Sie erst nach einem Neustart von
+arpaTools wieder an die Datenbankverbindung.</li>
+<li><strong>Freigaben von deaktivierten Benutzern bleiben liegen.</strong> Aktivieren Sie einen Benutzer in der Wawi
+wieder, hat er seine Freigaben zurück.</li>
+</ul>
+
+    </div>
+    </div>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 20. Oktober 2026.</p>
+  </div>
+</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

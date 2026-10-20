@@ -73,9 +73,6 @@ eingerichteten Profile mit Id und Name.
 Server, Benutzername, Passwort und die Datenbank selbst. Mit dem Knopf neben dem Datenbankfeld laden
 Sie die auf dem Server verfügbaren Datenbanken neu, um die richtige aus der Liste zu wählen.
 
-> **Hinweis für Bildschirmfotos:** Dieser Dialog zeigt echte Zugangsdaten. Für eine Doku-Aufnahme vorher
-> mit Beispielwerten befüllen, nicht mit echten.
-
 ## Lizenz
 
 Über **Lizenz** in der Seitenleiste hinterlegen Sie die E-Mail-Adresse und den Lizenzschlüssel, mit
@@ -92,6 +89,35 @@ tatsächlich gebraucht werden, und fließen in die Weiterentwicklung von arpaToo
 werden ausschließlich Zahlen und Zeitpunkte - niemals Job-, Kunden-, Artikel- oder Regelnamen oder
 sonstige Inhalte aus Ihren Daten.
 
+## Fehlerberichte
+
+Tritt in arpaTools ein Programmfehler auf, meldet arpaTools ihn selbst an uns, damit wir ihn
+beheben können, ohne dass Sie anrufen müssen. Das gilt auch für Jobby-Läufe ohne geöffnetes
+Fenster und für den arpaTools-Dienst.
+
+**Was übertragen wird:** die Art des Fehlers, die Stelle im Programmcode, an der er auftrat, das
+Modul, die arpaTools-Version und wie oft der Fehler an einem Tag vorkam, dazu Ihr Lizenzschlüssel,
+die JTL-Wawi-Version und eine Kennung des Profils, damit wir den Fehler einer Installation zuordnen
+können.
+
+**Was nicht übertragen wird:** Fehlermeldungstexte und Daten aus der JTL-Wawi wie Aufträge,
+Kunden, Artikel oder Preise.
+
+**Wann:** gebündelt beim Start von arpaTools und danach höchstens alle 15 Minuten, bei einem
+Kommandozeilen-Aufruf am Ende des Laufs. Ist keine Internetverbindung da, bleiben die Berichte im
+Profilordner liegen und gehen beim nächsten Mal mit.
+
+**Abschalten** lässt es sich für jedes arpaTools-Profil einzeln:
+
+- in der neuen Oberfläche, die sich über den Hinweis auf dem arpaTools-Dashboard einschalten
+  lässt: **Einstellungen** → Reiter **Profil** → **Fehler automatisch melden**
+- in der gewohnten Oberfläche: **Profileinstellungen** → **Programmfehler automatisch an arpaTools
+  melden** → **Speichern**
+
+Nach dem Update ist die Meldung eingeschaltet. Wer sie abschaltet, löscht damit auch die Berichte,
+die noch nicht gesendet wurden. Ein laufender arpaTools-Dienst übernimmt das Abschalten
+innerhalb einer Minute, ohne Neustart.
+
 ## Einstellungen und Anwendungsprotokoll
 
 Über **Einstellungen** in der Seitenleiste legen Sie die **Protokollierungsstufe** fest, also wie
@@ -99,9 +125,9 @@ ausführlich arpaTools mitschreibt. Von dort öffnen Sie mit einem Knopf direkt 
 **Anwendungsprotokoll**, dieselbe Ansicht wie unter dem gleichnamigen Seitenleisten-Eintrag. Dort finden
 Sie den Verlauf der Programmereignisse, hilfreich bei der Fehlersuche gemeinsam mit dem Support.
 
-> **Hinweis für Bildschirmfotos:** Protokollzeilen können Servernamen, Benutzernamen oder andere
-> Betriebsdetails im Klartext enthalten. Vor einer Aufnahme den Inhalt prüfen, nicht ungesehen
-> übernehmen.
+In der neuen Oberfläche legen Sie in den Einstellungen im Reiter **Zugriffsschutz** außerdem fest, welche
+Bereiche sich erst nach einer Anmeldung mit JTL-Wawi-Zugangsdaten öffnen und wer hinein darf (siehe
+[Zugriffsschutz](/doku/zugriffsschutz)).
 
 ## FTP-Zugang anlegen
 
@@ -144,8 +170,6 @@ Sie diese Daten von Netstock.
 
 **Prüfen** und **Speichern** lassen sich erst anklicken, wenn Bezeichnung, Server, Benutzername und
 Passwort ausgefüllt sind. **Abbrechen** verwirft die Eingaben.
-
-> Aufnahmeskript öffnet bisher nur eigene Fenster, keinen Bereich innerhalb des Bildschirms.
 
 Die Liste zeigt je Zugang **Bezeichnung**, **Adresse** und unter **Verwendet von**, welche Jobs und
 Apps ihn nutzen. Über den Stift am Zeilenende bearbeiten Sie einen Zugang, **Laden** ③ liest die Liste
