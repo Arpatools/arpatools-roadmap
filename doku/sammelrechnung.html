@@ -375,6 +375,8 @@ vollständig abgerechnet ist.</p>
 <p>Eine Sammelrechnung wird nach diesen Kriterien zusammengefasst: Firma, Versandland, USt-IdNr.,
 Kunden-ID, Sprache, Währung, Rechnungsadresse. Unterscheiden sich diese bei markierten Aufträgen eines
 Kunden, werden getrennte Sammelrechnungen erstellt.</p>
+<p>Sammelauftrag und Sammelrechnung tragen die Rechnungsadresse auch als Lieferadresse. Eine abweichende
+Lieferadresse einzelner Aufträge, etwa bei Direktversand an einen Endkunden, wird nicht übernommen.</p>
 <blockquote>
 <p>Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.</p>
 </blockquote>
@@ -398,7 +400,7 @@ erstellt Sammelrechnungen für die markierten Aufträge.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 20. Oktober 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 21. Oktober 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

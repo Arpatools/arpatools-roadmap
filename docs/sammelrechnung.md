@@ -345,6 +345,9 @@ Eine Sammelrechnung wird nach diesen Kriterien zusammengefasst: Firma, Versandla
 Kunden-ID, Sprache, Währung, Rechnungsadresse. Unterscheiden sich diese bei markierten Aufträgen eines
 Kunden, werden getrennte Sammelrechnungen erstellt.
 
+Sammelauftrag und Sammelrechnung tragen die Rechnungsadresse auch als Lieferadresse. Eine abweichende
+Lieferadresse einzelner Aufträge, etwa bei Direktversand an einen Endkunden, wird nicht übernommen.
+
 > Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.
 
 Auftrags- und Rechnungsnummern vergibt die JTL-Wawi. Legt im selben Moment jemand im Haus einen Beleg
