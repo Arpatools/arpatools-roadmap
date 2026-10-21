@@ -251,10 +251,6 @@ der Provisionsberechtigte die Regel Auftragsliste hat. Da nur bezahlte Rechnunge
 unbezahlte Aufträge erst im Journalintervall der Zahlung berücksichtigt. So lässt sich eine
 Auftragsliste über mehrere Intervalle nutzen.
 
-In der neuen Oberfläche zeigt eine Auftragsliste beim Öffnen nur Aufträge mit einem Auftragsdatum ab
-dem Monatsersten vor drei Monaten; löschen Sie das Datum im Feld „Ab", sehen Sie wieder alle Aufträge
-der Liste. Fügen Sie einen älteren Auftrag hinzu, rückt „Ab" so weit zurück, dass er sichtbar wird.
-
 ### Anwendungsbeispiel: Shopify-Coupon
 
 Coupons aus Shopify werden in JTL-Wawi direkt in der Auftragsposition abgezogen, anders als beim
@@ -295,10 +291,6 @@ Zeigt alle Journale aller Provisionsberechtigten. Filter:
 - **Startfilter / Endefilter:** Datumsbereich der angezeigten Journale.
 - **Provisionsberechtigte:** Filter auf bestimmte Provisionsberechtigte.
 - **Alle einblenden (Journalfilter):** leere, bereits abgerechnete oder nicht abrechenbare Journale ein- oder ausblenden.
-
-In der neuen Oberfläche steht „Ab" beim Öffnen auf dem Monatsersten vor drei Monaten, sodass ältere
-abgerechnete und nicht abrechenbare Journale ausgeblendet sind, während Journale, die noch auf ihre
-Abrechnung warten, immer sichtbar bleiben.
 
 Die Spalten Firma, Vorname, Name bieten zusätzliche Filter; andere Spalten sind sortierbar. Über das
 Kontextmenü lässt sich bei Kunden die Kundennummer kopieren.
@@ -402,10 +394,6 @@ abrechenbaren Journale werden zu einer Abrechnung zusammengefasst. Die Abrechnun
 - Für **Benutzer:** über „Exportieren" wird ein Abrechnungsbericht als CSV für die Buchhaltung erstellt. Der Ablagepfad wird in den ProviMate-Einstellungen hinterlegt.
 - Für **Kunden:** über „Verarbeiten" wird eine Rechnungskorrektur bzw. Provisionsgutschrift in JTL-Wawi erzeugt.
 - **Manuell abschließen:** weder Rechnungskorrektur noch Export; die Abrechnung gilt als abgeschlossen.
-
-In der neuen Oberfläche zeigt die Liste beim Öffnen nur Abrechnungen, die ab dem Monatsersten vor drei
-Monaten erstellt wurden; offene Abrechnungen bleiben immer sichtbar, und über die Felder „Ab" und
-„Bis" wählen Sie einen anderen Zeitraum.
 
 ### Abrechnungen löschen
 
