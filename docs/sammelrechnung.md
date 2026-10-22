@@ -71,15 +71,57 @@ Auftrag** wird die Firma aus den Ursprungsaufträgen übernommen.
 
 ### Positionsnamen bearbeiten
 
-Steuert die Positionsbezeichnungen in der Sammelrechnung. Auswahl:
-- Nein
+Unter **Konfiguration**, Registerkarte **Rechnungsaufbau**, legen Sie mit dem Schalter
+**Positionsnamen bearbeiten** selbst fest, wie die Positionen in der Sammelrechnung heißen. Ist er
+aus, setzt arpaTools den Namen aus Artikelname, Auftragsnummer, Auftragsdatum und, falls vorhanden,
+der externen Auftragsnummer zusammen, bei Retouren aus Artikelname, Retourennummer und
+Retourendatum.
+
+Mit **Regelsatz** wählen Sie, wofür Ihre eigenen Namen gelten:
 - Ja, Auftrag und Retoure
 - Ja, nur Auftrag
 - Ja, nur Retoure
 
-Die Inhalte beziehen sich auf den Ursprungsauftrag. Für die Bezeichnung stehen zur Verfügung:
-Auftragsnummer, Auftragsdatum, Positionsnummer, Artikelnummer, Positionsname, alle eigenen Felder des
-Auftrags, Freitext. Ein Doppelklick auf das jeweilige Feld fügt die Variable an der Cursorposition ein.
+Für jeden gewählten Teil erscheint ein Eingabefeld, **Positionsname Auftrag** und **Positionsname
+Retoure**, und darunter die Liste der verfügbaren Felder. Ein Doppelklick auf ein Feld setzt seinen
+Platzhalter an der Stelle ein, an der der Cursor im Eingabefeld zuletzt stand; markierter Text wird
+dabei ersetzt. Haben Sie noch nicht in das Eingabefeld geklickt, hängt arpaTools den Platzhalter mit
+einem Leerzeichen hinten an. Freitext schreiben Sie direkt dazwischen, zum Beispiel
+`<Positionsname> aus Auftrag <Auftragsnummer>`. Beim Abrechnen ersetzt arpaTools jeden Platzhalter in
+spitzen Klammern durch den Wert der jeweiligen Position.
+
+Für Auftragspositionen stehen zur Verfügung: Auftragsnummer, Externe Auftragsnummer, Auftragsdatum,
+Positionsnummer, Artikelnummer, Positionsname und alle eigenen Felder des Auftrags. Ein eigenes Feld
+erscheint mit dem Wert, den der Auftrag in JTL-Wawi dafür hat; hat er keinen, bleibt die Stelle leer.
+Zahlen stehen mit Dezimalkomma, Preise mit zwei Nachkommastellen, Datumsfelder als TT.MM.JJJJ.
+Für Retourenpositionen stehen zur Verfügung: Externe Auftragsnummer, Retourennummer, Retourendatum,
+Positionsnummer, Artikelnummer und Positionsname.
+
+**Lieferscheinfelder.** Rechnen Sie nach Lieferscheinen ab (siehe „Abrechnungsgrundlage“), bietet die
+Liste für Auftragspositionen zusätzlich **Lieferscheinnummer**, **Lieferscheindatum** und
+**Versanddatum** an. So sehen Sie bei Teillieferungen auf der Rechnung, aus welcher Lieferung eine
+Position stammt. Das Lieferscheindatum ist der Tag, an dem der Lieferschein in JTL-Wawi erstellt
+wurde, das Versanddatum der Tag, an dem er versendet wurde. Beide können auseinanderliegen, etwa
+wenn eine Lieferung erst Tage nach dem Lieferschein das Haus verlässt; wählen Sie das Datum, das
+Ihre Kunden auf dem Lieferschein oder der Sendungsverfolgung wiederfinden.
+Versand-, Frei- und Rabattpositionen tragen die Angaben des Lieferscheins, mit dem sie abgerechnet
+werden. Bei der Abrechnung nach Aufträgen fehlen diese drei Felder in der Liste; stehen sie trotzdem
+im Positionsnamen, bleiben sie leer.
+
+![Registerkarte Rechnungsaufbau mit eingeschaltetem Schalter Positionsnamen bearbeiten: Regelsatz „Ja, nur Auftrag“, im Feld Positionsname Auftrag das Muster „<Positionsname> / Lieferschein <Lieferscheinnummer> vom <Versanddatum>“, darunter die Feldliste mit Lieferscheinnummer, Lieferscheindatum und Versanddatum. Unten steht die Abrechnungsgrundlage auf Lieferscheine.](bilder/sammelrechnung-positionsnamen.png)
+
+**Beispiel mit Teillieferungen.** Ein Auftrag über 100 Schrauben geht in zwei Lieferungen raus, 60
+Stück am 6. Oktober und 40 Stück am 9. Oktober. Mit dem Muster aus dem Bild,
+`<Positionsname> / Lieferschein <Lieferscheinnummer> vom <Versanddatum>`, der Abrechnung nach
+Lieferscheinen und der Abrechnungsart „Positionen auflisten“ stehen auf der Sammelrechnung zwei
+Positionen, jede mit der Menge ihrer Lieferung:
+
+- Schraube / Lieferschein LS-1001 vom 06.10.2026
+- Schraube / Lieferschein LS-1002 vom 09.10.2026
+
+Die Lieferscheinnummern sind hier ausgedacht; auf Ihrer Rechnung stehen die Nummern aus JTL-Wawi.
+Werden beide Lieferungen in verschiedenen Läufen abgerechnet, steht jede Position auf der
+Sammelrechnung ihres Laufs.
 
 ### Abrechnungsgrundlage
 
@@ -91,7 +133,10 @@ fest, was in die Sammelrechnung kommt:
 - **Lieferscheine:** Jeder versendete Lieferschein kommt einzeln in die Sammelrechnung, mit den
   Mengen, die tatsächlich geliefert wurden. Liefern Sie einen Auftrag in mehreren Teilen, rechnet
   jeder Lauf die Teile ab, die bis dahin versendet sind. Sie müssen also nicht warten, bis der ganze
-  Auftrag geliefert ist.
+  Auftrag geliefert ist. Welche Lieferung eine Position abrechnet, können Sie im Positionsnamen
+  ausweisen, siehe „Positionsnamen bearbeiten“.
+
+![Registerkarte Rechnungsaufbau: die Schalter Versandposition übernehmen, Lieferungen abrechnen, Retouren verarbeiten, Rechnung erstellen, Gruppierung nach Lieferland und Positionsnamen bearbeiten, darunter die Abrechnungsgrundlage auf Lieferscheine mit ihrem Hinweis zum Umschalttag und die Abrechnungsart.](bilder/sammelrechnung-rechnungsaufbau.png)
 
 **Der Umschalttag.** Wenn Sie auf Lieferscheine umstellen, merkt sich arpaTools den Tag. Abgerechnet
 werden danach nur Aufträge, deren erster Lieferschein ab diesem Tag entstanden ist. So holt der erste
@@ -299,6 +344,9 @@ Beim Erzeugen werden mehrere Schritte ausgeführt:
 Eine Sammelrechnung wird nach diesen Kriterien zusammengefasst: Firma, Versandland, USt-IdNr.,
 Kunden-ID, Sprache, Währung, Rechnungsadresse. Unterscheiden sich diese bei markierten Aufträgen eines
 Kunden, werden getrennte Sammelrechnungen erstellt.
+
+Sammelauftrag und Sammelrechnung tragen die Rechnungsadresse auch als Lieferadresse. Eine abweichende
+Lieferadresse einzelner Aufträge, etwa bei Direktversand an einen Endkunden, wird nicht übernommen.
 
 > Hinweis zur Technik: Ab JTL-Wawi 2.0 wird die Sammelrechnung direkt in der Datenbank erzeugt. Bis JTL-Wawi 1.11 erfolgt die Erstellung über die Komponente JtlWawiExtern.dll, die dafür vorhanden sein muss.
 

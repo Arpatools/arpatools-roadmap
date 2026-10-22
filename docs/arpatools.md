@@ -73,9 +73,6 @@ eingerichteten Profile mit Id und Name.
 Server, Benutzername, Passwort und die Datenbank selbst. Mit dem Knopf neben dem Datenbankfeld laden
 Sie die auf dem Server verfügbaren Datenbanken neu, um die richtige aus der Liste zu wählen.
 
-> **Hinweis für Bildschirmfotos:** Dieser Dialog zeigt echte Zugangsdaten. Für eine Doku-Aufnahme vorher
-> mit Beispielwerten befüllen, nicht mit echten.
-
 ## Lizenz
 
 Über **Lizenz** in der Seitenleiste hinterlegen Sie die E-Mail-Adresse und den Lizenzschlüssel, mit
@@ -99,9 +96,9 @@ ausführlich arpaTools mitschreibt. Von dort öffnen Sie mit einem Knopf direkt 
 **Anwendungsprotokoll**, dieselbe Ansicht wie unter dem gleichnamigen Seitenleisten-Eintrag. Dort finden
 Sie den Verlauf der Programmereignisse, hilfreich bei der Fehlersuche gemeinsam mit dem Support.
 
-> **Hinweis für Bildschirmfotos:** Protokollzeilen können Servernamen, Benutzernamen oder andere
-> Betriebsdetails im Klartext enthalten. Vor einer Aufnahme den Inhalt prüfen, nicht ungesehen
-> übernehmen.
+In der neuen Oberfläche legen Sie in den Einstellungen im Reiter **Zugriffsschutz** außerdem fest, welche
+Bereiche sich erst nach einer Anmeldung mit JTL-Wawi-Zugangsdaten öffnen und wer hinein darf (siehe
+[Zugriffsschutz](/doku/zugriffsschutz)).
 
 ## FTP-Zugang anlegen
 
@@ -144,8 +141,6 @@ Sie diese Daten von Netstock.
 
 **Prüfen** und **Speichern** lassen sich erst anklicken, wenn Bezeichnung, Server, Benutzername und
 Passwort ausgefüllt sind. **Abbrechen** verwirft die Eingaben.
-
-> Aufnahmeskript öffnet bisher nur eigene Fenster, keinen Bereich innerhalb des Bildschirms.
 
 Die Liste zeigt je Zugang **Bezeichnung**, **Adresse** und unter **Verwendet von**, welche Jobs und
 Apps ihn nutzen. Über den Stift am Zeilenende bearbeiten Sie einen Zugang, **Laden** ③ liest die Liste

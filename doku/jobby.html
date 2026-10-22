@@ -261,9 +261,6 @@ arpaTools Worker, weist der Dialog darauf hin: Der Worker prüft standardmäßig
 (einstellbar unter <strong>Dienst</strong>), ein kürzeres Intervall greift erst ab diesem Wert. Bei den anderen
 Modi erscheint dieser Hinweis nicht, ein zu kurzes Intervall ist dort in der Praxis aber ohnehin
 nicht einstellbar.</p>
-<blockquote>
-<p>Diensttakthinweis)</p>
-</blockquote>
 <p>Bricht ein geplanter Lauf mit einem Fehler ab, gilt er trotzdem als gelaufen: Der Job wartet auf
 seinen nächsten regulären Termin, statt sofort erneut anzulaufen. Was schiefging, steht in der
 Ansicht <strong>Log</strong>. Wer den Job vorher noch einmal versuchen will, startet ihn über <strong>Starten</strong> von
@@ -500,6 +497,13 @@ eingerichtet", läuft noch kein Dienst, und geplante Jobs starten nur, solange a
 <p>Ist der Dienst eingerichtet, aber der Warnhinweis darunter sichtbar, läuft er zwar, bedient aber
 diesen Mandanten nicht. Beides sind verschiedene Fragen: Der Zustand oben gilt für den Rechner, der
 Hinweis darunter für den Mandanten, mit dem Sie gerade arbeiten.</p>
+<p>Der Dienst führt die fälligen Jobs nacheinander aus: Solange ein Job läuft, startet er keinen anderen.
+Belegt ein Job den Dienst eine Stunde lang, steht im Protokoll unter Jobby eine Warnung mit Nummer,
+Name und Laufzeit des Jobs, etwa <code>Job 12 "Bestandsimport" has been running for 60 minutes</code>, und danach
+jede weitere Stunde wieder. Abgebrochen wird der Job dadurch nicht. Bleiben Ihre übrigen Jobs stehen,
+ist diese Zeile der erste Hinweis darauf, welcher Job sie aufhält. Für die JTL-Ameise, die beiden
+Importe über die JTLWawiExtern.DLL und „Prozess starten“ können Sie in der Aktion ein Zeitlimit
+einstellen, nach dem arpaTools das Programm beendet.</p>
 <p>Den Weg über die Eingabeaufforderung beschreibt weiterhin der Abschnitt
 <a href="#arpatools-worker-installieren">arpaTools Worker installieren</a>.</p>
 <h2 id="einfachen-job-erstellen">Einfachen Job erstellen</h2>
@@ -672,6 +676,13 @@ speichern Sie den Job.</li>
 <li><strong>Loglevel:</strong> Detailgrad der Protokollierung: Ausführlich, Kompakt, Fehler/Warnungen.</li>
 <li><strong>Parameter für Logs:</strong> zusätzliche Einschränkung der Protokollierung. Der Parameter FILE gibt an, wohin die Logdatei geschrieben wird. Verfügbare Logarten: <code>--log</code> (Hauptbericht), <code>--log_errors</code>, <code>--log_warnings</code>, <code>--log_imported</code>, <code>--log_update</code>, <code>--log_other</code>. Platzhalter für den Dateinamen: <code>%y</code> (Jahr vierstellig), <code>%m</code> (Monat), <code>%d</code> (Tag), <code>%h</code> (Stunde), <code>%i</code> (Minute), <code>%s</code> (Sekunde), <code>%db</code> (Datenbankname), <code>%id</code> (Name der Importvorlage). Beispiel: <code>import_%y-%m-%d_%h-%i-%s_%id.log</code>.</li>
 <li><strong>Verarbeitung:</strong> ob nur die neueste oder alle geladenen Dateien verarbeitet werden.</li>
+<li><strong>Zeitlimit für das Programm:</strong> wie viele Minuten die JTL-Ameise je Datei höchstens laufen darf.
+Läuft sie länger, beendet arpaTools sie, und der Job bricht mit einem Hinweis im Protokoll ab. Das
+schützt davor, dass eine Ameise, die auf eine Rückfrage wartet, den Dienst dauerhaft aufhält:
+Solange eine Aktion läuft, startet der Dienst keinen anderen Job. Eine neue Aktion ist auf 120
+Minuten vorbelegt; bei Aktionen, die schon vorher angelegt waren, ist das Zeitlimit ausgeschaltet,
+sie warten wie bisher unbegrenzt. Was die Ameise bis zum Abbruch schon importiert hat, bleibt in
+der JTL-Wawi.</li>
 </ul>
 <h3 id="import-lieferantenbestand-importieren">Import: Lieferantenbestand importieren</h3>
 <p>Importiert Lieferantenbestände in JTL-Wawi. Der Bestand erscheint in den Artikeldetails im Reiter
@@ -700,6 +711,7 @@ den Windows-Dienst.</p>
 <li><strong>Sendungsnummer:</strong> Spalte mit der Trackingnummer.</li>
 <li><strong>Hinweis:</strong> optionale Spalte mit einem Versandhinweis.</li>
 <li><strong>Import-Filter:</strong> hilft bei mehrzeiligen Dateien (z. B. DESADV), in denen nicht jede Zeile eine Sendungsnummer enthält. Der Filter bestimmt, welcher Wert in einer Spalte vorhanden sein muss, damit eine Zeile berücksichtigt wird.</li>
+<li><strong>Zeitlimit für das Programm:</strong> wie viele Minuten der Import je Datei höchstens laufen darf. Läuft er länger, beendet arpaTools ihn, und der Job bricht mit einem Hinweis im Protokoll ab. Eine neue Aktion ist auf 120 Minuten vorbelegt; bei Aktionen, die schon vorher angelegt waren, ist das Zeitlimit ausgeschaltet, sie warten wie bisher unbegrenzt.</li>
 </ul>
 <h3 id="import-xml-auftragsimport-jtlwawiexterndll">Import: XML-Auftragsimport (JTLWawiExtern.DLL)</h3>
 <p>Importiert Auftragsdaten im JTL-XML-Format direkt in die JTL-Wawi, manuell oder zeitgesteuert. Die
@@ -708,6 +720,7 @@ Aktion verarbeitet die zuvor geladenen XML-Dateien.</p>
 <ul>
 <li><strong>Importbenutzer:</strong> der Benutzer, unter dem die Aufträge angelegt werden.</li>
 <li><strong>Verarbeitung:</strong> nur die neueste oder alle geladenen Dateien.</li>
+<li><strong>Zeitlimit für das Programm:</strong> wie viele Minuten der Import je Datei höchstens laufen darf. Läuft er länger, beendet arpaTools ihn, und der Job bricht mit einem Hinweis im Protokoll ab. Eine neue Aktion ist auf 120 Minuten vorbelegt; bei Aktionen, die schon vorher angelegt waren, ist das Zeitlimit ausgeschaltet, sie warten wie bisher unbegrenzt.</li>
 </ul>
 <h3 id="export-jtl-ameise-export">Export: JTL-Ameise Export</h3>
 <p>Für regelmäßige Exporte über JTL-Ameise, z. B. einen Lagerbestandsexport für B2B-Kunden. Voraussetzung
@@ -719,6 +732,7 @@ einem älteren Job noch eine Vorlage aus der Mandantendatenbank, sagt der Dialog
 wählen Sie die Vorlage dann einmal neu und speichern Sie den Job.</li>
 <li><strong>Zielverzeichnis:</strong> wohin die Datei gespeichert wird.</li>
 <li><strong>Dateiname:</strong> mit dynamischen Platzhaltern: Jahr (%y), Monat (%m), Tag (%d), Stunde (%H), Minute (%i), Sekunde (%s), Datenbankname (%db), Exportvorlagen-ID (%id).</li>
+<li><strong>Zeitlimit für das Programm:</strong> wie viele Minuten die JTL-Ameise höchstens laufen darf. Läuft sie länger, beendet arpaTools sie, und der Job bricht mit einem Hinweis im Protokoll ab. Eine neue Aktion ist auf 120 Minuten vorbelegt; bei Aktionen, die schon vorher angelegt waren, ist das Zeitlimit ausgeschaltet, sie warten wie bisher unbegrenzt.</li>
 </ul>
 <p>Exportvorlagen setzen mindestens den JTL-Tarif Advanced voraus.</p>
 <p>Der Export legt seine Datei nur im Zielverzeichnis ab, an die nächste Aktion gibt er sie nicht
@@ -1017,6 +1031,7 @@ Parametern.</p>
 <ul>
 <li><strong>Ausführbare Datei:</strong> Pfad zur auszuführenden Datei.</li>
 <li><strong>Parameter-Aufbau:</strong> Parameter mit Platzhaltern, z. B. <code>##file##</code>, um die während der Laufzeit verarbeitete Datei zu übergeben.</li>
+<li><strong>Zeitlimit für das Programm:</strong> wie viele Minuten das Programm je Aufruf höchstens laufen darf. Läuft es länger, beendet arpaTools es samt der Programme, die es selbst gestartet hat, und der Job bricht mit einem Hinweis im Protokoll ab. Eine neue Aktion ist auf 120 Minuten vorbelegt; bei Aktionen, die schon vorher angelegt waren, ist das Zeitlimit ausgeschaltet, sie warten wie bisher unbegrenzt. Die <strong>Wartezeit</strong> in den Prozesseinstellungen ist etwas anderes: Sie beginnt erst, wenn das Programm beendet ist, und wartet nur auf die Prüfdatei.</li>
 </ul>
 <h3 id="sonstiges-benutzerdefinierte-aktion">Sonstiges: Benutzerdefinierte Aktion</h3>
 <p>Startet ein beliebiges externes Programm oder Skript, wertet dessen Rückgabewert aus und kann die
