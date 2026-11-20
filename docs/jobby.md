@@ -467,9 +467,6 @@ später neu einrichten zu müssen.
 
 ### Den Ablauf als Zeichnung ansehen
 
-> **Noch nicht allgemein verfügbar.** Die Ablaufansicht steht vorerst nur mit Entwicklerlizenz zur
-> Verfügung. Ohne sie sieht die Ablauf-Karte aus wie bisher, mit der Schrittliste und sonst nichts.
-
 Am rechten Rand der Überschrift **Ablauf**, über der Schrittliste, stehen zwei Schaltflächen. Zeigen
 Sie mit der Maus darauf, nennen sie sich **Als Liste anzeigen** und **Als Ablauf anzeigen**. Die
 linke zeigt die Schrittliste, so wie bisher; die rechte zeichnet denselben Ablauf auf. Die
@@ -661,6 +658,7 @@ aktuelle CSV-Datei bereitstellen.
 - **Verarbeitung:** eine große Datei oder mehrere Dateien.
 - **Nicht gesendete Artikel + Bestimmten Bestand setzen:** setzt für Artikel, die nicht mehr in der Datei stehen, den Wert aus „Bestand für nicht gesendete Artikel". Andernfalls werden solche Artikel ignoriert.
 - **Bestandskonvertierung:** wandelt Textwerte in Zahlen, wenn der Lieferant statt Zahlen z. B. „Verfügbar"/„Nicht verfügbar" sendet (Quelle = Text in der Datei, Ziel = Zahl, z. B. Verfügbar = 10, Nicht verfügbar = 0).
+- **Negativen Bestand als 0 schreiben:** sendet der Lieferant einen Bestand kleiner 0, auch als Ergebnis der Bestandskonvertierung, wird 0 in den Lieferantenbestand geschrieben. Ohne Haken (Vorgabe, auch für bereits angelegte Aktionen) wird der Wert so übernommen, wie er in der Datei steht.
 
 ### Import: Sendungsdaten importieren (JTLWawiExtern.DLL)
 
@@ -865,9 +863,15 @@ mehr finden soll.
   Datei `export_20260828.csv`. Tragen Sie einen Namen ohne Dateiendung ein (z. B. `export_##YEAR##`),
   ergänzt arpaTools automatisch die Endung der Quelldatei, damit eine Datei entsteht, die sich öffnen
   lässt; ein Name mit eigener Endung wird unverändert übernommen.
-  Bei „Alle Dateien" gilt derselbe eingetragene Name für jede ausgewählte Datei — dann bleibt am Ziel
-  nur eine davon übrig, die anderen verschwinden. Wählen Sie in diesem Fall entweder „Nur die neueste
-  Datei" oder lassen Sie das Feld leer, damit jede Datei ihren eigenen Namen behält.
+  Dazu kommen drei Platzhalter, die sich auf die gespeicherte Datei beziehen: `##FILENAME##` (Name der
+  Quelldatei ohne Endung), `##EXTENSION##` (ihre Endung ohne Punkt) und `##COUNTER##` (fortlaufende
+  Nummer ab 1). Aus `##FILENAME##_##YEAR####MONTH####DAY##.##EXTENSION##` wird für `preise.csv` am
+  28. August 2026 die Datei `preise_20260828.csv`.
+  Bei „Alle Dateien" gilt der eingetragene Name für jede ausgewählte Datei. Bekämen dabei mehrere
+  Dateien denselben Zielnamen, etwa bei einem festen Namen wie `export.csv`, bleibt am Ziel nur eine
+  davon übrig, und der Lauf trägt eine Warnung ins Anwendungsprotokoll ein. Nehmen Sie dann
+  `##FILENAME##` oder `##COUNTER##` in den Namen, wählen Sie „Nur die neueste Datei" oder lassen Sie
+  das Feld leer, damit jede Datei ihren eigenen Namen behält.
 - **Dateien nach Tagen löschen:** nach wie vielen Tagen automatisch gelöscht wird (z. B. 30). Gilt nur
   für ein Zielverzeichnis.
 - **Existierende Datei:** „Überschreiben" oder „Ignorieren". Bei „Ignorieren" bleibt eine bereits

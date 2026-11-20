@@ -343,10 +343,13 @@ Sammelaufträge und Sammelrechnungen schnell wieder und können in der JTL-Stati
 <p>Öffnen Sie die App Sammelrechnung. Links zeigt <strong>Konfigurationen</strong>, wie viele Konfigurationen angelegt
 sind; über <strong>Neu</strong> entsteht die erste, <strong>Duplizieren</strong> übernimmt eine bestehende als Vorlage,
 <strong>Als Standard</strong> legt die Vorauswahl fest, <strong>Löschen</strong> entfernt eine Konfiguration.</p>
-<p>Standardmäßig ist im Dropdown <strong>Alle Kunden</strong> gewählt; angezeigt werden alle Kunden mit der in der
-Konfiguration festgelegten Zahlungsart. Für einen bestimmten Kunden wählen Sie diesen aus. Sie können
-die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein konfiguriertes Startdatum wird übernommen.
-Klicken Sie auf <strong>Aufträge laden</strong>.</p>
+<p>Das Feld <strong>Kunde</strong> listet jeden Kunden, der mindestens einen Auftrag hat, den die gewählte
+Konfiguration abrechnen würde. Begrenzen Sie die Aufträge auf einen Zeitraum, zeigt die Liste nur
+Kunden mit Aufträgen in diesem Zeitraum; ein konfiguriertes Startdatum wird übernommen. Haken Sie
+einen oder mehrere Kunden an, um nur deren Aufträge abzurechnen. <strong>Alle auswählen</strong> unter der Liste
+hakt alle Kunden auf einmal an. Ab sechs Kunden erscheint über der Liste ein Suchfeld, das die Kunden
+beim Tippen filtert. Ist kein Kunde angehakt, steht im Feld <strong>Alle Kunden</strong>, und es erscheinen die
+Aufträge aller Kunden. Klicken Sie auf <strong>Aufträge laden</strong>.</p>
 <ul>
 <li><strong>Alle markieren:</strong> markiert alle angezeigten Aufträge.</li>
 <li><strong>Rechnung erstellen:</strong> erstellt Sammelrechnungen für die markierten Aufträge.</li>
@@ -400,7 +403,7 @@ erstellt Sammelrechnungen für die markierten Aufträge.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 19. November 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 20. November 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

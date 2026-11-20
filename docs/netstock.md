@@ -239,6 +239,12 @@ Diese Einstellungen gelten für jede Übertragung an Netstock.
 - **Komponenten senden:** der Verkauf zählt für die einzelnen Bestandteile.
 - **Stücklistenvater senden:** der Verkauf zählt für den Stücklistenartikel selbst.
 
+**Globalen Mindestbestand senden:** der Mindestbestand aus dem Artikel Ihrer Wawi steht in der
+Datei `stock.csv` in Spalte 17. Pflegen Sie Ihre Mindestbestände lieber in Netstock selbst, schalten
+Sie den Schalter aus. Spalte 17 bleibt dann in jeder Zeile leer, die übrigen Spalten ändern sich
+nicht. Der Schalter ist nach dem Update an, wie bisher. Der Netstock Upload-Job hat dafür eine
+eigene Auswahl in seiner Aktion, auch sie steht nach dem Update auf „Ja“.
+
 ### Lagerauswahl
 
 Hier legen Sie je Lager fest, ob und wie es an Netstock geht. Die Zeile über der Tabelle zeigt, wie

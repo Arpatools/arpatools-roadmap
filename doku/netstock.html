@@ -339,6 +339,11 @@ Ausliefern vor der Zahlung erlaubt.</li>
 <li><strong>Komponenten senden:</strong> der Verkauf zählt für die einzelnen Bestandteile.</li>
 <li><strong>Stücklistenvater senden:</strong> der Verkauf zählt für den Stücklistenartikel selbst.</li>
 </ul>
+<p><strong>Globalen Mindestbestand senden:</strong> der Mindestbestand aus dem Artikel Ihrer Wawi steht in der
+Datei <code>stock.csv</code> in Spalte 17. Pflegen Sie Ihre Mindestbestände lieber in Netstock selbst, schalten
+Sie den Schalter aus. Spalte 17 bleibt dann in jeder Zeile leer, die übrigen Spalten ändern sich
+nicht. Der Schalter ist nach dem Update an, wie bisher. Der Netstock Upload-Job hat dafür eine
+eigene Auswahl in seiner Aktion, auch sie steht nach dem Update auf „Ja“.</p>
 <h3 id="lagerauswahl">Lagerauswahl</h3>
 <p>Hier legen Sie je Lager fest, ob und wie es an Netstock geht. Die Zeile über der Tabelle zeigt, wie
 viele Lager es gibt und wie viele davon übertragen werden. Ein grüner Punkt vor dem Namen markiert
@@ -521,7 +526,7 @@ eben von Hand übernommen haben (siehe
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 19. November 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 20. November 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

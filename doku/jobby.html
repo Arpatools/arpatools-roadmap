@@ -536,10 +536,6 @@ Ergebnis seither trotzdem bekam, bekommt es ab jetzt nicht mehr. Prüfen Sie Ihr
 abgeschaltete Schritte und schalten Sie ein, was weiterlaufen soll.</p>
 </blockquote>
 <h3 id="den-ablauf-als-zeichnung-ansehen">Den Ablauf als Zeichnung ansehen</h3>
-<blockquote>
-<p><strong>Noch nicht allgemein verfügbar.</strong> Die Ablaufansicht steht vorerst nur mit Entwicklerlizenz zur
-Verfügung. Ohne sie sieht die Ablauf-Karte aus wie bisher, mit der Schrittliste und sonst nichts.</p>
-</blockquote>
 <p>Am rechten Rand der Überschrift <strong>Ablauf</strong>, über der Schrittliste, stehen zwei Schaltflächen. Zeigen
 Sie mit der Maus darauf, nennen sie sich <strong>Als Liste anzeigen</strong> und <strong>Als Ablauf anzeigen</strong>. Die
 linke zeigt die Schrittliste, so wie bisher; die rechte zeichnet denselben Ablauf auf. Die
@@ -696,6 +692,7 @@ aktuelle CSV-Datei bereitstellen.</p>
 <li><strong>Verarbeitung:</strong> eine große Datei oder mehrere Dateien.</li>
 <li><strong>Nicht gesendete Artikel + Bestimmten Bestand setzen:</strong> setzt für Artikel, die nicht mehr in der Datei stehen, den Wert aus „Bestand für nicht gesendete Artikel". Andernfalls werden solche Artikel ignoriert.</li>
 <li><strong>Bestandskonvertierung:</strong> wandelt Textwerte in Zahlen, wenn der Lieferant statt Zahlen z. B. „Verfügbar"/„Nicht verfügbar" sendet (Quelle = Text in der Datei, Ziel = Zahl, z. B. Verfügbar = 10, Nicht verfügbar = 0).</li>
+<li><strong>Negativen Bestand als 0 schreiben:</strong> sendet der Lieferant einen Bestand kleiner 0, auch als Ergebnis der Bestandskonvertierung, wird 0 in den Lieferantenbestand geschrieben. Ohne Haken (Vorgabe, auch für bereits angelegte Aktionen) wird der Wert so übernommen, wie er in der Datei steht.</li>
 </ul>
 <h3 id="import-sendungsdaten-importieren-jtlwawiexterndll">Import: Sendungsdaten importieren (JTLWawiExtern.DLL)</h3>
 <p>Importiert Sendungs- bzw. Trackingdaten aus einer CSV-Datei und markiert Sendungen als versendet, ohne
@@ -879,9 +876,17 @@ aktuelle Uhrzeit des Rechners (Ortszeit) ersetzt: aus <code>export_##YEAR####MON
 Datei <code>export_20260828.csv</code>. Tragen Sie einen Namen ohne Dateiendung ein (z. B. <code>export_##YEAR##</code>),
 ergänzt arpaTools automatisch die Endung der Quelldatei, damit eine Datei entsteht, die sich öffnen
 lässt; ein Name mit eigener Endung wird unverändert übernommen.
-Bei „Alle Dateien" gilt derselbe eingetragene Name für jede ausgewählte Datei — dann bleibt am Ziel
-nur eine davon übrig, die anderen verschwinden. Wählen Sie in diesem Fall entweder „Nur die neueste
-Datei" oder lassen Sie das Feld leer, damit jede Datei ihren eigenen Namen behält.</li>
+Dazu kommen drei Platzhalter, die sich auf die gespeicherte Datei beziehen: <code>##FILENAME##</code> (Name der
+Quelldatei ohne Endung), <code>##EXTENSION##</code> (ihre Endung ohne Punkt) und <code>##COUNTER##</code> (fortlaufende
+Nummer ab 1). Aus <code>##FILENAME##_##YEAR####MONTH####DAY##.##EXTENSION##</code> wird für <code>preise.csv</code> am<ol>
+<li>August 2026 die Datei <code>preise_20260828.csv</code>.
+Bei „Alle Dateien" gilt der eingetragene Name für jede ausgewählte Datei. Bekämen dabei mehrere
+Dateien denselben Zielnamen, etwa bei einem festen Namen wie <code>export.csv</code>, bleibt am Ziel nur eine
+davon übrig, und der Lauf trägt eine Warnung ins Anwendungsprotokoll ein. Nehmen Sie dann
+<code>##FILENAME##</code> oder <code>##COUNTER##</code> in den Namen, wählen Sie „Nur die neueste Datei" oder lassen Sie
+das Feld leer, damit jede Datei ihren eigenen Namen behält.</li>
+</ol>
+</li>
 <li><strong>Dateien nach Tagen löschen:</strong> nach wie vielen Tagen automatisch gelöscht wird (z. B. 30). Gilt nur
 für ein Zielverzeichnis.</li>
 <li><strong>Existierende Datei:</strong> „Überschreiben" oder „Ignorieren". Bei „Ignorieren" bleibt eine bereits
@@ -1637,7 +1642,7 @@ Dienst entfernt wurde und arpaTools gerade nicht zur Hand ist.</p>
 </main>
 <footer class="site-footer">
   <div class="wrap">
-    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 19. November 2026.</p>
+    <p>Automatisch aus dem Entwicklungs-Backlog erzeugt. Stand: 20. November 2026.</p>
   </div>
 </footer>
 <script src="../assets/app.js" defer></script>

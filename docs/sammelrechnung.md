@@ -312,10 +312,13 @@ Sammelaufträge und Sammelrechnungen schnell wieder und können in der JTL-Stati
 sind; über **Neu** entsteht die erste, **Duplizieren** übernimmt eine bestehende als Vorlage,
 **Als Standard** legt die Vorauswahl fest, **Löschen** entfernt eine Konfiguration.
 
-Standardmäßig ist im Dropdown **Alle Kunden** gewählt; angezeigt werden alle Kunden mit der in der
-Konfiguration festgelegten Zahlungsart. Für einen bestimmten Kunden wählen Sie diesen aus. Sie können
-die Aufträge zusätzlich auf einen Zeitraum begrenzen; ein konfiguriertes Startdatum wird übernommen.
-Klicken Sie auf **Aufträge laden**.
+Das Feld **Kunde** listet jeden Kunden, der mindestens einen Auftrag hat, den die gewählte
+Konfiguration abrechnen würde. Begrenzen Sie die Aufträge auf einen Zeitraum, zeigt die Liste nur
+Kunden mit Aufträgen in diesem Zeitraum; ein konfiguriertes Startdatum wird übernommen. Haken Sie
+einen oder mehrere Kunden an, um nur deren Aufträge abzurechnen. **Alle auswählen** unter der Liste
+hakt alle Kunden auf einmal an. Ab sechs Kunden erscheint über der Liste ein Suchfeld, das die Kunden
+beim Tippen filtert. Ist kein Kunde angehakt, steht im Feld **Alle Kunden**, und es erscheinen die
+Aufträge aller Kunden. Klicken Sie auf **Aufträge laden**.
 
 - **Alle markieren:** markiert alle angezeigten Aufträge.
 - **Rechnung erstellen:** erstellt Sammelrechnungen für die markierten Aufträge.
